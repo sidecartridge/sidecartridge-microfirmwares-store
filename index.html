@@ -78,9 +78,12 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
-  <!-- Data pipeline (EPIC-02): load platforms.json, then the selected platform's
-       official apps.json — all same-origin (D-05). No catalog rendering here;
-       that is EPIC-04. Alpine calls init() automatically. -->
+  <!-- Data pipeline (EPIC-02 + EPIC-03): load platforms.json, then aggregate the
+       selected platform's catalog sources — one official (in-repo, same-origin,
+       D-05) plus 0..N unofficial (remote, HTTPS+CORS, C-04) listed in the
+       platform's unofficial.json. Each app is tagged with its provenance; a bad
+       source is isolated, not fatal. No catalog rendering here (EPIC-04).
+       Alpine calls init() automatically. -->
   <script>
     function storeData() {
       return {
@@ -89,8 +92,9 @@
         error: '',
         platforms: [],
         activePlatform: null,
-        apps: [],
-        appsError: '',
+        sources: [],   // [{ kind, id, label, apps_url, author, status, error, count }]
+        apps: [],      // merged, provenance-tagged: { ...app, _source, _sourceKind, _author, _duplicate }
+        unofficialRegistryError: '',
         async init() {
           try {
             const res = await fetch('platforms.json', { cache: 'no-cache' });
@@ -110,15 +114,64 @@
         },
         async loadPlatform(p) {
           this.activePlatform = p;
+          this.sources = [];
           this.apps = [];
-          this.appsError = '';
+          this.unofficialRegistryError = '';
+          const seen = new Set();   // uuid precedence: official is loaded first and wins
+          const merged = [];
+
+          // 1) Official catalog — in-repo, same-origin.
+          const official = { kind: 'official', id: 'official', label: 'Official', apps_url: p.apps_url, author: null, status: 'loading', error: '', count: 0 };
+          this.sources.push(official);
+          await this._loadSource(official, seen, merged);
+
+          // 2) Unofficial catalogs — from the platform's in-repo unofficial.json registry.
+          let defs = [];
+          if (p.unofficial_url) {
+            try {
+              const res = await fetch(p.unofficial_url, { cache: 'no-cache' });
+              if (!res.ok) throw new Error('HTTP ' + res.status);
+              const data = await res.json();
+              defs = (data.sources || []).filter(s => s && s.enabled).map(s => ({
+                kind: 'unofficial', id: s.id, label: s.name || s.id, apps_url: s.apps_url,
+                author: s.author || null, status: 'loading', error: '', count: 0
+              }));
+            } catch (e) {
+              this.unofficialRegistryError = e.message || String(e);
+            }
+          }
+          defs.forEach(d => this.sources.push(d));
+          // Fetch unofficial feeds in parallel; a failing feed is isolated per-source.
+          await Promise.all(defs.map(d => this._loadSource(d, seen, merged)));
+
+          this.apps = merged;
+        },
+        async _loadSource(src, seen, merged) {
+          // Unofficial feeds are remote and must be HTTPS (C-04); official is same-origin/relative.
+          if (src.kind === 'unofficial' && !/^https:\/\//i.test(src.apps_url || '')) {
+            src.status = 'error';
+            src.error = 'unofficial feed must be served over HTTPS (C-04)';
+            return;
+          }
           try {
-            const res = await fetch(p.apps_url, { cache: 'no-cache' });
-            if (!res.ok) throw new Error(p.apps_url + ' → HTTP ' + res.status);
+            const res = await fetch(src.apps_url, { cache: 'no-cache' });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
             const data = await res.json();
-            this.apps = Array.isArray(data.apps) ? data.apps : [];
+            const list = Array.isArray(data.apps) ? data.apps : [];
+            let n = 0;
+            for (const app of list) {
+              const dup = !!(app.uuid && seen.has(app.uuid));
+              if (app.uuid) seen.add(app.uuid);
+              merged.push(Object.assign({}, app, {
+                _source: src.id, _sourceKind: src.kind, _author: src.author, _duplicate: dup
+              }));
+              n++;
+            }
+            src.count = n;
+            src.status = 'loaded';
           } catch (e) {
-            this.appsError = e.message || String(e);
+            src.status = 'error';
+            src.error = e.message || String(e);
           }
         }
       };
@@ -171,7 +224,7 @@
         </div>
         <div class="browser-stat-card">
           <span x-text="activePlatform ? activePlatform.name + ' apps' : 'Apps'"></span>
-          <strong x-text="loading ? '…' : (appsError ? '—' : apps.length)"></strong>
+          <strong x-text="loading ? '…' : apps.length"></strong>
         </div>
       </div>
     </section>
@@ -204,23 +257,44 @@
         </div>
       </section>
 
-      <!-- loaded: catalog is in memory (EPIC-02 done; UI is EPIC-04) -->
+      <!-- loaded: catalog aggregated in memory with provenance (EPIC-02 + EPIC-03; UI is EPIC-04) -->
       <section class="browser-section" x-show="!loading && !error">
         <div class="browser-section-head">
           <div>
             <span class="browser-section-kicker" x-text="activePlatform ? activePlatform.name : 'Catalog'"></span>
-            <h3>Official microfirmwares</h3>
+            <h3>Catalog sources</h3>
           </div>
-          <span class="browser-count-badge" x-show="!appsError" x-text="apps.length"></span>
+          <span class="browser-count-badge" x-text="apps.length + ' apps'"></span>
         </div>
-        <p class="browser-section-copy" x-show="!appsError">
-          Loaded <strong x-text="apps.length"></strong> official microfirmwares for
+        <p class="browser-section-copy">
+          Aggregated <strong x-text="apps.length"></strong> microfirmwares across
+          <strong x-text="sources.length"></strong> source(s) for
           <span x-text="activePlatform ? activePlatform.name : 'this platform'"></span>.
+          Official is served in-repo; unofficial sources are remote and clearly labeled.
           The browsable catalog UI arrives in a later iteration.
         </p>
-        <div class="browser-empty-state" x-show="appsError">
-          <i class="fas fa-triangle-exclamation"></i>
-          <p>Couldn't load this platform's catalog: <span x-text="appsError"></span></p>
+        <div class="browser-list">
+          <template x-for="s in sources" :key="s.id">
+            <article class="browser-entry-row">
+              <div class="browser-entry-row-main">
+                <div class="browser-entry-row-title">
+                  <h4 x-text="s.label"></h4>
+                  <span class="browser-entry-tag" x-text="s.kind"></span>
+                  <span class="browser-entry-tag" x-show="s.author && s.author.name"
+                    x-text="s.author && s.author.name ? 'by ' + s.author.name : ''"></span>
+                </div>
+                <p class="browser-entry-path"
+                  x-text="s.status === 'loaded' ? (s.count + ' apps') : (s.status === 'error' ? ('error: ' + s.error) : 'loading…')"></p>
+              </div>
+            </article>
+          </template>
+        </div>
+        <p class="browser-inline-note" x-show="unofficialRegistryError">
+          Unofficial registry unavailable: <span x-text="unofficialRegistryError"></span> (official catalog still loaded).
+        </p>
+        <div class="browser-empty-state browser-empty-state-muted" x-show="sources.length === 1">
+          <i class="fas fa-circle-info"></i>
+          <p><span x-text="activePlatform ? activePlatform.name : 'This platform'"></span> has no unofficial sources yet — showing the official catalog only.</p>
         </div>
       </section>
     </div>
