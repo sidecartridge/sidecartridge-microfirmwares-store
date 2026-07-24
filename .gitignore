@@ -1,0 +1,6 @@
+# Local-only epics backlog (tracked on disk, not in git)
+docs/
+
+# Editor / OS cruft
+.DS_Store
+.claude/
