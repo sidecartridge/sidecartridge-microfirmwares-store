@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://md-store.sidecartridge.com/schema/apps.schema.json",
+  "title": "apps.json — per-platform microfirmware catalog (D-06)",
+  "description": "Contract for a platform's app catalog. Identical schema for every platform (official in-repo or unofficial remote). See docs/epics DECISIONS D-06.",
+  "type": "object",
+  "required": ["apps"],
+  "additionalProperties": false,
+  "properties": {
+    "apps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/app" }
+    }
+  },
+  "$defs": {
+    "app": {
+      "type": "object",
+      "required": ["uuid", "name", "description", "image", "tags", "devices", "binary", "md5", "version", "previous_versions"],
+      "additionalProperties": true,
+      "properties": {
+        "uuid": { "type": "string", "description": "Stable identifier." },
+        "name": { "type": "string" },
+        "description": { "type": "string", "description": "May contain HTML — treat as untrusted (C-03)." },
+        "image": { "type": "string", "format": "uri", "description": "Icon/preview URL (must be HTTPS on the deployed site, C-02)." },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "devices": { "type": "array", "items": { "type": "string" }, "description": "Hardware variants within the platform, e.g. ST/STE/MegaST/MegaSTE." },
+        "binary": { "type": "string", "format": "uri", "description": "URL to the current .uf2 firmware (external; must be HTTPS to download, C-02)." },
+        "md5": { "type": "string", "description": "Checksum of `binary`." },
+        "version": { "type": "string", "description": "e.g. v1.1.0." },
+        "previous_versions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/priorVersion" }
+        }
+      }
+    },
+    "priorVersion": {
+      "type": "object",
+      "required": ["version", "binary", "md5"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string" },
+        "binary": { "type": "string", "format": "uri" },
+        "md5": { "type": "string" }
+      }
+    }
+  }
+}
