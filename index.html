@@ -119,10 +119,11 @@
           this.unofficialRegistryError = '';
           const seen = new Set();   // uuid precedence: official is loaded first and wins
           const merged = [];
+          const sources = [];       // built locally; assigned to this.sources once, at the end
 
           // 1) Official catalog — in-repo, same-origin.
           const official = { kind: 'official', id: 'official', label: 'Official', apps_url: p.apps_url, author: null, status: 'loading', error: '', count: 0 };
-          this.sources.push(official);
+          sources.push(official);
           await this._loadSource(official, seen, merged);
 
           // 2) Unofficial catalogs — from the platform's in-repo unofficial.json registry.
@@ -140,10 +141,14 @@
               this.unofficialRegistryError = e.message || String(e);
             }
           }
-          defs.forEach(d => this.sources.push(d));
+          defs.forEach(d => sources.push(d));
           // Fetch unofficial feeds in parallel; a failing feed is isolated per-source.
           await Promise.all(defs.map(d => this._loadSource(d, seen, merged)));
 
+          // Assign once, after every source's status is final. Alpine re-renders on the
+          // assignment; mutating already-pushed objects in place would not (that was the
+          // "stuck on loading…" bug).
+          this.sources = sources;
           this.apps = merged;
         },
         async _loadSource(src, seen, merged) {
