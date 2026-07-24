@@ -77,9 +77,56 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+
+  <!-- Data pipeline (EPIC-02): load platforms.json, then the selected platform's
+       official apps.json — all same-origin (D-05). No catalog rendering here;
+       that is EPIC-04. Alpine calls init() automatically. -->
+  <script>
+    function storeData() {
+      return {
+        navMenuOpen: false,
+        loading: true,
+        error: '',
+        platforms: [],
+        activePlatform: null,
+        apps: [],
+        appsError: '',
+        async init() {
+          try {
+            const res = await fetch('platforms.json', { cache: 'no-cache' });
+            if (!res.ok) throw new Error('platforms.json → HTTP ' + res.status);
+            const data = await res.json();
+            this.platforms = (data.platforms || [])
+              .filter(p => p && p.enabled)
+              .sort((a, b) => (a.order || 0) - (b.order || 0));
+            if (this.platforms.length) {
+              await this.loadPlatform(this.platforms[0]);
+            }
+          } catch (e) {
+            this.error = e.message || String(e);
+          } finally {
+            this.loading = false;
+          }
+        },
+        async loadPlatform(p) {
+          this.activePlatform = p;
+          this.apps = [];
+          this.appsError = '';
+          try {
+            const res = await fetch(p.apps_url, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(p.apps_url + ' → HTTP ' + res.status);
+            const data = await res.json();
+            this.apps = Array.isArray(data.apps) ? data.apps : [];
+          } catch (e) {
+            this.appsError = e.message || String(e);
+          }
+        }
+      };
+    }
+  </script>
 </head>
 
-<body class="browser-page" x-data="{ navMenuOpen: false }">
+<body class="browser-page" x-data="storeData()">
   <header class="app-header">
     <div class="app-header-inner">
       <div class="app-header-copy">
@@ -114,35 +161,66 @@
         <p>
           Browse and install microfirmwares — the applications and services that run on the
           <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
-          Multi-device family. The store is under construction; check back soon.
+          Multi-device family. The browsable catalog UI is coming soon.
         </p>
       </div>
-      <div class="browser-stat-grid" style="grid-template-columns: 1fr;">
+      <div class="browser-stat-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
         <div class="browser-stat-card">
-          <span>Status</span>
-          <strong>Coming soon</strong>
+          <span>Platforms</span>
+          <strong x-text="loading ? '…' : platforms.length"></strong>
+        </div>
+        <div class="browser-stat-card">
+          <span x-text="activePlatform ? activePlatform.name + ' apps' : 'Apps'"></span>
+          <strong x-text="loading ? '…' : (appsError ? '—' : apps.length)"></strong>
         </div>
       </div>
     </section>
 
     <div class="browser-shell">
       <!-- ============================================================
-           PLACEHOLDER — Microfirmware application store goes here.
-
-           Build the store UI inside this .browser-shell (catalog list,
-           search/filter, per-device sections, install/download actions).
-           The design system in styles.css already provides the relevant
-           classes: .browser-section, .browser-card-grid,
-           .browser-entry-card, .browser-list, .browser-entry-row,
-           .taxonomy-chip, .browser-download-button, .browser-empty-state,
-           .mode-toggle, .browse-az, .browse-pager, etc.
-
-           Remove this placeholder block when the store is implemented.
+           EPIC-02 proof: the data pipeline loads same-origin and holds the
+           catalog in memory. The browsable catalog UI (cards, search, source
+           switcher, download actions) is EPIC-04 and replaces this section.
+           Design-system primitives ready in styles.css: .browser-card-grid,
+           .browser-entry-card, .taxonomy-chip, .browser-download-button, etc.
            ============================================================ -->
-      <section class="browser-section">
-        <div class="browser-empty-state browser-empty-state-muted">
-          <i class="fas fa-store"></i>
-          <p>The microfirmware application store will be implemented here.</p>
+
+      <!-- loading -->
+      <div class="browser-loading" x-show="loading">
+        <div class="browser-loading-card">
+          <i class="fas fa-spinner fa-spin"></i>
+          <div>
+            <strong>Loading catalog…</strong>
+            <p>Fetching the platform registry and the official app list.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- platform registry failed -->
+      <section class="browser-section" x-show="!loading && error">
+        <div class="browser-empty-state">
+          <i class="fas fa-triangle-exclamation"></i>
+          <p>Couldn't load the platform registry: <span x-text="error"></span></p>
+        </div>
+      </section>
+
+      <!-- loaded: catalog is in memory (EPIC-02 done; UI is EPIC-04) -->
+      <section class="browser-section" x-show="!loading && !error">
+        <div class="browser-section-head">
+          <div>
+            <span class="browser-section-kicker" x-text="activePlatform ? activePlatform.name : 'Catalog'"></span>
+            <h3>Official microfirmwares</h3>
+          </div>
+          <span class="browser-count-badge" x-show="!appsError" x-text="apps.length"></span>
+        </div>
+        <p class="browser-section-copy" x-show="!appsError">
+          Loaded <strong x-text="apps.length"></strong> official microfirmwares for
+          <span x-text="activePlatform ? activePlatform.name : 'this platform'"></span>.
+          The browsable catalog UI arrives in a later iteration.
+        </p>
+        <div class="browser-empty-state" x-show="appsError">
+          <i class="fas fa-triangle-exclamation"></i>
+          <p>Couldn't load this platform's catalog: <span x-text="appsError"></span></p>
         </div>
       </section>
     </div>
