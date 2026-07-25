@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="SEGA Mega Drive">
+  <rect width="48" height="48" rx="10" fill="#0089CF"/>
+  <text x="24" y="24" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" font-style="italic" font-weight="700" fill="#fff" letter-spacing="0.5">SEGA</text>
+  <text x="24" y="37" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="7" font-weight="700" fill="#cfeeff" letter-spacing="1">MD</text>
+</svg>

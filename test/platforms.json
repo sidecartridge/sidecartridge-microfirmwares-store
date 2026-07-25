@@ -1,0 +1,55 @@
+{
+  "_comment": "TEST DATA — fictional platforms/apps for development (EPIC-06, D-11). Not real. Official-only.",
+  "platforms": [
+    {
+      "id": "atari-2600",
+      "name": "Atari 2600",
+      "description": "Atari 2600 / VCS cartridge console (TEST).",
+      "apps_url": "atari-2600/apps.json",
+      "image": "assets/platforms/atari-2600.svg",
+      "devices": ["2600", "VCS"],
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "atari-8bit",
+      "name": "Atari 8-bit",
+      "description": "Atari 400/800/XL/XE 8-bit computers (TEST).",
+      "apps_url": "atari-8bit/apps.json",
+      "image": "assets/platforms/atari-8bit.svg",
+      "devices": ["400", "800", "XL", "XE"],
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "sega-megadrive",
+      "name": "SEGA Megadrive",
+      "description": "SEGA Mega Drive / Genesis 16-bit console (TEST).",
+      "apps_url": "sega-megadrive/apps.json",
+      "image": "assets/platforms/sega-megadrive.svg",
+      "devices": ["Mega Drive", "Genesis"],
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "nes",
+      "name": "NES",
+      "description": "Nintendo Entertainment System / Famicom (TEST).",
+      "apps_url": "nes/apps.json",
+      "image": "assets/platforms/nes.svg",
+      "devices": ["NES", "Famicom"],
+      "enabled": true,
+      "order": 4
+    },
+    {
+      "id": "colecovision",
+      "name": "Colecovision",
+      "description": "ColecoVision 8-bit cartridge console (TEST).",
+      "apps_url": "colecovision/apps.json",
+      "image": "assets/platforms/colecovision.svg",
+      "devices": ["ColecoVision"],
+      "enabled": true,
+      "order": 5
+    }
+  ]
+}

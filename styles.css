@@ -469,25 +469,6 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .browser-entry-actions { display: flex; justify-content: flex-start; align-items: center; flex: 0 0 auto; }
 .browser-entry-actions-rail { min-width: 3.7rem; padding: 0.9rem 0.9rem 0.9rem 0.15rem; }
 
-.browser-download-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: var(--color-ink);
-  color: var(--color-on-ink);
-  cursor: pointer;
-  line-height: 1;
-  flex: 0 0 auto;
-  transition: transform 0.16s ease, opacity 0.16s ease;
-}
-.browser-download-button:hover,
-.browser-download-button:focus-visible { transform: translateY(-1px); opacity: 0.9; }
-.browser-download-button .fas { font-size: 1.1rem; }
-
 .browser-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
 .browser-entry-row { display: flex; justify-content: space-between; align-items: stretch; overflow: hidden; }
@@ -644,6 +625,7 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 
 /* ---------- Catalog header ---------- */
 .catalog-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.catalog-head-logo { width: 40px; height: 40px; object-fit: contain; flex: 0 0 auto; }
 .catalog-title { margin: 0.1rem 0 0; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.01em; }
 
 /* ---------- Source switcher ---------- */
@@ -701,17 +683,35 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   border-radius: var(--radius);
   background: var(--color-bg-2);
   overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+.app-card:hover,
+.app-card:focus-visible {
+  border-color: var(--color-ink);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  outline: none;
 }
 .app-card-media {
+  position: relative;
   aspect-ratio: 16 / 9;
-  background: var(--color-bg-3);
+  background: var(--logo-bg, var(--color-bg-3));
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-.app-card-img { width: 100%; height: 100%; object-fit: cover; }
-.app-card-media.is-empty .app-card-img { display: none; }
+.app-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* "no logo" monogram shown when image is placehold.co / missing / broken (EPIC-05) */
+.app-noimg {
+  font-family: var(--font-base);
+  font-weight: 700;
+  font-size: 1.7rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
 .app-card-body {
   padding: 0.9rem 1rem 0.4rem;
   display: flex;
@@ -722,8 +722,20 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .app-card-body h4 { margin: 0; color: var(--color-ink); font-size: 1.05rem; font-weight: 700; }
 .app-card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .app-card-devices { margin: 0; color: var(--color-ink-2); font-family: var(--font-mono); font-size: 0.78rem; }
-.app-card-actions { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem 1rem; }
-.app-card-actions .btn-primary { margin-left: auto; }
+/* cooler "Details" affordance: the whole card is clickable; this is the footer hint (EPIC-05) */
+.app-card-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding: 0.7rem 1rem 0.9rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-ink-2);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+.app-card:hover .app-card-cta,
+.app-card:focus-visible .app-card-cta { color: var(--color-ink); }
 
 /* ---------- App detail modal ---------- */
 .app-modal {
@@ -765,14 +777,51 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .app-modal-close:hover { background: var(--color-bg-3); }
 .app-detail-desc { color: var(--color-ink-2); line-height: 1.6; margin: 0.5rem 0 1rem; }
 .app-detail-desc a { color: var(--color-ink); font-weight: 500; }
-.app-detail-download {
+.app-modal-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: var(--radius);
+  background: var(--logo-bg, var(--color-bg-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.app-detail-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
-  margin: 1rem 0;
-  padding: 0.85rem 0;
+  margin: 1rem 0 0.75rem;
+  padding: 0.85rem 0 0;
   border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
 }
+.app-detail-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 0.5rem;
+  color: var(--color-ink-2);
+  font-size: 0.9rem;
+}
+.app-detail-note i { margin-top: 0.15rem; }
 .app-detail-history h4 { margin: 1rem 0 0.6rem; font-weight: 700; }
+
+/* Test-data mode banner (EPIC-06) */
+.test-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-ink);
+  border-radius: var(--radius);
+  background: var(--color-bg-3);
+  color: var(--color-ink);
+  font-size: 0.9rem;
+}
+.test-banner code { font-size: 0.85em; }
+.test-banner a { font-weight: 500; }

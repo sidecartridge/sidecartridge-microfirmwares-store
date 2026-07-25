@@ -1,0 +1,29 @@
+{
+  "_comment": "TEST DATA — fictional. Not real firmware.",
+  "apps": [
+    {
+      "uuid": "tcv-0001",
+      "name": "Super Game Module (TEST)",
+      "description": "Fictional expansion microfirmware for ColecoVision.",
+      "image": "https://placehold.co/256x256/png",
+      "tags": ["Expansion", "Audio"],
+      "devices": ["ColecoVision"],
+      "binary": "https://example.com/test/tcv-0001-v1.3.0.uf2",
+      "md5": "00000000000000000000000000000041",
+      "version": "v1.3.0",
+      "previous_versions": []
+    },
+    {
+      "uuid": "tcv-0002",
+      "name": "ROM Multicart (TEST)",
+      "description": "Fictional ColecoVision multicart image.",
+      "image": "",
+      "tags": ["Multicart", "ROM"],
+      "devices": ["ColecoVision"],
+      "binary": "https://example.com/test/tcv-0002-v2.0.0.uf2",
+      "md5": "00000000000000000000000000000042",
+      "version": "v2.0.0",
+      "previous_versions": []
+    }
+  ]
+}

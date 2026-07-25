@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Atari ST">
+  <rect width="48" height="48" rx="10" fill="#E4002B"/>
+  <g fill="#fff">
+    <rect x="22.6" y="9" width="2.8" height="21"/>
+    <path d="M21.4 9c-3.4.6-5.5 6-6.4 21h3.2C18.9 18 19.9 12 21.4 11Z"/>
+    <path d="M26.6 9c3.4.6 5.5 6 6.4 21h-3.2C29.1 18 28.1 12 26.6 11Z"/>
+  </g>
+  <text x="24" y="41" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="9" font-weight="700" fill="#fff">ST</text>
+</svg>
