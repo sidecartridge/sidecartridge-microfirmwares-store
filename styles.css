@@ -47,6 +47,8 @@
   --color-bg-3: #faebd7;       /* warm accent surface */
   --color-on-ink: #fdfcf9;     /* text/icon on ink surfaces */
   --color-border: rgba(13, 4, 43, 0.12);
+  --tag-device-bg: #e6e8f5;    /* device tags — cool (distinct from warm feature tags) */
+  --tag-device-text: #3d4372;
 
   --radius: 5px;               /* --card-border-radius / --button-border-radius */
   --radius-pill: 999px;
@@ -66,6 +68,8 @@
   --color-bg-3: #251654;
   --color-on-ink: #0b0326;
   --color-border: rgba(245, 245, 236, 0.14);
+  --tag-device-bg: #22264a;
+  --tag-device-text: #c3c9ee;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   color-scheme: dark;
 }
@@ -79,6 +83,8 @@
     --color-bg-3: #251654;
     --color-on-ink: #0b0326;
     --color-border: rgba(245, 245, 236, 0.14);
+    --tag-device-bg: #22264a;
+    --tag-device-text: #c3c9ee;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     color-scheme: dark;
   }
@@ -360,7 +366,7 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   padding: 0.42rem 0.7rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  background: var(--color-bg-2);
+  background: var(--color-bg-3);
   color: var(--color-ink);
   font: inherit;
   font-size: 0.9rem;
@@ -377,6 +383,13 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   text-align: center;
 }
 .taxonomy-chip.active { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-on-ink); }
+/* device filter chips: cool color, distinct from the warm feature/tag chips */
+.taxonomy-chip.chip-device:not(.active) {
+  background: var(--tag-device-bg);
+  color: var(--tag-device-text);
+  border-color: transparent;
+}
+.taxonomy-chip.chip-device strong { color: var(--tag-device-text); }
 .taxonomy-chip.active strong { background: rgba(255, 255, 255, 0.18); color: var(--color-on-ink); }
 
 .browser-summary { margin: 0.9rem 0 0; color: var(--color-ink-2); }
@@ -674,12 +687,12 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .platform-card-body h3 { margin: 0 0 0.2rem; color: var(--color-ink); font-size: 1.15rem; font-weight: 700; }
 .platform-card-body p { margin: 0 0 0.55rem; color: var(--color-ink-2); font-size: 0.92rem; line-height: 1.45; }
 .platform-card-devices { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-/* platform (device) tags: outlined/neutral — visually distinct from the filled-warm
-   app feature tags (.app-card-tags .browser-entry-tag) */
+/* platform (device) tags: cool color — visually distinct from the warm app
+   feature tags (.app-card-tags .browser-entry-tag / .taxonomy-chip) */
 .platform-card-devices .browser-entry-tag {
-  background: transparent;
-  color: var(--color-ink-2);
-  border: 1px solid var(--color-border);
+  background: var(--tag-device-bg);
+  color: var(--tag-device-text);
+  border: 0;
 }
 .platform-card-go { flex: 0 0 auto; color: var(--color-ink-2); }
 
