@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=6.0" />
+  <link rel="stylesheet" href="styles.css?v=7.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -348,7 +348,7 @@
           </div>
         </section>
 
-        <div class="browser-card-grid" x-show="platforms.length">
+        <div class="browser-card-grid platform-grid" x-show="platforms.length">
           <template x-for="p in platforms" :key="p.id">
             <article class="platform-card" role="button" tabindex="0"
               @click="selectPlatform(p)" @keydown.enter="selectPlatform(p)" @keydown.space.prevent="selectPlatform(p)">
