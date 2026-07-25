@@ -469,6 +469,26 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .browser-entry-actions { display: flex; justify-content: flex-start; align-items: center; flex: 0 0 auto; }
 .browser-entry-actions-rail { min-width: 3.7rem; padding: 0.9rem 0.9rem 0.9rem 0.15rem; }
 
+/* download control — only used behind ?downloadable (D-13) */
+.browser-download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  cursor: pointer;
+  line-height: 1;
+  flex: 0 0 auto;
+  transition: transform 0.16s ease, opacity 0.16s ease;
+}
+.browser-download-button:hover,
+.browser-download-button:focus-visible { transform: translateY(-1px); opacity: 0.9; }
+.browser-download-button .fas { font-size: 1.1rem; }
+
 .browser-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
 .browser-entry-row { display: flex; justify-content: space-between; align-items: stretch; overflow: hidden; }
@@ -616,7 +636,28 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   box-shadow: var(--shadow-sm);
   outline: none;
 }
-.platform-card-logo { width: 48px; height: 48px; object-fit: contain; flex: 0 0 auto; }
+/* platform logo tile: monogram placeholder behind the real logo image (auto-shows
+   the PNG once it exists; monogram until then, EPIC-08) */
+.platform-logo {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--logo-bg, var(--color-bg-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.platform-logo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--color-bg); }
+.platform-noimg {
+  font-family: var(--font-base);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
 .platform-card-body { min-width: 0; flex: 1 1 auto; }
 .platform-card-body h3 { margin: 0 0 0.2rem; color: var(--color-ink); font-size: 1.15rem; font-weight: 700; }
 .platform-card-body p { margin: 0 0 0.55rem; color: var(--color-ink-2); font-size: 0.92rem; line-height: 1.45; }
@@ -625,7 +666,19 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 
 /* ---------- Catalog header ---------- */
 .catalog-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
-.catalog-head-logo { width: 40px; height: 40px; object-fit: contain; flex: 0 0 auto; }
+.catalog-head-logo {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--logo-bg, var(--color-bg-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.catalog-head-logo .platform-noimg { font-size: 0.9rem; }
 .catalog-title { margin: 0.1rem 0 0; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.01em; }
 
 /* ---------- Source switcher ---------- */

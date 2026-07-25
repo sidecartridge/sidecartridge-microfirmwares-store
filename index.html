@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=4.0" />
+  <link rel="stylesheet" href="styles.css?v=6.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -103,12 +103,14 @@
         detailApp: null,
         testMode: false,        // EPIC-06: ?data=test
         dataBase: '',           // '' (real) | 'test/' (fixtures)
+        downloadable: false,    // ?downloadable — reveals .uf2 link + md5 in detail (D-13)
 
         async init() {
           window.addEventListener('hashchange', () => this.applyHash());
           const params = new URLSearchParams(location.search);
           this.testMode = params.get('data') === 'test';
           this.dataBase = this.testMode ? 'test/' : '';
+          this.downloadable = params.has('downloadable');
           try {
             const res = await fetch(this.dataBase + 'platforms.json', { cache: 'no-cache' });
             if (!res.ok) throw new Error('platforms.json → HTTP ' + res.status);
@@ -165,8 +167,9 @@
         // ----- no-logo art (EPIC-05 STORY-02): placehold.co / missing / broken -> brand monogram
         noLogo(app) { const src = (app && app.image) || ''; return !src || /placehold\.co/i.test(src); },
         initials(name) {
-          const parts = String(name || '').replace(/\(TEST\)/i, '').trim().split(/\s+/).filter(Boolean);
-          const s = (parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : '');
+          const clean = String(name || '').replace(/\(TEST\)/i, '').trim();
+          const parts = clean.split(/\s+/).filter(Boolean);
+          const s = parts.length >= 2 ? (parts[0][0] + parts[1][0]) : clean.slice(0, 2);
           return (s || '?').toUpperCase();
         },
         logoBg(name) {
@@ -333,7 +336,7 @@
     <!-- ============ Platform landing (STORY-01) ============ -->
     <template x-if="!loading && !error && view === 'platforms'">
       <div>
-        <section class="browser-hero">
+        <section class="browser-hero" style="grid-template-columns: 1fr;">
           <div class="browser-hero-copy">
             <span class="browser-kicker">Microfirmware Store</span>
             <h2>The application store for your SidecarTridge devices.</h2>
@@ -343,20 +346,17 @@
               device family. Pick a platform to explore its catalog.
             </p>
           </div>
-          <div class="browser-stat-grid" style="grid-template-columns: 1fr;">
-            <div class="browser-stat-card">
-              <span>Platforms</span>
-              <strong x-text="platforms.length"></strong>
-            </div>
-          </div>
         </section>
 
         <div class="browser-card-grid" x-show="platforms.length">
           <template x-for="p in platforms" :key="p.id">
             <article class="platform-card" role="button" tabindex="0"
               @click="selectPlatform(p)" @keydown.enter="selectPlatform(p)" @keydown.space.prevent="selectPlatform(p)">
-              <img class="platform-card-logo" :src="p.image" :alt="p.name + ' logo'" loading="lazy"
-                onerror="this.style.display='none'">
+              <span class="platform-logo" :style="'--logo-bg:' + logoBg(p.name)">
+                <span class="platform-noimg" x-text="initials(p.name)"></span>
+                <img class="platform-logo-img" :src="p.image" :alt="p.name + ' logo'" loading="lazy"
+                  onerror="this.remove()">
+              </span>
               <div class="platform-card-body">
                 <h3 x-text="p.name"></h3>
                 <p x-text="p.description"></p>
@@ -380,9 +380,11 @@
       <div>
         <div class="catalog-head">
           <button type="button" class="pure-button" @click="backToPlatforms()"><i class="fas fa-arrow-left"></i> Platforms</button>
-          <img class="catalog-head-logo" x-show="activePlatform && activePlatform.image"
-            :src="activePlatform ? activePlatform.image : ''" :alt="activePlatform ? activePlatform.name + ' logo' : ''"
-            onerror="this.style.display='none'">
+          <span class="catalog-head-logo" x-show="activePlatform" :style="'--logo-bg:' + logoBg(activePlatform ? activePlatform.name : '')">
+            <span class="platform-noimg" x-text="activePlatform ? initials(activePlatform.name) : ''"></span>
+            <img class="platform-logo-img" :src="activePlatform ? activePlatform.image : ''"
+              :alt="activePlatform ? activePlatform.name + ' logo' : ''" onerror="this.remove()">
+          </span>
           <div>
             <span class="browser-section-kicker">Platform</span>
             <h2 class="catalog-title" x-text="activePlatform ? activePlatform.name : ''"></h2>
@@ -505,12 +507,16 @@
             <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
             <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
             <p class="browser-entry-path" x-show="(detailApp.devices || []).length">Devices: <span x-text="(detailApp.devices || []).join(', ')"></span></p>
-            <!-- No download: microfirmwares install from the device (D-10). Version/md5 shown as info. -->
+            <!-- Default: no download, no md5 (install is device-only, D-10).
+                 ?downloadable reveals the .uf2 link + md5 (D-13). -->
             <div class="app-detail-meta">
               <span class="browser-entry-tag" x-text="'version ' + detailApp.version"></span>
-              <span class="browser-entry-path" x-text="'md5: ' + detailApp.md5"></span>
+              <template x-if="downloadable">
+                <a class="btn-primary" :href="detailApp.binary" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download .uf2</a>
+              </template>
+              <span class="browser-entry-path" x-show="downloadable" x-text="'md5: ' + detailApp.md5"></span>
             </div>
-            <p class="app-detail-note">
+            <p class="app-detail-note" x-show="!downloadable">
               <i class="fas fa-circle-info"></i>
               Microfirmwares are installed from your SidecarTridge device — there's no download here.
             </p>
@@ -522,7 +528,10 @@
                     <article class="browser-entry-row">
                       <div class="browser-entry-row-main">
                         <div class="browser-entry-row-title"><h4 x-text="pv.version"></h4></div>
-                        <p class="browser-entry-path" x-text="'md5: ' + pv.md5"></p>
+                        <p class="browser-entry-path" x-show="downloadable" x-text="'md5: ' + pv.md5"></p>
+                      </div>
+                      <div class="browser-entry-actions browser-entry-actions-rail" x-show="downloadable">
+                        <a class="browser-download-button" :href="pv.binary" target="_blank" rel="noopener" aria-label="Download"><span class="fas fa-download"></span></a>
                       </div>
                     </article>
                   </template>
