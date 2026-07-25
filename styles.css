@@ -618,10 +618,13 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
    ============================================================================ */
 
 /* ---------- Platform landing cards ---------- */
+/* one platform per row (single column), independent of the app-card grid */
+.platform-grid { grid-template-columns: 1fr; }
+
 .platform-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   padding: 1.1rem 1.2rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -640,8 +643,9 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
    the PNG once it exists; monogram until then, EPIC-08) */
 .platform-logo {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 256px;
+  height: 256px;
+  max-width: 100%;
   flex: 0 0 auto;
   border-radius: var(--radius);
   overflow: hidden;
@@ -654,9 +658,17 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .platform-noimg {
   font-family: var(--font-base);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 3.5rem;
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+/* stack on narrow screens so the 256px logo never overflows */
+@media (max-width: 640px) {
+  .platform-card { flex-direction: column; align-items: stretch; text-align: center; }
+  .platform-logo { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+  .platform-card-devices { justify-content: center; }
+  .platform-card-go { display: none; }
 }
 .platform-card-body { min-width: 0; flex: 1 1 auto; }
 .platform-card-body h3 { margin: 0 0 0.2rem; color: var(--color-ink); font-size: 1.15rem; font-weight: 700; }
