@@ -1,12 +1,22 @@
 {
-  "_comment": "TEST DATA — fictional platforms/apps for development (EPIC-06, D-11). Not real. Official-only.",
+  "_comment": "TEST DATA — for development (EPIC-06, D-11). Official-only. Atari ST uses the REAL catalog (copied from atari-st/apps.json); the rest are fictional.",
   "platforms": [
+    {
+      "id": "atari-st",
+      "name": "Atari ST",
+      "description": "Atari ST / STE / MegaST / MegaSTE — real catalog, shown in test mode.",
+      "apps_url": "atari-st/apps.json",
+      "image": "assets/platforms/atari-st.png",
+      "devices": ["ST", "STE", "MegaST", "MegaSTE"],
+      "enabled": true,
+      "order": 0
+    },
     {
       "id": "atari-2600",
       "name": "Atari 2600",
       "description": "Atari 2600 / VCS cartridge console (TEST).",
       "apps_url": "atari-2600/apps.json",
-      "image": "assets/platforms/atari-2600.svg",
+      "image": "assets/platforms/atari-2600.png",
       "devices": ["2600", "VCS"],
       "enabled": true,
       "order": 1
@@ -16,7 +26,7 @@
       "name": "Atari 8-bit",
       "description": "Atari 400/800/XL/XE 8-bit computers (TEST).",
       "apps_url": "atari-8bit/apps.json",
-      "image": "assets/platforms/atari-8bit.svg",
+      "image": "assets/platforms/atari-8bit.png",
       "devices": ["400", "800", "XL", "XE"],
       "enabled": true,
       "order": 2
@@ -26,7 +36,7 @@
       "name": "SEGA Megadrive",
       "description": "SEGA Mega Drive / Genesis 16-bit console (TEST).",
       "apps_url": "sega-megadrive/apps.json",
-      "image": "assets/platforms/sega-megadrive.svg",
+      "image": "assets/platforms/sega-megadrive.png",
       "devices": ["Mega Drive", "Genesis"],
       "enabled": true,
       "order": 3
@@ -36,7 +46,7 @@
       "name": "NES",
       "description": "Nintendo Entertainment System / Famicom (TEST).",
       "apps_url": "nes/apps.json",
-      "image": "assets/platforms/nes.svg",
+      "image": "assets/platforms/nes.png",
       "devices": ["NES", "Famicom"],
       "enabled": true,
       "order": 4
@@ -46,7 +56,7 @@
       "name": "Colecovision",
       "description": "ColecoVision 8-bit cartridge console (TEST).",
       "apps_url": "colecovision/apps.json",
-      "image": "assets/platforms/colecovision.svg",
+      "image": "assets/platforms/colecovision.png",
       "devices": ["ColecoVision"],
       "enabled": true,
       "order": 5
