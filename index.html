@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=3.0" />
+  <link rel="stylesheet" href="styles.css?v=4.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -101,11 +101,16 @@
         activeTag: '',
         activeDevice: '',
         detailApp: null,
+        testMode: false,        // EPIC-06: ?data=test
+        dataBase: '',           // '' (real) | 'test/' (fixtures)
 
         async init() {
           window.addEventListener('hashchange', () => this.applyHash());
+          const params = new URLSearchParams(location.search);
+          this.testMode = params.get('data') === 'test';
+          this.dataBase = this.testMode ? 'test/' : '';
           try {
-            const res = await fetch('platforms.json', { cache: 'no-cache' });
+            const res = await fetch(this.dataBase + 'platforms.json', { cache: 'no-cache' });
             if (!res.ok) throw new Error('platforms.json → HTTP ' + res.status);
             const data = await res.json();
             this.platforms = (data.platforms || [])
@@ -157,6 +162,19 @@
         openDetail(a) { this.detailApp = a; },
         closeDetail() { this.detailApp = null; },
 
+        // ----- no-logo art (EPIC-05 STORY-02): placehold.co / missing / broken -> brand monogram
+        noLogo(app) { const src = (app && app.image) || ''; return !src || /placehold\.co/i.test(src); },
+        initials(name) {
+          const parts = String(name || '').replace(/\(TEST\)/i, '').trim().split(/\s+/).filter(Boolean);
+          const s = (parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : '');
+          return (s || '?').toUpperCase();
+        },
+        logoBg(name) {
+          let h = 0; const s = String(name || '');
+          for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360;
+          return 'linear-gradient(135deg, hsl(' + h + ',42%,52%), hsl(' + ((h + 40) % 360) + ',42%,38%))';
+        },
+
         // ----- sanitize untrusted description HTML (C-03) -----
         sanitize(html) {
           if (html == null) return '';
@@ -198,8 +216,8 @@
           const merged = [];
           const sources = [];       // built locally; assigned to this.sources once, at the end
 
-          // 1) Official catalog — in-repo, same-origin.
-          const official = { kind: 'official', id: 'official', label: 'Official', apps_url: p.apps_url, author: null, status: 'loading', error: '', count: 0 };
+          // 1) Official catalog — in-repo, same-origin (dataBase = 'test/' in test mode, D-11).
+          const official = { kind: 'official', id: 'official', label: 'Official', apps_url: this.dataBase + p.apps_url, author: null, status: 'loading', error: '', count: 0 };
           sources.push(official);
           await this._loadSource(official, seen, merged);
 
@@ -207,7 +225,7 @@
           let defs = [];
           if (p.unofficial_url) {
             try {
-              const res = await fetch(p.unofficial_url, { cache: 'no-cache' });
+              const res = await fetch(this.dataBase + p.unofficial_url, { cache: 'no-cache' });
               if (!res.ok) throw new Error('HTTP ' + res.status);
               const data = await res.json();
               defs = (data.sources || []).filter(s => s && s.enabled).map(s => ({
@@ -290,6 +308,12 @@
   <!-- Main Content Area -->
   <main class="main-content browser-main">
 
+    <!-- test-data mode indicator (EPIC-06, D-11) -->
+    <div class="test-banner" x-show="testMode" x-cloak>
+      <i class="fas fa-flask"></i>
+      <span>Test data mode (<code>?data=test</code>) — fictional platforms &amp; apps. <a href="./">Back to real data</a>.</span>
+    </div>
+
     <!-- global loading -->
     <div class="browser-loading" x-show="loading">
       <div class="browser-loading-card">
@@ -356,6 +380,9 @@
       <div>
         <div class="catalog-head">
           <button type="button" class="pure-button" @click="backToPlatforms()"><i class="fas fa-arrow-left"></i> Platforms</button>
+          <img class="catalog-head-logo" x-show="activePlatform && activePlatform.image"
+            :src="activePlatform ? activePlatform.image : ''" :alt="activePlatform ? activePlatform.name + ' logo' : ''"
+            onerror="this.style.display='none'">
           <div>
             <span class="browser-section-kicker">Platform</span>
             <h2 class="catalog-title" x-text="activePlatform ? activePlatform.name : ''"></h2>
@@ -425,10 +452,13 @@
         <!-- app grid -->
         <div class="browser-card-grid" x-show="activeSource() && activeSource().status === 'loaded'" x-cloak>
           <template x-for="app in visibleApps()" :key="app._source + '-' + app.uuid">
-            <article class="app-card">
-              <div class="app-card-media">
-                <img class="app-card-img" :src="app.image" :alt="app.name" loading="lazy"
-                  onerror="this.closest('.app-card-media').classList.add('is-empty')">
+            <article class="app-card" role="button" tabindex="0" :aria-label="'View details for ' + app.name"
+              @click="openDetail(app)" @keydown.enter="openDetail(app)" @keydown.space.prevent="openDetail(app)">
+              <div class="app-card-media" :style="'--logo-bg:' + logoBg(app.name)">
+                <span class="app-noimg" x-text="initials(app.name)"></span>
+                <template x-if="!noLogo(app)">
+                  <img class="app-card-img" :src="app.image" :alt="app.name" loading="lazy" onerror="this.remove()">
+                </template>
               </div>
               <div class="app-card-body">
                 <div class="browser-entry-topline">
@@ -441,10 +471,7 @@
                 </div>
                 <p class="app-card-devices" x-show="(app.devices || []).length" x-text="(app.devices || []).join(' · ')"></p>
               </div>
-              <div class="app-card-actions">
-                <button type="button" class="pure-button" @click="openDetail(app)">Details</button>
-                <a class="btn-primary" :href="app.binary" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download</a>
-              </div>
+              <span class="app-card-cta"><i class="fas fa-circle-info"></i> View details</span>
             </article>
           </template>
         </div>
@@ -464,6 +491,12 @@
         <button type="button" class="app-modal-close" @click="closeDetail()" aria-label="Close"><i class="fas fa-xmark"></i></button>
         <template x-if="detailApp">
           <div>
+            <div class="app-modal-media" :style="'--logo-bg:' + logoBg(detailApp.name)">
+              <span class="app-noimg" x-text="initials(detailApp.name)"></span>
+              <template x-if="!noLogo(detailApp)">
+                <img class="app-card-img" :src="detailApp.image" :alt="detailApp.name" onerror="this.remove()">
+              </template>
+            </div>
             <div class="browser-entry-topline">
               <span class="browser-entry-tag" x-text="detailApp.version"></span>
               <template x-for="t in (detailApp.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
@@ -472,22 +505,24 @@
             <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
             <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
             <p class="browser-entry-path" x-show="(detailApp.devices || []).length">Devices: <span x-text="(detailApp.devices || []).join(', ')"></span></p>
-            <div class="app-detail-download">
-              <a class="btn-primary" :href="detailApp.binary" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download <span x-text="detailApp.version"></span></a>
+            <!-- No download: microfirmwares install from the device (D-10). Version/md5 shown as info. -->
+            <div class="app-detail-meta">
+              <span class="browser-entry-tag" x-text="'version ' + detailApp.version"></span>
               <span class="browser-entry-path" x-text="'md5: ' + detailApp.md5"></span>
             </div>
+            <p class="app-detail-note">
+              <i class="fas fa-circle-info"></i>
+              Microfirmwares are installed from your SidecarTridge device — there's no download here.
+            </p>
             <template x-if="detailApp.previous_versions && detailApp.previous_versions.length">
               <div class="app-detail-history">
-                <h4>Previous versions</h4>
+                <h4>Version history</h4>
                 <div class="browser-list">
                   <template x-for="pv in detailApp.previous_versions" :key="pv.version">
                     <article class="browser-entry-row">
                       <div class="browser-entry-row-main">
                         <div class="browser-entry-row-title"><h4 x-text="pv.version"></h4></div>
                         <p class="browser-entry-path" x-text="'md5: ' + pv.md5"></p>
-                      </div>
-                      <div class="browser-entry-actions browser-entry-actions-rail">
-                        <a class="browser-download-button" :href="pv.binary" target="_blank" rel="noopener" aria-label="Download"><span class="fas fa-download"></span></a>
                       </div>
                     </article>
                   </template>

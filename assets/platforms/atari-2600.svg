@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Atari 2600">
+  <rect width="48" height="48" rx="10" fill="#6E4A2A"/>
+  <g fill="#fff">
+    <rect x="22.6" y="9" width="2.8" height="20"/>
+    <path d="M21.4 9c-3.4.6-5.5 5.7-6.4 20h3.2C18.9 17.5 19.9 12 21.4 11Z"/>
+    <path d="M26.6 9c3.4.6 5.5 5.7 6.4 20h-3.2C29.1 17.5 28.1 12 26.6 11Z"/>
+  </g>
+  <text x="24" y="41" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="8.5" font-weight="700" fill="#fff">2600</text>
+</svg>

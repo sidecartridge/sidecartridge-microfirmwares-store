@@ -1,0 +1,43 @@
+{
+  "_comment": "TEST DATA — fictional. Not real firmware.",
+  "apps": [
+    {
+      "uuid": "t2600-0001",
+      "name": "Combat Loader (TEST)",
+      "description": "Fictional test microfirmware. <a target='_blank' href='https://sidecartridge.com/'>Learn more</a>",
+      "image": "https://placehold.co/256x256/png",
+      "tags": ["Cartridge", "Loader"],
+      "devices": ["2600", "VCS"],
+      "binary": "https://example.com/test/t2600-0001-v1.0.0.uf2",
+      "md5": "00000000000000000000000000000001",
+      "version": "v1.0.0",
+      "previous_versions": []
+    },
+    {
+      "uuid": "t2600-0002",
+      "name": "Paddle Tester (TEST)",
+      "description": "Fictional test microfirmware for paddle controllers.",
+      "image": "https://placehold.co/256x256/png",
+      "tags": ["Controller", "Diagnostics"],
+      "devices": ["2600"],
+      "binary": "https://example.com/test/t2600-0002-v2.1.0.uf2",
+      "md5": "00000000000000000000000000000002",
+      "version": "v2.1.0",
+      "previous_versions": [
+        { "version": "v2.0.0", "binary": "https://example.com/test/t2600-0002-v2.0.0.uf2", "md5": "000000000000000000000000000000a2" }
+      ]
+    },
+    {
+      "uuid": "t2600-0003",
+      "name": "Homebrew Multicart (TEST)",
+      "description": "Fictional multicart image.",
+      "image": "",
+      "tags": ["Multicart", "Homebrew"],
+      "devices": ["2600", "VCS"],
+      "binary": "https://example.com/test/t2600-0003-v0.9.0.uf2",
+      "md5": "00000000000000000000000000000003",
+      "version": "v0.9.0",
+      "previous_versions": []
+    }
+  ]
+}
