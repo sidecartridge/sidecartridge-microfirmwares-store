@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=8.0" />
+  <link rel="stylesheet" href="styles.css?v=9.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -404,7 +404,7 @@
               :aria-selected="activeSourceId === s.id ? 'true' : 'false'"
               @click="selectSource(s.id)">
               <span x-text="s.label"></span>
-              <span class="source-tab-kind" x-text="s.kind"></span>
+              <span class="source-tab-kind" x-show="s.kind === 'unofficial'" x-text="s.kind"></span>
             </button>
           </template>
         </div>
