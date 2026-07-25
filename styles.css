@@ -677,11 +677,24 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .platform-card-go { flex: 0 0 auto; color: var(--color-ink-2); }
 
 /* ---------- Catalog header ---------- */
-.catalog-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
-.catalog-head-logo {
+.catalog-head { margin-bottom: 1rem; }
+
+/* platform banner: the platform logo shown large at the top of its catalog page */
+.platform-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+.platform-banner-logo {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 200px;
+  height: 200px;
+  max-width: 100%;
   flex: 0 0 auto;
   border-radius: var(--radius);
   overflow: hidden;
@@ -690,8 +703,14 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   align-items: center;
   justify-content: center;
 }
-.catalog-head-logo .platform-noimg { font-size: 0.9rem; }
-.catalog-title { margin: 0.1rem 0 0; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.01em; }
+.platform-banner-logo .platform-noimg { font-size: 3rem; }
+.platform-banner-copy { min-width: 0; }
+.platform-banner-copy p { margin: 0.5rem 0 0; color: var(--color-ink-2); line-height: 1.5; }
+.catalog-title { margin: 0.1rem 0 0; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.01em; }
+@media (max-width: 640px) {
+  .platform-banner { flex-direction: column; text-align: center; align-items: center; }
+  .platform-banner-logo { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+}
 
 /* ---------- Source switcher ---------- */
 .source-switcher { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
