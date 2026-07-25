@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=2.0" />
+  <link rel="stylesheet" href="styles.css?v=3.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -78,12 +78,11 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
-  <!-- Data pipeline (EPIC-02 + EPIC-03): load platforms.json, then aggregate the
-       selected platform's catalog sources — one official (in-repo, same-origin,
-       D-05) plus 0..N unofficial (remote, HTTPS+CORS, C-04) listed in the
-       platform's unofficial.json. Each app is tagged with its provenance; a bad
-       source is isolated, not fatal. No catalog rendering here (EPIC-04).
-       Alpine calls init() automatically. -->
+  <!-- Catalog app (EPIC-02/03/04): loads platforms.json, aggregates each platform's
+       official (in-repo, D-05) + unofficial (remote, HTTPS, C-04) catalogs with
+       provenance, and drives the browse UI — platform landing, source switcher,
+       search/filter, and app detail. Hash routing (#<platform>[/<source>]); untrusted
+       description HTML is sanitized to a safe whitelist (C-03). init() runs on start. -->
   <script>
     function storeData() {
       return {
@@ -95,7 +94,16 @@
         sources: [],   // [{ kind, id, label, apps_url, author, status, error, count }]
         apps: [],      // merged, provenance-tagged: { ...app, _source, _sourceKind, _author, _duplicate }
         unofficialRegistryError: '',
+        // ----- view / UI state (EPIC-04) -----
+        view: 'platforms',        // 'platforms' | 'catalog'
+        activeSourceId: 'official',
+        search: '',
+        activeTag: '',
+        activeDevice: '',
+        detailApp: null,
+
         async init() {
+          window.addEventListener('hashchange', () => this.applyHash());
           try {
             const res = await fetch('platforms.json', { cache: 'no-cache' });
             if (!res.ok) throw new Error('platforms.json → HTTP ' + res.status);
@@ -103,15 +111,84 @@
             this.platforms = (data.platforms || [])
               .filter(p => p && p.enabled)
               .sort((a, b) => (a.order || 0) - (b.order || 0));
-            if (this.platforms.length) {
-              await this.loadPlatform(this.platforms[0]);
-            }
           } catch (e) {
             this.error = e.message || String(e);
-          } finally {
+            this.loading = false;
+            return;
+          }
+          await this.applyHash();   // honor an initial #platform[/source] deep link
+          this.loading = false;
+        },
+
+        // ----- routing: #<platform-id>[/<source-id>] -----
+        async applyHash() {
+          const h = decodeURIComponent((location.hash || '').replace(/^#/, ''));
+          const [pid, sid] = h.split('/');
+          const p = pid && this.platforms.find(x => x.id === pid);
+          if (!p) { this.view = 'platforms'; this.activePlatform = null; this.detailApp = null; return; }
+          this.view = 'catalog';
+          if (!this.activePlatform || this.activePlatform.id !== p.id) {
+            this.loading = true;
+            await this.loadPlatform(p);
             this.loading = false;
           }
+          this.activeSourceId = (sid && this.sources.some(s => s.id === sid)) ? sid : 'official';
+          this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.detailApp = null;
         },
+        selectPlatform(p) { location.hash = p.id; },
+        backToPlatforms() { location.hash = ''; },
+        selectSource(id) { location.hash = this.activePlatform.id + (id !== 'official' ? '/' + id : ''); },
+
+        // ----- derived views (EPIC-04) -----
+        activeSource() { return this.sources.find(s => s.id === this.activeSourceId) || null; },
+        sourceApps() { return this.apps.filter(a => a._source === this.activeSourceId); },
+        visibleApps() {
+          const q = this.search.trim().toLowerCase();
+          return this.sourceApps().filter(a => {
+            if (q && !String(a.name || '').toLowerCase().includes(q)) return false;
+            if (this.activeTag && !(a.tags || []).includes(this.activeTag)) return false;
+            if (this.activeDevice && !(a.devices || []).includes(this.activeDevice)) return false;
+            return true;
+          });
+        },
+        tagsForSource() { const s = new Set(); this.sourceApps().forEach(a => (a.tags || []).forEach(t => s.add(t))); return [...s].sort(); },
+        devicesForSource() { const s = new Set(); this.sourceApps().forEach(a => (a.devices || []).forEach(d => s.add(d))); return [...s].sort(); },
+        clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; },
+        openDetail(a) { this.detailApp = a; },
+        closeDetail() { this.detailApp = null; },
+
+        // ----- sanitize untrusted description HTML (C-03) -----
+        sanitize(html) {
+          if (html == null) return '';
+          const ALLOWED = { A: ['href'], B: [], I: [], EM: [], STRONG: [], BR: [], CODE: [], P: [], UL: [], OL: [], LI: [], SPAN: [] };
+          const body = new DOMParser().parseFromString(String(html), 'text/html').body;
+          const copy = (src, dest) => {
+            src.childNodes.forEach(node => {
+              if (node.nodeType === 3) {
+                dest.appendChild(document.createTextNode(node.nodeValue));
+              } else if (node.nodeType === 1) {
+                const spec = ALLOWED[node.tagName];
+                if (spec) {
+                  const el = document.createElement(node.tagName);
+                  spec.forEach(a => {
+                    const v = node.getAttribute(a);
+                    if (a === 'href' && v && /^https?:\/\//i.test(v)) el.setAttribute('href', v);
+                  });
+                  if (node.tagName === 'A') { el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener noreferrer'); }
+                  copy(node, el);
+                  dest.appendChild(el);
+                } else {
+                  copy(node, dest); // drop the tag, keep its text/children
+                }
+              }
+            });
+          };
+          const out = document.createElement('div');
+          copy(body, out);
+          return out.innerHTML;
+        },
+
+        // ----- data loading (EPIC-02/03) -----
         async loadPlatform(p) {
           this.activePlatform = p;
           this.sources = [];
@@ -212,97 +289,216 @@
 
   <!-- Main Content Area -->
   <main class="main-content browser-main">
-    <section class="browser-hero">
-      <div class="browser-hero-copy">
-        <span class="browser-kicker">Microfirmware Store</span>
-        <h2>The application store for your SidecarTridge devices.</h2>
-        <p>
-          Browse and install microfirmwares — the applications and services that run on the
-          <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
-          Multi-device family. The browsable catalog UI is coming soon.
-        </p>
+
+    <!-- global loading -->
+    <div class="browser-loading" x-show="loading">
+      <div class="browser-loading-card">
+        <i class="fas fa-spinner fa-spin"></i>
+        <div><strong>Loading…</strong><p>Fetching the catalog.</p></div>
       </div>
-      <div class="browser-stat-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
-        <div class="browser-stat-card">
-          <span>Platforms</span>
-          <strong x-text="loading ? '…' : platforms.length"></strong>
-        </div>
-        <div class="browser-stat-card">
-          <span x-text="activePlatform ? activePlatform.name + ' apps' : 'Apps'"></span>
-          <strong x-text="loading ? '…' : apps.length"></strong>
-        </div>
+    </div>
+
+    <!-- platform registry failed -->
+    <section class="browser-section" x-show="!loading && error" x-cloak>
+      <div class="browser-empty-state">
+        <i class="fas fa-triangle-exclamation"></i>
+        <p>Couldn't load the platform registry: <span x-text="error"></span></p>
       </div>
     </section>
 
-    <div class="browser-shell">
-      <!-- ============================================================
-           EPIC-02 proof: the data pipeline loads same-origin and holds the
-           catalog in memory. The browsable catalog UI (cards, search, source
-           switcher, download actions) is EPIC-04 and replaces this section.
-           Design-system primitives ready in styles.css: .browser-card-grid,
-           .browser-entry-card, .taxonomy-chip, .browser-download-button, etc.
-           ============================================================ -->
-
-      <!-- loading -->
-      <div class="browser-loading" x-show="loading">
-        <div class="browser-loading-card">
-          <i class="fas fa-spinner fa-spin"></i>
-          <div>
-            <strong>Loading catalog…</strong>
-            <p>Fetching the platform registry and the official app list.</p>
+    <!-- ============ Platform landing (STORY-01) ============ -->
+    <template x-if="!loading && !error && view === 'platforms'">
+      <div>
+        <section class="browser-hero">
+          <div class="browser-hero-copy">
+            <span class="browser-kicker">Microfirmware Store</span>
+            <h2>The application store for your SidecarTridge devices.</h2>
+            <p>
+              Browse and install microfirmwares — the applications and services that run on the
+              <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
+              device family. Pick a platform to explore its catalog.
+            </p>
           </div>
+          <div class="browser-stat-grid" style="grid-template-columns: 1fr;">
+            <div class="browser-stat-card">
+              <span>Platforms</span>
+              <strong x-text="platforms.length"></strong>
+            </div>
+          </div>
+        </section>
+
+        <div class="browser-card-grid" x-show="platforms.length">
+          <template x-for="p in platforms" :key="p.id">
+            <article class="platform-card" role="button" tabindex="0"
+              @click="selectPlatform(p)" @keydown.enter="selectPlatform(p)" @keydown.space.prevent="selectPlatform(p)">
+              <img class="platform-card-logo" :src="p.image" :alt="p.name + ' logo'" loading="lazy"
+                onerror="this.style.display='none'">
+              <div class="platform-card-body">
+                <h3 x-text="p.name"></h3>
+                <p x-text="p.description"></p>
+                <div class="platform-card-devices">
+                  <template x-for="d in (p.devices || [])" :key="d"><span class="browser-entry-tag" x-text="d"></span></template>
+                </div>
+              </div>
+              <span class="platform-card-go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+            </article>
+          </template>
+        </div>
+        <div class="browser-empty-state browser-empty-state-muted" x-show="!platforms.length">
+          <i class="fas fa-circle-info"></i>
+          <p>No platforms are available yet.</p>
         </div>
       </div>
+    </template>
 
-      <!-- platform registry failed -->
-      <section class="browser-section" x-show="!loading && error">
-        <div class="browser-empty-state">
-          <i class="fas fa-triangle-exclamation"></i>
-          <p>Couldn't load the platform registry: <span x-text="error"></span></p>
-        </div>
-      </section>
-
-      <!-- loaded: catalog aggregated in memory with provenance (EPIC-02 + EPIC-03; UI is EPIC-04) -->
-      <section class="browser-section" x-show="!loading && !error">
-        <div class="browser-section-head">
+    <!-- ============ Catalog view (STORY-02 + STORY-03) ============ -->
+    <template x-if="!loading && !error && view === 'catalog'">
+      <div>
+        <div class="catalog-head">
+          <button type="button" class="pure-button" @click="backToPlatforms()"><i class="fas fa-arrow-left"></i> Platforms</button>
           <div>
-            <span class="browser-section-kicker" x-text="activePlatform ? activePlatform.name : 'Catalog'"></span>
-            <h3>Catalog sources</h3>
+            <span class="browser-section-kicker">Platform</span>
+            <h2 class="catalog-title" x-text="activePlatform ? activePlatform.name : ''"></h2>
           </div>
-          <span class="browser-count-badge" x-text="apps.length + ' apps'"></span>
         </div>
-        <p class="browser-section-copy">
-          Aggregated <strong x-text="apps.length"></strong> microfirmwares across
-          <strong x-text="sources.length"></strong> source(s) for
-          <span x-text="activePlatform ? activePlatform.name : 'this platform'"></span>.
-          Official is served in-repo; unofficial sources are remote and clearly labeled.
-          The browsable catalog UI arrives in a later iteration.
-        </p>
-        <div class="browser-list">
+
+        <!-- source switcher: Official (default) + unofficial -->
+        <div class="source-switcher" role="tablist" aria-label="Catalog source">
           <template x-for="s in sources" :key="s.id">
-            <article class="browser-entry-row">
-              <div class="browser-entry-row-main">
-                <div class="browser-entry-row-title">
-                  <h4 x-text="s.label"></h4>
-                  <span class="browser-entry-tag" x-text="s.kind"></span>
-                  <span class="browser-entry-tag" x-show="s.author && s.author.name"
-                    x-text="s.author && s.author.name ? 'by ' + s.author.name : ''"></span>
+            <button type="button" class="source-tab" role="tab"
+              :class="{ 'is-active': activeSourceId === s.id, 'is-error': s.status === 'error' }"
+              :aria-selected="activeSourceId === s.id ? 'true' : 'false'"
+              @click="selectSource(s.id)">
+              <span x-text="s.label"></span>
+              <span class="source-tab-kind" x-text="s.kind"></span>
+            </button>
+          </template>
+        </div>
+
+        <!-- unofficial provenance notice (D-07) -->
+        <div class="unofficial-notice" x-show="activeSource() && activeSource().kind === 'unofficial'" x-cloak>
+          <i class="fas fa-triangle-exclamation"></i>
+          <p>
+            <strong>Unofficial source.</strong>
+            <template x-if="activeSource() && activeSource().author">
+              <span>By
+                <template x-if="activeSource().author.url">
+                  <a :href="activeSource().author.url" target="_blank" rel="noopener" x-text="activeSource().author.name || 'a third party'"></a>
+                </template>
+                <template x-if="!activeSource().author.url">
+                  <span x-text="activeSource().author.name || 'a third party'"></span>
+                </template>.
+              </span>
+            </template>
+            Not reviewed or endorsed by SidecarTridge — use at your own risk.
+          </p>
+        </div>
+
+        <!-- selected source failed to load -->
+        <div class="browser-empty-state" x-show="activeSource() && activeSource().status === 'error'" x-cloak>
+          <i class="fas fa-triangle-exclamation"></i>
+          <p x-text="'This source failed to load: ' + (activeSource() ? activeSource().error : '')"></p>
+        </div>
+
+        <!-- search + filters -->
+        <section class="browser-filter-panel" x-show="activeSource() && activeSource().status === 'loaded'" x-cloak>
+          <div class="browser-search-row">
+            <label class="browser-search-field">
+              <i class="fas fa-magnifying-glass"></i>
+              <input type="text" x-model="search" placeholder="Search microfirmwares…" aria-label="Search microfirmwares">
+            </label>
+            <button type="button" class="pure-button" x-show="search || activeTag || activeDevice" @click="clearFilters()">Clear</button>
+          </div>
+          <div class="browser-taxonomy" x-show="tagsForSource().length">
+            <template x-for="t in tagsForSource()" :key="'t-' + t">
+              <button type="button" class="taxonomy-chip" :class="{ active: activeTag === t }" @click="activeTag = (activeTag === t ? '' : t)"><span x-text="t"></span></button>
+            </template>
+          </div>
+          <div class="browser-taxonomy" x-show="devicesForSource().length">
+            <template x-for="d in devicesForSource()" :key="'d-' + d">
+              <button type="button" class="taxonomy-chip" :class="{ active: activeDevice === d }" @click="activeDevice = (activeDevice === d ? '' : d)"><span x-text="d"></span></button>
+            </template>
+          </div>
+          <p class="browser-summary" x-text="visibleApps().length + ' of ' + sourceApps().length + ' microfirmwares'"></p>
+        </section>
+
+        <!-- app grid -->
+        <div class="browser-card-grid" x-show="activeSource() && activeSource().status === 'loaded'" x-cloak>
+          <template x-for="app in visibleApps()" :key="app._source + '-' + app.uuid">
+            <article class="app-card">
+              <div class="app-card-media">
+                <img class="app-card-img" :src="app.image" :alt="app.name" loading="lazy"
+                  onerror="this.closest('.app-card-media').classList.add('is-empty')">
+              </div>
+              <div class="app-card-body">
+                <div class="browser-entry-topline">
+                  <span class="browser-entry-tag" x-text="app.version"></span>
+                  <span class="browser-entry-tag" x-show="app._duplicate" title="Also in the official catalog">also official</span>
                 </div>
-                <p class="browser-entry-path"
-                  x-text="s.status === 'loaded' ? (s.count + ' apps') : (s.status === 'error' ? ('error: ' + s.error) : 'loading…')"></p>
+                <h4 x-text="app.name"></h4>
+                <div class="app-card-tags">
+                  <template x-for="t in (app.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
+                </div>
+                <p class="app-card-devices" x-show="(app.devices || []).length" x-text="(app.devices || []).join(' · ')"></p>
+              </div>
+              <div class="app-card-actions">
+                <button type="button" class="pure-button" @click="openDetail(app)">Details</button>
+                <a class="btn-primary" :href="app.binary" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download</a>
               </div>
             </article>
           </template>
         </div>
-        <p class="browser-inline-note" x-show="unofficialRegistryError">
-          Unofficial registry unavailable: <span x-text="unofficialRegistryError"></span> (official catalog still loaded).
-        </p>
-        <div class="browser-empty-state browser-empty-state-muted" x-show="sources.length === 1">
-          <i class="fas fa-circle-info"></i>
-          <p><span x-text="activePlatform ? activePlatform.name : 'This platform'"></span> has no unofficial sources yet — showing the official catalog only.</p>
+
+        <!-- no results -->
+        <div class="browser-empty-state" x-show="activeSource() && activeSource().status === 'loaded' && visibleApps().length === 0" x-cloak>
+          <i class="fas fa-magnifying-glass"></i>
+          <p>No microfirmwares match your filters.</p>
         </div>
-      </section>
+      </div>
+    </template>
+
+    <!-- ============ App detail modal (STORY-03) ============ -->
+    <div class="app-modal" x-show="detailApp" x-cloak style="display:none" @keydown.escape.window="closeDetail()">
+      <div class="app-modal-overlay" @click="closeDetail()"></div>
+      <div class="app-modal-content" role="dialog" aria-modal="true" :aria-label="detailApp ? detailApp.name : 'App details'">
+        <button type="button" class="app-modal-close" @click="closeDetail()" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <template x-if="detailApp">
+          <div>
+            <div class="browser-entry-topline">
+              <span class="browser-entry-tag" x-text="detailApp.version"></span>
+              <template x-for="t in (detailApp.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
+            </div>
+            <h3 x-text="detailApp.name"></h3>
+            <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
+            <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
+            <p class="browser-entry-path" x-show="(detailApp.devices || []).length">Devices: <span x-text="(detailApp.devices || []).join(', ')"></span></p>
+            <div class="app-detail-download">
+              <a class="btn-primary" :href="detailApp.binary" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download <span x-text="detailApp.version"></span></a>
+              <span class="browser-entry-path" x-text="'md5: ' + detailApp.md5"></span>
+            </div>
+            <template x-if="detailApp.previous_versions && detailApp.previous_versions.length">
+              <div class="app-detail-history">
+                <h4>Previous versions</h4>
+                <div class="browser-list">
+                  <template x-for="pv in detailApp.previous_versions" :key="pv.version">
+                    <article class="browser-entry-row">
+                      <div class="browser-entry-row-main">
+                        <div class="browser-entry-row-title"><h4 x-text="pv.version"></h4></div>
+                        <p class="browser-entry-path" x-text="'md5: ' + pv.md5"></p>
+                      </div>
+                      <div class="browser-entry-actions browser-entry-actions-rail">
+                        <a class="browser-download-button" :href="pv.binary" target="_blank" rel="noopener" aria-label="Download"><span class="fas fa-download"></span></a>
+                      </div>
+                    </article>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
     </div>
+
   </main>
 
   <!-- Footer information in-page -->
