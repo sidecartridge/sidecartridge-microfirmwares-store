@@ -674,6 +674,13 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 .platform-card-body h3 { margin: 0 0 0.2rem; color: var(--color-ink); font-size: 1.15rem; font-weight: 700; }
 .platform-card-body p { margin: 0 0 0.55rem; color: var(--color-ink-2); font-size: 0.92rem; line-height: 1.45; }
 .platform-card-devices { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+/* platform (device) tags: outlined/neutral — visually distinct from the filled-warm
+   app feature tags (.app-card-tags .browser-entry-tag) */
+.platform-card-devices .browser-entry-tag {
+  background: transparent;
+  color: var(--color-ink-2);
+  border: 1px solid var(--color-border);
+}
 .platform-card-go { flex: 0 0 auto; color: var(--color-ink-2); }
 
 /* ---------- Catalog header ---------- */
@@ -850,6 +857,7 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
+  z-index: 2;                 /* sit above the media/logo block */
   width: 2rem;
   height: 2rem;
   border: 0;
@@ -857,6 +865,7 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   background: var(--color-bg-2);
   color: var(--color-ink);
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(13, 4, 43, 0.25);
 }
 .app-modal-close:hover { background: var(--color-bg-3); }
 .app-detail-desc { color: var(--color-ink-2); line-height: 1.6; margin: 0.5rem 0 1rem; }
