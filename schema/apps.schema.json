@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://md-store.sidecartridge.com/schema/apps.schema.json",
-  "title": "apps.json — per-platform microfirmware catalog (D-06)",
-  "description": "Contract for a platform's app catalog. Identical schema for every platform (official in-repo or unofficial remote). See docs/epics DECISIONS D-06.",
+  "title": "apps.json — origin catalog contract (D-06)",
+  "description": "Contract each ORIGIN publishes (D-06): a platform's app catalog. Identical for every origin (official in-repo or unofficial remote creator). tools/build_catalog.py (EPIC-10) reads origins in this shape and emits the CONSOLIDATED catalog (schema/catalog.schema.json, D-15) with an added creators map + per-app official/creator. See docs/epics DECISIONS D-06/D-14/D-15.",
   "type": "object",
   "required": ["apps"],
   "additionalProperties": false,

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://md-store.sidecartridge.com/schema/origins.schema.json",
+  "title": "origins.json — per-platform registry of catalog origins (D-14)",
+  "description": "Build-time INPUT consumed by tools/build_catalog.py (EPIC-10). Lists a platform's origins (creators' apps.json); one is official (SidecarTridge, local source), the rest are remote creator URLs. Not loaded by the UI. Invariant (enforced by the batch, not expressible here): exactly one origin has official=true.",
+  "type": "object",
+  "required": ["platform", "origins"],
+  "additionalProperties": true,
+  "properties": {
+    "platform": { "type": "string", "description": "Platform id, matches platforms.json." },
+    "origins": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/origin" } }
+  },
+  "$defs": {
+    "origin": {
+      "type": "object",
+      "required": ["creator", "official"],
+      "additionalProperties": true,
+      "properties": {
+        "creator": { "$ref": "#/$defs/creator" },
+        "official": { "type": "boolean", "description": "Exactly one origin per platform is true (SidecarTridge)." },
+        "enabled": { "type": "boolean", "default": true },
+        "source": { "type": "string", "description": "In-repo path to this origin's apps.json (used by the official origin)." },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://", "description": "Remote HTTPS URL to a creator's apps.json (unofficial origins, C-04/D-16)." }
+      },
+      "oneOf": [
+        { "required": ["source"] },
+        { "required": ["url"] }
+      ]
+    },
+    "creator": {
+      "type": "object",
+      "required": ["id", "name"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "description": "Unique creator id (slug) within the platform; creator <-> origin is 1:1." },
+        "name": { "type": "string" },
+        "url": { "type": "string", "format": "uri" },
+        "image": { "type": "string" },
+        "contact": { "type": "string" }
+      }
+    }
+  }
+}
