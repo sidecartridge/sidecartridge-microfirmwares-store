@@ -1,43 +1,77 @@
 {
-  "_comment": "TEST DATA — fictional. Not real firmware.",
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "official": true
+    }
+  },
   "apps": [
     {
       "uuid": "tsmd-0001",
       "name": "Genesis Everdrive Helper (TEST)",
       "description": "Fictional flash-cart helper for the Mega Drive.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Flash Cart", "Loader"],
-      "devices": ["Mega Drive", "Genesis"],
+      "tags": [
+        "Flash Cart",
+        "Loader"
+      ],
+      "devices": [
+        "Mega Drive",
+        "Genesis"
+      ],
       "binary": "https://example.com/test/tsmd-0001-v3.0.0.uf2",
       "md5": "00000000000000000000000000000021",
       "version": "v3.0.0",
       "previous_versions": [
-        { "version": "v2.5.0", "binary": "https://example.com/test/tsmd-0001-v2.5.0.uf2", "md5": "000000000000000000000000000000b1" }
-      ]
+        {
+          "version": "v2.5.0",
+          "binary": "https://example.com/test/tsmd-0001-v2.5.0.uf2",
+          "md5": "000000000000000000000000000000b1"
+        }
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "tsmd-0002",
       "name": "Region Free (TEST)",
       "description": "Fictional region-unlock microfirmware.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Region", "Patch"],
-      "devices": ["Mega Drive", "Genesis"],
+      "tags": [
+        "Region",
+        "Patch"
+      ],
+      "devices": [
+        "Mega Drive",
+        "Genesis"
+      ],
       "binary": "https://example.com/test/tsmd-0002-v1.1.0.uf2",
       "md5": "00000000000000000000000000000022",
       "version": "v1.1.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "tsmd-0003",
       "name": "FM Audio Test (TEST)",
       "description": "Fictional YM2612 FM audio diagnostic.",
       "image": "",
-      "tags": ["Audio", "Diagnostics"],
-      "devices": ["Mega Drive"],
+      "tags": [
+        "Audio",
+        "Diagnostics"
+      ],
+      "devices": [
+        "Mega Drive"
+      ],
       "binary": "https://example.com/test/tsmd-0003-v0.5.0.uf2",
       "md5": "00000000000000000000000000000023",
       "version": "v0.5.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     }
   ]
 }

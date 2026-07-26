@@ -1,4 +1,12 @@
 {
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "official": true
+    }
+  },
   "apps": [
     {
       "uuid": "1805c20c-5b83-4ea1-9264-6fe13da448a0",
@@ -26,7 +34,9 @@
           "binary": "https://atarist.sidecartridge.com/1805c20c-5b83-4ea1-9264-6fe13da448a0-v1.0.6beta.uf2",
           "md5": "03b4b060b91e3b6df471e35a68b5300f"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "360a8520-9f50-4556-8a05-65f924d4f5d8",
@@ -45,7 +55,9 @@
       "binary": "https://atarist.sidecartridge.com/360a8520-9f50-4556-8a05-65f924d4f5d8-v2.0.0.uf2",
       "md5": "11f2df86901121320d43c4bc0a8e400b",
       "version": "v2.0.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "4f6e8575-1590-4660-95ad-e6167e46715e",
@@ -65,7 +77,9 @@
       "binary": "https://atarist.sidecartridge.com/4f6e8575-1590-4660-95ad-e6167e46715e-v1.0.1beta.uf2",
       "md5": "59e9917d47d9c79eaba53bc866c3714f",
       "version": "v1.0.1beta",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "5a7827c7-6b1a-4d4a-bc96-99d08e81aaac",
@@ -86,7 +100,9 @@
       "binary": "https://atarist.sidecartridge.com/5a7827c7-6b1a-4d4a-bc96-99d08e81aaac-v1.0.1beta.uf2",
       "md5": "f49dff91b2c6fc3ed36d94a48655b305",
       "version": "v1.0.1beta",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "60a83f2a-6dca-440a-87a5-92fec145708f",
@@ -107,7 +123,9 @@
       "binary": "https://atarist.sidecartridge.com/60a83f2a-6dca-440a-87a5-92fec145708f-v1.0.0.uf2",
       "md5": "8adc643488d9672334e8a899033abd12",
       "version": "v1.0.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "6bc6b136-c177-4cbd-a827-4a310d3cc303",
@@ -138,7 +156,9 @@
           "binary": "https://atarist.sidecartridge.com/6bc6b136-c177-4cbd-a827-4a310d3cc303-v1.0.2dev.uf2",
           "md5": "e19a917cf5fe3fa194d6e905972f9178"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
@@ -158,7 +178,9 @@
       "binary": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca-v1.0.1beta.uf2",
       "md5": "9e544d1baa30cf700b648364420dbf98",
       "version": "v1.0.1beta",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "b04ccd04-9b5d-4f6b-abd1-43af82c3b43a",
@@ -180,7 +202,9 @@
       "binary": "https://atarist.sidecartridge.com/b04ccd04-9b5d-4f6b-abd1-43af82c3b43a-v1.0.0alpha.uf2",
       "md5": "43d1880d3d57dd240163c0e680c02448",
       "version": "v1.0.0alpha",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "c1c59922-942b-465f-9859-a75831486e73",
@@ -207,7 +231,9 @@
           "binary": "https://atarist.sidecartridge.com/c1c59922-942b-465f-9859-a75831486e73-v0.0.1dev.uf2",
           "md5": "3e83e31a5aea4202a39185dd8191fa2f"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "c6004dfd-1df1-4000-939b-2c48efa344c8",
@@ -233,7 +259,9 @@
           "binary": "https://atarist.sidecartridge.com/c6004dfd-1df1-4000-939b-2c48efa344c8-v1.0.0beta.uf2",
           "md5": "7447364bce390ed6d18cd0a2b508b17d"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "ed70ef7b-3538-43c8-8957-4d9fa4e7736c",
@@ -261,7 +289,9 @@
           "binary": "https://atarist.sidecartridge.com/ed70ef7b-3538-43c8-8957-4d9fa4e7736c-v2.0.2.uf2",
           "md5": "43027c450be26591d45dca2e70a4d10c"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "f6b96229-873c-415d-992f-2555c7f7918d",
@@ -294,7 +324,9 @@
           "binary": "https://atarist.sidecartridge.com/f6b96229-873c-415d-992f-2555c7f7918d-v1.1.0.uf2",
           "md5": "11d5884b18c6771e328ca701d023b3f1"
         }
-      ]
+      ],
+      "official": true,
+      "creator": "sidecartridge"
     }
   ]
 }
