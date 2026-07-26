@@ -1,0 +1,55 @@
+{
+  "_comment": "SAMPLE unofficial origin (fictional) to exercise the provenance UI. Normally an unofficial origin would be a remote HTTPS url in origins/atari-st.json; this uses a local source for a self-contained demo. Remove this file + its entry in origins/atari-st.json and rerun tools/build_catalog.py to take it down.",
+  "apps": [
+    {
+      "uuid": "1805c20c-5b83-4ea1-9264-6fe13da448a0",
+      "name": "Multidrive emulator (community fork) [SAMPLE]",
+      "description": "Sample duplicate — same uuid as the official app, so the build drops it (official wins).",
+      "image": "",
+      "tags": ["HD", "Floppy"],
+      "devices": ["ST", "STE"],
+      "binary": "https://example.com/retro-homebrew/dup-v1.0.0.uf2",
+      "md5": "00000000000000000000000000000901",
+      "version": "v1.0.0",
+      "previous_versions": []
+    },
+    {
+      "uuid": "rh-0001",
+      "name": "PicoDrive Loader [SAMPLE]",
+      "description": "Fictional community loader — demonstration of an unofficial microfirmware. <a target='_blank' href='https://example.com/retro-homebrew'>Learn more</a>",
+      "image": "",
+      "tags": ["Emulation", "Homebrew"],
+      "devices": ["ST", "STE"],
+      "binary": "https://example.com/retro-homebrew/picodrive-v0.9.0.uf2",
+      "md5": "00000000000000000000000000000911",
+      "version": "v0.9.0",
+      "previous_versions": []
+    },
+    {
+      "uuid": "rh-0002",
+      "name": "SD Card Toolkit [SAMPLE]",
+      "description": "Fictional community disk utility (sample unofficial content).",
+      "image": "",
+      "tags": ["Utility", "HD"],
+      "devices": ["ST", "MegaST", "MegaSTE"],
+      "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.1.0.uf2",
+      "md5": "00000000000000000000000000000912",
+      "version": "v2.1.0",
+      "previous_versions": [
+        { "version": "v2.0.0", "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.0.0.uf2", "md5": "000000000000000000000000000009a2" }
+      ]
+    },
+    {
+      "uuid": "rh-0003",
+      "name": "MOD Player [SAMPLE]",
+      "description": "Fictional community audio player (sample unofficial content).",
+      "image": "https://placehold.co/256x256/png",
+      "tags": ["Audio", "Demo"],
+      "devices": ["STE"],
+      "binary": "https://example.com/retro-homebrew/modplayer-v1.4.0.uf2",
+      "md5": "00000000000000000000000000000913",
+      "version": "v1.4.0",
+      "previous_versions": []
+    }
+  ]
+}
