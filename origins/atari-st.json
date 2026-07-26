@@ -1,0 +1,17 @@
+{
+  "_comment": "Build-time origins registry (D-14). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote HTTPS url, e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
+  "platform": "atari-st",
+  "origins": [
+    {
+      "creator": {
+        "id": "sidecartridge",
+        "name": "SidecarTridge",
+        "url": "https://sidecartridge.com",
+        "image": "assets/platforms/atari-st.png"
+      },
+      "official": true,
+      "enabled": true,
+      "source": "origins/atari-st/sidecartridge.apps.json"
+    }
+  ]
+}

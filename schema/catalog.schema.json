@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://md-store.sidecartridge.com/schema/catalog.schema.json",
+  "title": "Consolidated catalog apps.json (D-15) — what the UI loads",
+  "description": "OUTPUT of tools/build_catalog.py (EPIC-10) per platform, served at <platform>/apps.json. The base apps.json shape (apps.schema.json) plus a top-level creators map and per-app official/creator provenance. A build artifact — do not hand-edit.",
+  "type": "object",
+  "required": ["creators", "apps"],
+  "additionalProperties": true,
+  "properties": {
+    "creators": {
+      "type": "object",
+      "description": "Map of creator id -> creator details (referenced by each app's `creator`).",
+      "additionalProperties": { "$ref": "#/$defs/creator" }
+    },
+    "apps": { "type": "array", "items": { "$ref": "#/$defs/app" } }
+  },
+  "$defs": {
+    "creator": {
+      "type": "object",
+      "required": ["id", "name", "official"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "image": { "type": "string" },
+        "official": { "type": "boolean" }
+      }
+    },
+    "app": {
+      "type": "object",
+      "required": ["uuid", "name", "description", "image", "tags", "devices", "binary", "md5", "version", "previous_versions", "official", "creator"],
+      "additionalProperties": true,
+      "properties": {
+        "uuid": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string", "description": "May contain HTML — untrusted (C-03)." },
+        "image": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "devices": { "type": "array", "items": { "type": "string" } },
+        "binary": { "type": "string" },
+        "md5": { "type": "string" },
+        "version": { "type": "string" },
+        "previous_versions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["version", "binary", "md5"],
+            "additionalProperties": false,
+            "properties": {
+              "version": { "type": "string" },
+              "binary": { "type": "string" },
+              "md5": { "type": "string" }
+            }
+          }
+        },
+        "official": { "type": "boolean", "description": "True if this app came from the official (SidecarTridge) origin." },
+        "creator": { "type": "string", "description": "Key into the top-level `creators` map." }
+      }
+    }
+  }
+}

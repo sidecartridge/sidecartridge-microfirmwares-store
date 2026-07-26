@@ -5,7 +5,6 @@
       "name": "Atari ST",
       "description": "Atari ST / STE / MegaST / MegaSTE 16/32-bit home computers.",
       "apps_url": "atari-st/apps.json",
-      "unofficial_url": "atari-st/unofficial.json",
       "image": "assets/platforms/atari-st.png",
       "devices": ["ST", "STE", "MegaST", "MegaSTE"],
       "enabled": true,
