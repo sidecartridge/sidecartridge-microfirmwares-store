@@ -732,36 +732,41 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
   .platform-banner-logo { width: 100%; height: auto; aspect-ratio: 1 / 1; }
 }
 
-/* ---------- Source switcher ---------- */
-.source-switcher { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-.source-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-bg-2);
-  color: var(--color-ink);
-  font: inherit;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
-}
-.source-tab:hover { border-color: var(--color-ink); }
-.source-tab.is-active { background: var(--color-ink); color: var(--color-on-ink); border-color: var(--color-ink); }
-.source-tab.is-error { opacity: 0.6; }
-.source-tab-kind {
-  font-size: 0.64rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
-  padding: 0.1rem 0.4rem;
-  border-radius: var(--radius-pill);
-  background: var(--color-bg-3);
+/* ---------- Filter groups (provenance / creator / tags / devices) ---------- */
+.filter-group { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.filter-label {
+  flex: 0 0 auto;
   color: var(--color-ink-2);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
-.source-tab.is-active .source-tab-kind { background: rgba(255, 255, 255, 0.18); color: var(--color-on-ink); }
+.filter-group .browser-taxonomy { margin-top: 0; }
+
+/* ---------- Provenance badge (per app: official / unofficial) ---------- */
+.provenance-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1;
+  padding: 0.14rem 0.5rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(13, 4, 43, 0.2);
+}
+.provenance-badge.is-official { background: var(--color-ink); color: var(--color-on-ink); }
+.provenance-badge.is-unofficial { background: #b8860b; color: #fff; }
+.app-detail-provenance .provenance-badge { position: static; box-shadow: none; }
+
+.app-card-creator { margin: 0; color: var(--color-ink-2); font-size: 0.86rem; }
+.app-card-creator a { color: var(--color-ink); font-weight: 500; }
+
+.app-detail-provenance { display: flex; align-items: center; gap: 0.6rem; margin: 0.3rem 0 0.75rem; color: var(--color-ink-2); }
+.app-detail-provenance a { color: var(--color-ink); font-weight: 500; }
 
 /* ---------- Unofficial provenance notice ---------- */
 .unofficial-notice {

@@ -1,29 +1,56 @@
 {
-  "_comment": "TEST DATA — fictional. Not real firmware.",
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "official": true
+    }
+  },
   "apps": [
     {
       "uuid": "t8bit-0001",
       "name": "SIO Drive (TEST)",
       "description": "Fictional test disk-drive emulator for the Atari 8-bit line.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Disk", "SIO", "Emulation"],
-      "devices": ["800", "XL", "XE"],
+      "tags": [
+        "Disk",
+        "SIO",
+        "Emulation"
+      ],
+      "devices": [
+        "800",
+        "XL",
+        "XE"
+      ],
       "binary": "https://example.com/test/t8bit-0001-v1.2.0.uf2",
       "md5": "00000000000000000000000000000011",
       "version": "v1.2.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "t8bit-0002",
       "name": "Cartridge Bank Switcher (TEST)",
       "description": "Fictional bank-switching cartridge tool.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Cartridge", "ROM"],
-      "devices": ["400", "800", "XL", "XE"],
+      "tags": [
+        "Cartridge",
+        "ROM"
+      ],
+      "devices": [
+        "400",
+        "800",
+        "XL",
+        "XE"
+      ],
       "binary": "https://example.com/test/t8bit-0002-v1.0.0.uf2",
       "md5": "00000000000000000000000000000012",
       "version": "v1.0.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     }
   ]
 }

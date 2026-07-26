@@ -1,41 +1,71 @@
 {
-  "_comment": "TEST DATA — fictional. Not real firmware.",
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "official": true
+    }
+  },
   "apps": [
     {
       "uuid": "tnes-0001",
       "name": "Mapper Multicart (TEST)",
       "description": "Fictional multi-mapper cartridge for the NES/Famicom.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Multicart", "Mapper"],
-      "devices": ["NES", "Famicom"],
+      "tags": [
+        "Multicart",
+        "Mapper"
+      ],
+      "devices": [
+        "NES",
+        "Famicom"
+      ],
       "binary": "https://example.com/test/tnes-0001-v4.2.0.uf2",
       "md5": "00000000000000000000000000000031",
       "version": "v4.2.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "tnes-0002",
       "name": "FDS Loader (TEST)",
       "description": "Fictional Famicom Disk System loader.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Disk", "Loader", "Famicom"],
-      "devices": ["Famicom"],
+      "tags": [
+        "Disk",
+        "Loader",
+        "Famicom"
+      ],
+      "devices": [
+        "Famicom"
+      ],
       "binary": "https://example.com/test/tnes-0002-v1.0.0.uf2",
       "md5": "00000000000000000000000000000032",
       "version": "v1.0.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     },
     {
       "uuid": "tnes-0003",
       "name": "Zapper Test (TEST)",
       "description": "Fictional light-gun diagnostic.",
       "image": "https://placehold.co/256x256/png",
-      "tags": ["Controller", "Diagnostics"],
-      "devices": ["NES"],
+      "tags": [
+        "Controller",
+        "Diagnostics"
+      ],
+      "devices": [
+        "NES"
+      ],
       "binary": "https://example.com/test/tnes-0003-v0.8.0.uf2",
       "md5": "00000000000000000000000000000033",
       "version": "v0.8.0",
-      "previous_versions": []
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
     }
   ]
 }

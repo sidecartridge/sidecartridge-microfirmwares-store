@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=10.0" />
+  <link rel="stylesheet" href="styles.css?v=11.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -88,22 +88,23 @@
       return {
         navMenuOpen: false,
         loading: true,
-        error: '',
+        error: '',               // platforms.json failure
         platforms: [],
         activePlatform: null,
-        sources: [],   // [{ kind, id, label, apps_url, author, status, error, count }]
-        apps: [],      // merged, provenance-tagged: { ...app, _source, _sourceKind, _author, _duplicate }
-        unofficialRegistryError: '',
-        // ----- view / UI state (EPIC-04) -----
-        view: 'platforms',        // 'platforms' | 'catalog'
-        activeSourceId: 'official',
+        apps: [],                // consolidated apps (each tagged official + creator by the batch)
+        creators: {},            // id -> { id, name, url?, image?, official }
+        appsError: '',           // consolidated catalog fetch failure
+        // ----- view / UI state -----
+        view: 'platforms',       // 'platforms' | 'catalog'
         search: '',
         activeTag: '',
         activeDevice: '',
+        activeCreator: '',       // filter by creator id
+        provenance: 'all',       // 'all' | 'official' | 'unofficial'
         detailApp: null,
-        testMode: false,        // EPIC-06: ?data=test
-        dataBase: '',           // '' (real) | 'test/' (fixtures)
-        downloadable: false,    // ?downloadable — reveals .uf2 link + md5 in detail (D-13)
+        testMode: false,         // EPIC-06: ?data=test
+        dataBase: '',            // '' (real) | 'test/' (fixtures)
+        downloadable: false,     // ?downloadable — reveals .uf2 link + md5 in detail (D-13)
 
         async init() {
           window.addEventListener('hashchange', () => this.applyHash());
@@ -123,14 +124,13 @@
             this.loading = false;
             return;
           }
-          await this.applyHash();   // honor an initial #platform[/source] deep link
+          await this.applyHash();   // honor an initial #platform deep link
           this.loading = false;
         },
 
-        // ----- routing: #<platform-id>[/<source-id>] -----
+        // ----- routing: #<platform-id> -----
         async applyHash() {
-          const h = decodeURIComponent((location.hash || '').replace(/^#/, ''));
-          const [pid, sid] = h.split('/');
+          const pid = decodeURIComponent((location.hash || '').replace(/^#/, ''));
           const p = pid && this.platforms.find(x => x.id === pid);
           if (!p) { this.view = 'platforms'; this.activePlatform = null; this.detailApp = null; return; }
           this.view = 'catalog';
@@ -139,28 +139,32 @@
             await this.loadPlatform(p);
             this.loading = false;
           }
-          this.activeSourceId = (sid && this.sources.some(s => s.id === sid)) ? sid : 'official';
-          this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.detailApp = null;
+          this.clearFilters();
+          this.detailApp = null;
         },
         selectPlatform(p) { location.hash = p.id; },
         backToPlatforms() { location.hash = ''; },
-        selectSource(id) { location.hash = this.activePlatform.id + (id !== 'official' ? '/' + id : ''); },
 
-        // ----- derived views (EPIC-04) -----
-        activeSource() { return this.sources.find(s => s.id === this.activeSourceId) || null; },
-        sourceApps() { return this.apps.filter(a => a._source === this.activeSourceId); },
+        // ----- derived views -----
+        creatorOf(app) { return (app && this.creators[app.creator]) || { id: app && app.creator, name: (app && app.creator) || 'Unknown' }; },
+        creatorList() { return Object.values(this.creators).sort((a, b) => String(a.name).localeCompare(String(b.name))); },
+        hasUnofficial() { return this.apps.some(a => !a.official); },
         visibleApps() {
           const q = this.search.trim().toLowerCase();
-          return this.sourceApps().filter(a => {
+          return this.apps.filter(a => {
+            if (this.provenance === 'official' && !a.official) return false;
+            if (this.provenance === 'unofficial' && a.official) return false;
+            if (this.activeCreator && a.creator !== this.activeCreator) return false;
             if (q && !String(a.name || '').toLowerCase().includes(q)) return false;
             if (this.activeTag && !(a.tags || []).includes(this.activeTag)) return false;
             if (this.activeDevice && !(a.devices || []).includes(this.activeDevice)) return false;
             return true;
           });
         },
-        tagsForSource() { const s = new Set(); this.sourceApps().forEach(a => (a.tags || []).forEach(t => s.add(t))); return [...s].sort(); },
-        devicesForSource() { const s = new Set(); this.sourceApps().forEach(a => (a.devices || []).forEach(d => s.add(d))); return [...s].sort(); },
-        clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; },
+        tagsForCatalog() { const s = new Set(); this.apps.forEach(a => (a.tags || []).forEach(t => s.add(t))); return [...s].sort(); },
+        devicesForCatalog() { const s = new Set(); this.apps.forEach(a => (a.devices || []).forEach(d => s.add(d))); return [...s].sort(); },
+        hasFilters() { return !!(this.search || this.activeTag || this.activeDevice || this.activeCreator || this.provenance !== 'all'); },
+        clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.activeCreator = ''; this.provenance = 'all'; },
         openDetail(a) { this.detailApp = a; },
         closeDetail() { this.detailApp = null; },
 
@@ -209,72 +213,20 @@
           return out.innerHTML;
         },
 
-        // ----- data loading (EPIC-02/03) -----
+        // ----- data loading: one consolidated catalog per platform (D-15) -----
         async loadPlatform(p) {
           this.activePlatform = p;
-          this.sources = [];
           this.apps = [];
-          this.unofficialRegistryError = '';
-          const seen = new Set();   // uuid precedence: official is loaded first and wins
-          const merged = [];
-          const sources = [];       // built locally; assigned to this.sources once, at the end
-
-          // 1) Official catalog — in-repo, same-origin (dataBase = 'test/' in test mode, D-11).
-          const official = { kind: 'official', id: 'official', label: 'Official', apps_url: this.dataBase + p.apps_url, author: null, status: 'loading', error: '', count: 0 };
-          sources.push(official);
-          await this._loadSource(official, seen, merged);
-
-          // 2) Unofficial catalogs — from the platform's in-repo unofficial.json registry.
-          let defs = [];
-          if (p.unofficial_url) {
-            try {
-              const res = await fetch(this.dataBase + p.unofficial_url, { cache: 'no-cache' });
-              if (!res.ok) throw new Error('HTTP ' + res.status);
-              const data = await res.json();
-              defs = (data.sources || []).filter(s => s && s.enabled).map(s => ({
-                kind: 'unofficial', id: s.id, label: s.name || s.id, apps_url: s.apps_url,
-                author: s.author || null, status: 'loading', error: '', count: 0
-              }));
-            } catch (e) {
-              this.unofficialRegistryError = e.message || String(e);
-            }
-          }
-          defs.forEach(d => sources.push(d));
-          // Fetch unofficial feeds in parallel; a failing feed is isolated per-source.
-          await Promise.all(defs.map(d => this._loadSource(d, seen, merged)));
-
-          // Assign once, after every source's status is final. Alpine re-renders on the
-          // assignment; mutating already-pushed objects in place would not (that was the
-          // "stuck on loading…" bug).
-          this.sources = sources;
-          this.apps = merged;
-        },
-        async _loadSource(src, seen, merged) {
-          // Unofficial feeds are remote and must be HTTPS (C-04); official is same-origin/relative.
-          if (src.kind === 'unofficial' && !/^https:\/\//i.test(src.apps_url || '')) {
-            src.status = 'error';
-            src.error = 'unofficial feed must be served over HTTPS (C-04)';
-            return;
-          }
+          this.creators = {};
+          this.appsError = '';
           try {
-            const res = await fetch(src.apps_url, { cache: 'no-cache' });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const res = await fetch(this.dataBase + p.apps_url, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(p.apps_url + ' → HTTP ' + res.status);
             const data = await res.json();
-            const list = Array.isArray(data.apps) ? data.apps : [];
-            let n = 0;
-            for (const app of list) {
-              const dup = !!(app.uuid && seen.has(app.uuid));
-              if (app.uuid) seen.add(app.uuid);
-              merged.push(Object.assign({}, app, {
-                _source: src.id, _sourceKind: src.kind, _author: src.author, _duplicate: dup
-              }));
-              n++;
-            }
-            src.count = n;
-            src.status = 'loaded';
+            this.creators = data.creators || {};
+            this.apps = Array.isArray(data.apps) ? data.apps : [];
           } catch (e) {
-            src.status = 'error';
-            src.error = e.message || String(e);
+            this.appsError = e.message || String(e);
           }
         }
       };
@@ -396,69 +348,55 @@
           </div>
         </section>
 
-        <!-- source switcher: Official (default) + unofficial -->
-        <div class="source-switcher" role="tablist" aria-label="Catalog source">
-          <template x-for="s in sources" :key="s.id">
-            <button type="button" class="source-tab" role="tab"
-              :class="{ 'is-active': activeSourceId === s.id, 'is-error': s.status === 'error' }"
-              :aria-selected="activeSourceId === s.id ? 'true' : 'false'"
-              @click="selectSource(s.id)">
-              <span x-text="s.label"></span>
-              <span class="source-tab-kind" x-show="s.kind === 'unofficial'" x-text="s.kind"></span>
-            </button>
-          </template>
-        </div>
-
-        <!-- unofficial provenance notice (D-07) -->
-        <div class="unofficial-notice" x-show="activeSource() && activeSource().kind === 'unofficial'" x-cloak>
+        <!-- catalog failed to load -->
+        <div class="browser-empty-state" x-show="appsError" x-cloak>
           <i class="fas fa-triangle-exclamation"></i>
-          <p>
-            <strong>Unofficial source.</strong>
-            <template x-if="activeSource() && activeSource().author">
-              <span>By
-                <template x-if="activeSource().author.url">
-                  <a :href="activeSource().author.url" target="_blank" rel="noopener" x-text="activeSource().author.name || 'a third party'"></a>
-                </template>
-                <template x-if="!activeSource().author.url">
-                  <span x-text="activeSource().author.name || 'a third party'"></span>
-                </template>.
-              </span>
-            </template>
-            Not reviewed or endorsed by SidecarTridge — use at your own risk.
-          </p>
-        </div>
-
-        <!-- selected source failed to load -->
-        <div class="browser-empty-state" x-show="activeSource() && activeSource().status === 'error'" x-cloak>
-          <i class="fas fa-triangle-exclamation"></i>
-          <p x-text="'This source failed to load: ' + (activeSource() ? activeSource().error : '')"></p>
+          <p x-text="'Couldn\'t load this platform\'s catalog: ' + appsError"></p>
         </div>
 
         <!-- search + filters -->
-        <section class="browser-filter-panel" x-show="activeSource() && activeSource().status === 'loaded'" x-cloak>
+        <section class="browser-filter-panel" x-show="!appsError && apps.length" x-cloak>
           <div class="browser-search-row">
             <label class="browser-search-field">
               <i class="fas fa-magnifying-glass"></i>
               <input type="text" x-model="search" placeholder="Search microfirmwares…" aria-label="Search microfirmwares">
             </label>
-            <button type="button" class="pure-button" x-show="search || activeTag || activeDevice" @click="clearFilters()">Clear</button>
+            <button type="button" class="pure-button" x-show="hasFilters()" @click="clearFilters()">Clear</button>
           </div>
-          <div class="browser-taxonomy" x-show="tagsForSource().length">
-            <template x-for="t in tagsForSource()" :key="'t-' + t">
+          <!-- provenance filter (only when the catalog has unofficial entries) -->
+          <div class="filter-group" x-show="hasUnofficial()">
+            <span class="filter-label">Origin</span>
+            <div class="browser-taxonomy">
+              <button type="button" class="taxonomy-chip" :class="{ active: provenance === 'all' }" @click="provenance = 'all'"><span>All</span></button>
+              <button type="button" class="taxonomy-chip" :class="{ active: provenance === 'official' }" @click="provenance = 'official'"><span>Official</span></button>
+              <button type="button" class="taxonomy-chip chip-device" :class="{ active: provenance === 'unofficial' }" @click="provenance = 'unofficial'"><span>Unofficial</span></button>
+            </div>
+          </div>
+          <!-- creator filter (only when more than one creator) -->
+          <div class="filter-group" x-show="creatorList().length > 1">
+            <span class="filter-label">Creator</span>
+            <div class="browser-taxonomy">
+              <template x-for="c in creatorList()" :key="c.id">
+                <button type="button" class="taxonomy-chip" :class="{ active: activeCreator === c.id }" @click="activeCreator = (activeCreator === c.id ? '' : c.id)"><span x-text="c.name"></span></button>
+              </template>
+            </div>
+          </div>
+          <div class="browser-taxonomy" x-show="tagsForCatalog().length">
+            <template x-for="t in tagsForCatalog()" :key="'t-' + t">
               <button type="button" class="taxonomy-chip" :class="{ active: activeTag === t }" @click="activeTag = (activeTag === t ? '' : t)"><span x-text="t"></span></button>
             </template>
           </div>
-          <div class="browser-taxonomy" x-show="devicesForSource().length">
-            <template x-for="d in devicesForSource()" :key="'d-' + d">
+          <div class="browser-taxonomy" x-show="devicesForCatalog().length">
+            <template x-for="d in devicesForCatalog()" :key="'d-' + d">
               <button type="button" class="taxonomy-chip chip-device" :class="{ active: activeDevice === d }" @click="activeDevice = (activeDevice === d ? '' : d)"><span x-text="d"></span></button>
             </template>
           </div>
-          <p class="browser-summary" x-text="visibleApps().length + ' of ' + sourceApps().length + ' microfirmwares'"></p>
+          <p class="browser-summary" x-text="visibleApps().length + ' of ' + apps.length + ' microfirmwares'"></p>
         </section>
 
         <!-- app grid -->
-        <div class="browser-card-grid" x-show="activeSource() && activeSource().status === 'loaded'" x-cloak>
-          <template x-for="app in visibleApps()" :key="app._source + '-' + app.uuid">
+        <div class="browser-card-grid" x-show="!appsError && apps.length" x-cloak>
+          <template x-for="app in visibleApps()" :key="app.uuid">
             <article class="app-card" role="button" tabindex="0" :aria-label="'View details for ' + app.name"
               @click="openDetail(app)" @keydown.enter="openDetail(app)" @keydown.space.prevent="openDetail(app)">
               <div class="app-card-media" :style="'--logo-bg:' + logoBg(app.name)">
@@ -466,13 +404,19 @@
                 <template x-if="!noLogo(app)">
                   <img class="app-card-img" :src="app.image" :alt="app.name" loading="lazy" onerror="this.remove()">
                 </template>
+                <span class="provenance-badge" :class="app.official ? 'is-official' : 'is-unofficial'" x-text="app.official ? 'Official' : 'Unofficial'"></span>
               </div>
               <div class="app-card-body">
                 <div class="browser-entry-topline">
                   <span class="browser-entry-tag" x-text="app.version"></span>
-                  <span class="browser-entry-tag" x-show="app._duplicate" title="Also in the official catalog">also official</span>
                 </div>
                 <h4 x-text="app.name"></h4>
+                <p class="app-card-creator">by
+                  <template x-if="creatorOf(app).url">
+                    <a :href="creatorOf(app).url" target="_blank" rel="noopener" @click.stop x-text="creatorOf(app).name"></a>
+                  </template>
+                  <template x-if="!creatorOf(app).url"><span x-text="creatorOf(app).name"></span></template>
+                </p>
                 <div class="app-card-tags">
                   <template x-for="t in (app.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
                 </div>
@@ -484,7 +428,7 @@
         </div>
 
         <!-- no results -->
-        <div class="browser-empty-state" x-show="activeSource() && activeSource().status === 'loaded' && visibleApps().length === 0" x-cloak>
+        <div class="browser-empty-state" x-show="!appsError && apps.length && visibleApps().length === 0" x-cloak>
           <i class="fas fa-magnifying-glass"></i>
           <p>No microfirmwares match your filters.</p>
         </div>
@@ -509,6 +453,20 @@
               <template x-for="t in (detailApp.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
             </div>
             <h3 x-text="detailApp.name"></h3>
+            <p class="app-detail-provenance">
+              <span class="provenance-badge" :class="detailApp.official ? 'is-official' : 'is-unofficial'" x-text="detailApp.official ? 'Official' : 'Unofficial'"></span>
+              <span>by
+                <template x-if="creatorOf(detailApp).url">
+                  <a :href="creatorOf(detailApp).url" target="_blank" rel="noopener" x-text="creatorOf(detailApp).name"></a>
+                </template>
+                <template x-if="!creatorOf(detailApp).url"><span x-text="creatorOf(detailApp).name"></span></template>
+              </span>
+            </p>
+            <!-- unofficial microfirmwares are third-party — labeled, not endorsed (D-07/C-03) -->
+            <div class="unofficial-notice" x-show="!detailApp.official" x-cloak>
+              <i class="fas fa-triangle-exclamation"></i>
+              <p><strong>Unofficial microfirmware.</strong> Not reviewed or endorsed by SidecarTridge — use at your own risk.</p>
+            </div>
             <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
             <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
             <p class="browser-entry-path" x-show="(detailApp.devices || []).length">Devices: <span x-text="(detailApp.devices || []).join(', ')"></span></p>
