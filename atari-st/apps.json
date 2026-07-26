@@ -6,6 +6,12 @@
       "url": "https://sidecartridge.com",
       "image": "assets/platforms/atari-st.png",
       "official": true
+    },
+    "retro-homebrew": {
+      "id": "retro-homebrew",
+      "name": "Retro Homebrew Collective",
+      "url": "https://example.com/retro-homebrew",
+      "official": false
     }
   },
   "apps": [
@@ -328,6 +334,72 @@
       ],
       "official": true,
       "creator": "sidecartridge"
+    },
+    {
+      "uuid": "rh-0001",
+      "name": "PicoDrive Loader [SAMPLE]",
+      "description": "Fictional community loader — demonstration of an unofficial microfirmware. <a target='_blank' href='https://example.com/retro-homebrew'>Learn more</a>",
+      "image": "",
+      "tags": [
+        "Emulation",
+        "Homebrew"
+      ],
+      "devices": [
+        "ST",
+        "STE"
+      ],
+      "binary": "https://example.com/retro-homebrew/picodrive-v0.9.0.uf2",
+      "md5": "00000000000000000000000000000911",
+      "version": "v0.9.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "retro-homebrew"
+    },
+    {
+      "uuid": "rh-0002",
+      "name": "SD Card Toolkit [SAMPLE]",
+      "description": "Fictional community disk utility (sample unofficial content).",
+      "image": "",
+      "tags": [
+        "Utility",
+        "HD"
+      ],
+      "devices": [
+        "ST",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.1.0.uf2",
+      "md5": "00000000000000000000000000000912",
+      "version": "v2.1.0",
+      "previous_versions": [
+        {
+          "version": "v2.0.0",
+          "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.0.0.uf2",
+          "md5": "000000000000000000000000000009a2"
+        }
+      ],
+      "official": false,
+      "creator": "retro-homebrew"
+    },
+    {
+      "uuid": "rh-0003",
+      "name": "MOD Player [SAMPLE]",
+      "description": "Fictional community audio player (sample unofficial content).",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Audio",
+        "Demo"
+      ],
+      "devices": [
+        "STE"
+      ],
+      "binary": "https://example.com/retro-homebrew/modplayer-v1.4.0.uf2",
+      "md5": "00000000000000000000000000000913",
+      "version": "v1.4.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "retro-homebrew"
     }
   ]
 }
