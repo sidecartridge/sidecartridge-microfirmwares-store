@@ -23,6 +23,13 @@
       "official": false,
       "enabled": true,
       "source": "origins/atari-st/retro-homebrew.apps.json"
+    },
+    {
+      "creator": {
+        "id": "badguy"
+      },
+      "official": false,
+      "url": "ftp://example.com/atari-st/apps.json"
     }
   ]
 }
