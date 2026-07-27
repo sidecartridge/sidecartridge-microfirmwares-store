@@ -5,8 +5,8 @@ name: Rebuild catalog
 # Kept independent of deploy.yml (which runs on push to main).
 on:
   workflow_dispatch: {}
-  # schedule:
-  #   - cron: "0 6 * * 1"   # optional: weekly
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC
 
 permissions:
   contents: write   # commit regenerated catalogs
