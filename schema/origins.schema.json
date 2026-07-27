@@ -20,7 +20,7 @@
         "official": { "type": "boolean", "description": "Exactly one origin per platform is true (SidecarTridge)." },
         "enabled": { "type": "boolean", "default": true },
         "source": { "type": "string", "description": "In-repo path to this origin's apps.json (used by the official origin)." },
-        "url": { "type": "string", "format": "uri", "pattern": "^https://", "description": "Remote HTTPS URL to a creator's apps.json (unofficial origins, C-04/D-16)." }
+        "url": { "type": "string", "format": "uri", "pattern": "^https?://", "description": "Remote URL (HTTP or HTTPS) to a creator's apps.json; fetched server-side at build time, so HTTP is allowed (HTTPS recommended). D-16." }
       },
       "oneOf": [
         { "required": ["source"] },

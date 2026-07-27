@@ -4,3 +4,7 @@ docs/
 # Editor / OS cruft
 .DS_Store
 .claude/
+
+# Python
+__pycache__/
+*.pyc

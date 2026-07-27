@@ -2,7 +2,7 @@
 """build_catalog.py — consolidate per-platform origins into <platform>/apps.json.
 
 For each `origins/<platform>.json` registry (EPIC-09, D-14) this reads the official
-origin (local `source`), fetches each unofficial origin (remote HTTPS `url`, D-16),
+origin (local `source`), fetches each unofficial origin (remote `url`, HTTP or HTTPS, D-16),
 validates each against the apps.json contract (schema/apps.schema.json, D-06), tags
 every app with `official` + `creator`, dedupes by `uuid` (official wins, D-17), and
 writes the consolidated `<platform>/apps.json` (schema/catalog.schema.json, D-15):
@@ -75,15 +75,14 @@ def load_origin_apps(origin):
         data = load_local(origin["source"])
     elif "url" in origin:
         url = origin["url"]
-        official = bool(origin.get("official"))
         if not re.match(r"^https?://", url, re.I):
             raise RuntimeError("origin url must be http(s)")
         if url.lower().startswith("http://"):
-            # First-party (SidecarTridge) origin may use HTTP (its host's HTTPS is broken);
-            # third-party creator origins must be HTTPS (C-04).
-            if not official:
-                raise RuntimeError("unofficial origin must be served over HTTPS (C-04)")
-            log(f"    (note) first-party origin fetched over HTTP (not HTTPS): {url}")
+            # Origins (official and creator alike) are fetched server-side at build time,
+            # so plain HTTP is acceptable here — there is no browser mixed-content concern
+            # for the fetch itself. Note it for visibility. (Embedded image/binary URLs are
+            # loaded by the browser and must still be HTTPS — enforced by the app contract.)
+            log(f"    (note) origin fetched over HTTP (not HTTPS): {url}")
         data = fetch_remote(url)
     else:
         raise RuntimeError("origin has neither 'source' nor 'url'")
