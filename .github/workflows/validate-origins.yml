@@ -1,22 +1,18 @@
 name: Validate origins
 
-# Blocking gate for pull requests that add, modify, or delete an origin (any platform).
-# Runs tools/build_catalog.py --check --strict, which:
-#   - validates each registry (origins/<platform>.json) against schema/origins.schema.json,
-#   - validates every origin's apps.json (local source or fetched remote url) against the
-#     strict schema/apps.schema.json contract,
-#   - fetches remote origins so a newly-added url must be reachable AND compliant,
-#   - fails on ANY invalid/unreachable origin (not just the official one).
-# Writes nothing. Requires jsonschema so validation is the authoritative strict path.
+# Required status check for pull requests. The `validate` job runs on EVERY pull request so
+# the required check always reports — a path-filtered required check would leave PRs that
+# don't touch origins stuck on "Expected". It only performs the heavy strict validation
+# (which fetches remote origins) when a PR actually adds/modifies/deletes an origin, i.e.
+# changes under origins/**, schema/**, or the build tool; otherwise it is a no-op pass.
 #
-# To make this required before merging, enable it as a required status check in
-# Settings -> Branches -> branch protection for `main` (context: "Validate origins / validate").
+# Strict validation runs tools/build_catalog.py --check --strict:
+#   - validates each registry against schema/origins.schema.json,
+#   - validates every origin's apps.json (local source or fetched remote url) against
+#     schema/apps.schema.json,
+#   - requires jsonschema (authoritative strict path); fails on ANY invalid/unreachable origin.
 on:
   pull_request:
-    paths:
-      - "origins/**"
-      - "schema/**"
-      - "tools/build_catalog.py"
 
 # Read-only: safe for pull requests from forks (no secrets, no write access needed).
 permissions:
@@ -31,9 +27,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect origin changes
+        id: changes
+        run: |
+          base='${{ github.event.pull_request.base.sha }}'
+          if git diff --name-only "$base" HEAD | grep -qE '^(origins/|schema/|tools/build_catalog\.py)'; then
+            echo "origins=true" >> "$GITHUB_OUTPUT"
+            echo "Origin/schema/build changes detected — running strict validation."
+          else
+            echo "origins=false" >> "$GITHUB_OUTPUT"
+            echo "No origin/schema/build changes — strict validation not required for this PR."
+          fi
 
       - name: Install validator
+        if: steps.changes.outputs.origins == 'true'
         run: python3 -m pip install --quiet jsonschema
 
       - name: Validate origins (strict)
+        if: steps.changes.outputs.origins == 'true'
         run: python3 tools/build_catalog.py --check --strict
