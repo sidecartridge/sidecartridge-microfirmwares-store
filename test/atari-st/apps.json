@@ -5,6 +5,12 @@
       "name": "SidecarTridge",
       "url": "https://sidecartridge.com",
       "official": true
+    },
+    "retro-homebrew": {
+      "id": "retro-homebrew",
+      "name": "Retro Homebrew Collective",
+      "url": "https://example.com/retro-homebrew",
+      "official": false
     }
   },
   "apps": [
@@ -327,6 +333,71 @@
       ],
       "official": true,
       "creator": "sidecartridge"
+    },
+    {
+      "uuid": "rh-t-0001",
+      "name": "PicoDrive Loader (TEST) [SAMPLE]",
+      "description": "Fictional unofficial microfirmware for the provenance demo. <a target='_blank' href='https://example.com/retro-homebrew'>Learn more</a>",
+      "image": "",
+      "tags": [
+        "Emulation",
+        "Homebrew"
+      ],
+      "devices": [
+        "ST",
+        "STE"
+      ],
+      "binary": "https://example.com/retro-homebrew/picodrive-v0.9.0.uf2",
+      "md5": "00000000000000000000000000000a11",
+      "version": "v0.9.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "retro-homebrew"
+    },
+    {
+      "uuid": "rh-t-0002",
+      "name": "SD Card Toolkit (TEST) [SAMPLE]",
+      "description": "Fictional unofficial disk utility.",
+      "image": "",
+      "tags": [
+        "Utility",
+        "HD"
+      ],
+      "devices": [
+        "ST",
+        "MegaST"
+      ],
+      "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.1.0.uf2",
+      "md5": "00000000000000000000000000000a12",
+      "version": "v2.1.0",
+      "previous_versions": [
+        {
+          "version": "v2.0.0",
+          "binary": "https://example.com/retro-homebrew/sdtoolkit-v2.0.0.uf2",
+          "md5": "0000000000000000000000000000ab12"
+        }
+      ],
+      "official": false,
+      "creator": "retro-homebrew"
+    },
+    {
+      "uuid": "rh-t-0003",
+      "name": "MOD Player (TEST) [SAMPLE]",
+      "description": "Fictional unofficial audio player.",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Audio",
+        "Demo"
+      ],
+      "devices": [
+        "STE"
+      ],
+      "binary": "https://example.com/retro-homebrew/modplayer-v1.4.0.uf2",
+      "md5": "00000000000000000000000000000a13",
+      "version": "v1.4.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "retro-homebrew"
     }
   ]
 }
