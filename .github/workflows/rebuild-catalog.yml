@@ -22,6 +22,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install validator
+        # Pin the strict JSON Schema validator so the build always uses the
+        # authoritative contract (schema/apps.schema.json), not the tool's lenient
+        # structural fallback. Without this the result would depend on whether the
+        # runner image happens to ship jsonschema.
+        run: python3 -m pip install --quiet jsonschema
+
       - name: Validate origins
         run: python3 tools/build_catalog.py --check
 

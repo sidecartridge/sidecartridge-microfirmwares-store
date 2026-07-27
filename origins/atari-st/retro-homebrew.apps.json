@@ -1,5 +1,4 @@
 {
-  "_comment": "SAMPLE unofficial origin (fictional) to exercise the provenance UI. Normally an unofficial origin would be a remote HTTPS url in origins/atari-st.json; this uses a local source for a self-contained demo. Remove this file + its entry in origins/atari-st.json and rerun tools/build_catalog.py to take it down.",
   "apps": [
     {
       "uuid": "1805c20c-5b83-4ea1-9264-6fe13da448a0",
