@@ -11,7 +11,7 @@
       },
       "official": true,
       "enabled": true,
-      "source": "origins/atari-st/sidecartridge.apps.json"
+      "url": "http://atarist.sidecartridge.com/apps.json"
     },
     {
       "_comment": "SAMPLE unofficial creator (fictional) to exercise the provenance UI. A real unofficial origin would use a remote HTTPS \"url\" instead of a local \"source\". Remove this entry + origins/atari-st/retro-homebrew.apps.json and rerun tools/build_catalog.py to take it down.",
