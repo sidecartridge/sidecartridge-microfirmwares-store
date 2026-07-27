@@ -1,5 +1,5 @@
 {
-  "_comment": "Build-time origins registry (D-14). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote HTTPS url, e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
+  "_comment": "Build-time origins registry (D-14). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote url (HTTP or HTTPS — fetched server-side at build time; HTTPS recommended), e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
   "platform": "atari-st",
   "origins": [
     {
@@ -14,7 +14,7 @@
       "url": "http://atarist.sidecartridge.com/apps.json"
     },
     {
-      "_comment": "SAMPLE unofficial creator (fictional) to exercise the provenance UI. A real unofficial origin would use a remote HTTPS \"url\" instead of a local \"source\". Remove this entry + origins/atari-st/retro-homebrew.apps.json and rerun tools/build_catalog.py to take it down.",
+      "_comment": "SAMPLE unofficial creator (fictional) to exercise the provenance UI. A real unofficial origin would use a remote \"url\" (HTTP or HTTPS) instead of a local \"source\". Remove this entry + origins/atari-st/retro-homebrew.apps.json and rerun tools/build_catalog.py to take it down.",
       "creator": {
         "id": "retro-homebrew",
         "name": "Retro Homebrew Collective",

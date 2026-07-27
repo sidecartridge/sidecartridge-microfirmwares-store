@@ -13,7 +13,8 @@ is **consolidated at build time** from one or more **origins** — one per creat
 
 You never edit the store's files. The flow is:
 
-1. You publish an **`apps.json`** describing your microfirmwares, hosted by you over **HTTPS**.
+1. You publish an **`apps.json`** describing your microfirmwares, hosted by you at a stable URL
+   (**HTTPS recommended**, plain HTTP accepted — see [§2](#2-hosting-your-appsjson)).
 2. You submit your **origin** (your creator details + the `apps.json` URL) to be added to the
    platform's registry.
 3. A maintainer reviews and merges it, then runs the consolidation build. Your apps appear in the
@@ -102,9 +103,12 @@ draft 2020-12). It is **identical for every creator** — only the content diffe
 
 ## 2. Hosting your `apps.json`
 
-- Host it anywhere reachable over **HTTPS** (your own site, GitHub Pages, an object store, …).
-- The store's build **fetches it server-side at build time**, so **CORS is not required** — but
-  **HTTPS is**, and the URL must be reachable at build time.
+- Host it anywhere reachable over the web (your own site, GitHub Pages, an object store, …).
+- The store's build **fetches it server-side at build time**, so **CORS is not required** and the
+  URL may be **HTTP or HTTPS** — there is no browser mixed-content concern for the fetch itself.
+  **HTTPS is still recommended.** The URL just has to be reachable at build time.
+- Note the distinction: the `apps.json` **URL** may be HTTP, but the `image` and `binary` URLs
+  **inside** it must be **HTTPS** — the browser loads those directly and blocks mixed content.
 - Keep the URL **stable**. To publish changes, update the file **in place** at the same URL.
 
 ---
@@ -168,7 +172,7 @@ You are represented in a platform's registry by a **creator** (one creator ↔ o
 - [ ] `md5` matches each `binary`.
 - [ ] `tags` / `devices` are accurate for the platform.
 - [ ] `description` uses only the allowed HTML tags.
-- [ ] Hosted over HTTPS at a stable URL.
+- [ ] Hosted at a stable URL, reachable at build time (HTTPS recommended; HTTP accepted).
 
 ## Reference
 
