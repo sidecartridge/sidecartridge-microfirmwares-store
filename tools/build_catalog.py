@@ -3,7 +3,8 @@
 
 For each `origins/<platform>.json` registry (EPIC-09, D-14) this reads the official
 origin (local `source`), fetches each unofficial origin (remote `url`, HTTP or HTTPS, D-16),
-validates each against the apps.json contract (schema/apps.schema.json, D-06), tags
+validates the registry (schema/origins.schema.json, D-14) and each origin against the
+apps.json contract (schema/apps.schema.json, D-06), tags
 every app with `official` + `creator`, dedupes by `uuid` (official wins, D-17), and
 writes the consolidated `<platform>/apps.json` (schema/catalog.schema.json, D-15):
 `{ "creators": {<id>: {...}}, "apps": [ {...app, official, creator} ] }`.
@@ -12,6 +13,7 @@ Detached from the UI — a maintainer/CI tool. Stdlib only. Run from the repo ro
 
     python3 tools/build_catalog.py            # rebuild all platforms
     python3 tools/build_catalog.py --check    # validate only, write nothing
+    python3 tools/build_catalog.py --check --strict  # PR gate: ANY invalid/unreachable origin fails
     python3 tools/build_catalog.py --platform atari-st
 """
 import argparse
@@ -46,27 +48,45 @@ def fetch_remote(url):
         return json.loads(r.read().decode("utf-8"))
 
 
-def _make_validator():
-    """Prefer jsonschema; fall back to a structural check of the required fields."""
+def _import_jsonschema():
     try:
         import jsonschema  # type: ignore
+        return jsonschema
+    except Exception:
+        return None
+
+
+JSONSCHEMA = _import_jsonschema()
+HAVE_JSONSCHEMA = JSONSCHEMA is not None
+
+
+def _make_validator():
+    """Prefer jsonschema (strict, authoritative); fall back to a structural check."""
+    if JSONSCHEMA is not None:
         schema = load_local("schema/apps.schema.json")
 
         def validate(data):
-            jsonschema.validate(data, schema)
+            JSONSCHEMA.validate(data, schema)
         return validate
-    except Exception:
-        def validate(data):
-            if not isinstance(data, dict) or not isinstance(data.get("apps"), list):
-                raise RuntimeError("not an object with an 'apps' array")
-            for i, app in enumerate(data["apps"]):
-                if not isinstance(app, dict) or not APP_REQUIRED.issubset(app):
-                    missing = sorted(APP_REQUIRED - set(app)) if isinstance(app, dict) else sorted(APP_REQUIRED)
-                    raise RuntimeError(f"app[{i}] missing fields {missing}")
-        return validate
+
+    def validate(data):
+        if not isinstance(data, dict) or not isinstance(data.get("apps"), list):
+            raise RuntimeError("not an object with an 'apps' array")
+        for i, app in enumerate(data["apps"]):
+            if not isinstance(app, dict) or not APP_REQUIRED.issubset(app):
+                missing = sorted(APP_REQUIRED - set(app)) if isinstance(app, dict) else sorted(APP_REQUIRED)
+                raise RuntimeError(f"app[{i}] missing fields {missing}")
+    return validate
 
 
 VALIDATE = _make_validator()
+
+
+def validate_registry(reg):
+    """Validate a registry object against origins.schema.json (D-14). Requires
+    jsonschema; a no-op otherwise (strict validation demands it — see --strict)."""
+    if JSONSCHEMA is not None:
+        JSONSCHEMA.validate(reg, load_local("schema/origins.schema.json"))
 
 
 def load_origin_apps(origin):
@@ -90,9 +110,14 @@ def load_origin_apps(origin):
     return data.get("apps", [])
 
 
-def build_platform(registry_rel, check=False):
-    """Build one platform. Returns (changed: bool). Raises on hard errors."""
+def build_platform(registry_rel, check=False, strict=False):
+    """Build one platform. Returns (changed: bool). Raises on hard errors.
+
+    Resilience (D-16): a broken *unofficial* origin is skipped (non-fatal) so one
+    creator's bad feed can't break the build; only the official origin failing is
+    fatal. Under `strict` (PR gate) ANY invalid/unreachable origin is fatal."""
     reg = load_local(registry_rel)
+    validate_registry(reg)
     platform = reg["platform"]
     all_origins = reg.get("origins", [])
     official = [o for o in all_origins if o.get("official")]
@@ -105,7 +130,7 @@ def build_platform(registry_rel, check=False):
         raise RuntimeError(f"{platform}: the official origin must be enabled")
 
     creators, apps, seen = {}, [], set()
-    hard_error = None
+    errors = []
     log(f"platform {platform}:")
     for o in ordered:
         cid = o["creator"]["id"]
@@ -114,8 +139,8 @@ def build_platform(registry_rel, check=False):
         try:
             origin_apps = load_origin_apps(o)
         except Exception as e:
-            if is_official:
-                hard_error = f"{platform}: official origin '{cid}' failed: {e}"
+            if is_official or strict:
+                errors.append(f"{platform}: origin '{cid}' ({tag}) failed: {e}")
                 log(f"  - {cid} ({tag}): ERROR — {e}")
             else:
                 log(f"  - {cid} ({tag}): SKIP — {e}")
@@ -142,8 +167,8 @@ def build_platform(registry_rel, check=False):
         note = f", {dropped} dedup drop(s)" if dropped else ""
         log(f"  - {cid} ({tag}): +{added} app(s){note}")
 
-    if hard_error:
-        raise RuntimeError(hard_error)
+    if errors:
+        raise RuntimeError("; ".join(errors))
 
     consolidated = {"creators": creators, "apps": apps}
     log(f"  => {len(apps)} app(s), {len(creators)} creator(s)")
@@ -165,8 +190,15 @@ def build_platform(registry_rel, check=False):
 def main():
     ap = argparse.ArgumentParser(description="Consolidate origins into <platform>/apps.json")
     ap.add_argument("--check", action="store_true", help="validate origins only; write nothing")
+    ap.add_argument("--strict", action="store_true",
+                    help="fail on ANY invalid/unreachable origin (not just the official one) and "
+                         "require the jsonschema validator; use to gate origin pull requests")
     ap.add_argument("--platform", help="build only this platform id")
     args = ap.parse_args()
+
+    if args.strict and not HAVE_JSONSCHEMA:
+        log("[FAIL] --strict requires the 'jsonschema' package (pip install jsonschema)")
+        return 1
 
     registries = sorted(glob.glob(os.path.join(ROOT, "origins", "*.json")))
     if args.platform:
@@ -180,7 +212,7 @@ def main():
     for reg in registries:
         rel = os.path.relpath(reg, ROOT)
         try:
-            changed_any = build_platform(rel, check=args.check) or changed_any
+            changed_any = build_platform(rel, check=args.check, strict=args.strict) or changed_any
         except Exception as e:
             log(f"[FAIL] {rel}: {e}")
             rc = 1
