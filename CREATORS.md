@@ -107,6 +107,28 @@ draft 2020-12). It is **identical for every creator** — only the content diffe
   PR can be merged**. Anything that isn't strict-schema compliant, or a `url` that isn't reachable,
   fails the check.
 
+### If the check fails
+
+The failing **Validate origins** check names exactly what's wrong. To fix it:
+
+1. Open the PR's **Checks** tab → **Validate origins / validate** → the *Validate origins (strict)*
+   step. The log points at the file and the rule it broke, e.g.
+   `origins/atari-st.json: 'name' is a required property`, an unexpected top-level property, or a
+   `url` that isn't reachable.
+2. Reproduce and fix locally — the exact command the check runs — until it prints `check: OK`:
+
+   ```bash
+   pip install jsonschema
+   python3 tools/build_catalog.py --check --strict
+   ```
+
+3. Push the fix to the **same PR branch**; the check re-runs automatically. Repeat until green.
+
+Most failures are one of: a **missing required field**; an **unexpected/extra property** (the
+`apps.json` object is strict — only `apps` is allowed at the top level); a registry entry whose
+`url` isn't `http(s)` or that has **both/neither** `source` and `url`; a **creator** missing
+`id`/`name`; or an **unreachable `url`** (the check fetches it at build time).
+
 ---
 
 ## 2. Hosting your `apps.json`
