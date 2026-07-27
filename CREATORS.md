@@ -93,11 +93,19 @@ draft 2020-12). It is **identical for every creator** — only the content diffe
 
 - Validate your file against [`schema/apps.schema.json`](schema/apps.schema.json) with any JSON
   Schema validator.
-- A maintainer can also dry-run it with the build tool:
+- Dry-run the whole registry (schema + your origin, fetched) with the build tool:
 
   ```bash
-  python3 tools/build_catalog.py --check
+  pip install jsonschema        # enables strict (authoritative) validation
+  python3 tools/build_catalog.py --check --strict
   ```
+
+- **This runs automatically on your pull request.** A required **Validate origins** check strictly
+  validates every changed origin — your registry entry against
+  [`schema/origins.schema.json`](schema/origins.schema.json) and your `apps.json` (fetched from its
+  `url`) against [`schema/apps.schema.json`](schema/apps.schema.json) — and **must pass before the
+  PR can be merged**. Anything that isn't strict-schema compliant, or a `url` that isn't reachable,
+  fails the check.
 
 ---
 
@@ -144,8 +152,10 @@ You are represented in a platform's registry by a **creator** (one creator ↔ o
    (Registry schema: [`schema/origins.schema.json`](schema/origins.schema.json). `official` is
    `false` for creators — only SidecarTridge's origin is `true`.)
 
-2. **Review.** The maintainer reviews your `apps.json` and creator details. Curation is the trust
-   gate — listing is not an endorsement.
+2. **Automated validation + review.** Opening the PR runs the required **Validate origins** check,
+   which strictly validates your registry entry and fetches + validates your `apps.json`; it **must
+   be green to merge**. The maintainer then reviews your `apps.json` and creator details — curation
+   is the trust gate; listing is not an endorsement.
 
 3. **Build.** The maintainer runs the consolidation (`python3 tools/build_catalog.py`, or the
    *Rebuild catalog* GitHub Action). It fetches your `apps.json`, tags each app with your creator,
@@ -173,6 +183,8 @@ You are represented in a platform's registry by a **creator** (one creator ↔ o
 - [ ] `tags` / `devices` are accurate for the platform.
 - [ ] `description` uses only the allowed HTML tags.
 - [ ] Hosted at a stable URL, reachable at build time (HTTPS recommended; HTTP accepted).
+- [ ] Your origin passes `python3 tools/build_catalog.py --check --strict` (the **Validate origins**
+      PR check must be green before merge).
 
 ## Reference
 
