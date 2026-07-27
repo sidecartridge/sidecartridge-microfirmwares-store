@@ -18,6 +18,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -74,8 +75,15 @@ def load_origin_apps(origin):
         data = load_local(origin["source"])
     elif "url" in origin:
         url = origin["url"]
-        if not url.lower().startswith("https://"):
-            raise RuntimeError("unofficial origin must be served over HTTPS (C-04/D-16)")
+        official = bool(origin.get("official"))
+        if not re.match(r"^https?://", url, re.I):
+            raise RuntimeError("origin url must be http(s)")
+        if url.lower().startswith("http://"):
+            # First-party (SidecarTridge) origin may use HTTP (its host's HTTPS is broken);
+            # third-party creator origins must be HTTPS (C-04).
+            if not official:
+                raise RuntimeError("unofficial origin must be served over HTTPS (C-04)")
+            log(f"    (note) first-party origin fetched over HTTP (not HTTPS): {url}")
         data = fetch_remote(url)
     else:
         raise RuntimeError("origin has neither 'source' nor 'url'")
