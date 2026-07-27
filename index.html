@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=11.0" />
+  <link rel="stylesheet" href="styles.css?v=12.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -78,10 +78,11 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 
-  <!-- Catalog app (EPIC-02/03/04): loads platforms.json, aggregates each platform's
-       official (in-repo, D-05) + unofficial (remote, HTTPS, C-04) catalogs with
-       provenance, and drives the browse UI — platform landing, source switcher,
-       search/filter, and app detail. Hash routing (#<platform>[/<source>]); untrusted
+  <!-- Catalog app: loads platforms.json, then one consolidated <platform>/apps.json
+       (built by tools/build_catalog.py) with per-app creator attribution. The UI is
+       creator-first: SidecarTridge is the first-party creator (priority + a subtle
+       marker); other creators are shown by name — no official/unofficial labels (D-18).
+       Search/creator/tag/device filters; hash routing (#<platform>); untrusted
        description HTML is sanitized to a safe whitelist (C-03). init() runs on start. -->
   <script>
     function storeData() {
@@ -100,7 +101,6 @@
         activeTag: '',
         activeDevice: '',
         activeCreator: '',       // filter by creator id
-        provenance: 'all',       // 'all' | 'official' | 'unofficial'
         detailApp: null,
         testMode: false,         // EPIC-06: ?data=test
         dataBase: '',            // '' (real) | 'test/' (fixtures)
@@ -147,13 +147,14 @@
 
         // ----- derived views -----
         creatorOf(app) { return (app && this.creators[app.creator]) || { id: app && app.creator, name: (app && app.creator) || 'Unknown' }; },
-        creatorList() { return Object.values(this.creators).sort((a, b) => String(a.name).localeCompare(String(b.name))); },
-        hasUnofficial() { return this.apps.some(a => !a.official); },
+        creatorList() {
+          // first-party (SidecarTridge) first, then the rest by name
+          return Object.values(this.creators).sort((a, b) =>
+            (b.official ? 1 : 0) - (a.official ? 1 : 0) || String(a.name).localeCompare(String(b.name)));
+        },
         visibleApps() {
           const q = this.search.trim().toLowerCase();
           return this.apps.filter(a => {
-            if (this.provenance === 'official' && !a.official) return false;
-            if (this.provenance === 'unofficial' && a.official) return false;
             if (this.activeCreator && a.creator !== this.activeCreator) return false;
             if (q && !String(a.name || '').toLowerCase().includes(q)) return false;
             if (this.activeTag && !(a.tags || []).includes(this.activeTag)) return false;
@@ -163,8 +164,8 @@
         },
         tagsForCatalog() { const s = new Set(); this.apps.forEach(a => (a.tags || []).forEach(t => s.add(t))); return [...s].sort(); },
         devicesForCatalog() { const s = new Set(); this.apps.forEach(a => (a.devices || []).forEach(d => s.add(d))); return [...s].sort(); },
-        hasFilters() { return !!(this.search || this.activeTag || this.activeDevice || this.activeCreator || this.provenance !== 'all'); },
-        clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.activeCreator = ''; this.provenance = 'all'; },
+        hasFilters() { return !!(this.search || this.activeTag || this.activeDevice || this.activeCreator); },
+        clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.activeCreator = ''; },
         openDetail(a) { this.detailApp = a; },
         closeDetail() { this.detailApp = null; },
 
@@ -363,21 +364,12 @@
             </label>
             <button type="button" class="pure-button" x-show="hasFilters()" @click="clearFilters()">Clear</button>
           </div>
-          <!-- provenance filter (only when the catalog has unofficial entries) -->
-          <div class="filter-group" x-show="hasUnofficial()">
-            <span class="filter-label">Origin</span>
-            <div class="browser-taxonomy">
-              <button type="button" class="taxonomy-chip" :class="{ active: provenance === 'all' }" @click="provenance = 'all'"><span>All</span></button>
-              <button type="button" class="taxonomy-chip" :class="{ active: provenance === 'official' }" @click="provenance = 'official'"><span>Official</span></button>
-              <button type="button" class="taxonomy-chip chip-device" :class="{ active: provenance === 'unofficial' }" @click="provenance = 'unofficial'"><span>Unofficial</span></button>
-            </div>
-          </div>
           <!-- creator filter (only when more than one creator) -->
           <div class="filter-group" x-show="creatorList().length > 1">
             <span class="filter-label">Creator</span>
             <div class="browser-taxonomy">
               <template x-for="c in creatorList()" :key="c.id">
-                <button type="button" class="taxonomy-chip" :class="{ active: activeCreator === c.id }" @click="activeCreator = (activeCreator === c.id ? '' : c.id)"><span x-text="c.name"></span></button>
+                <button type="button" class="taxonomy-chip" :class="{ active: activeCreator === c.id }" @click="activeCreator = (activeCreator === c.id ? '' : c.id)"><span x-text="c.name"></span><i class="fas fa-circle-check creator-badge" x-show="c.official" title="First-party (SidecarTridge)"></i></button>
               </template>
             </div>
           </div>
@@ -404,7 +396,6 @@
                 <template x-if="!noLogo(app)">
                   <img class="app-card-img" :src="app.image" :alt="app.name" loading="lazy" onerror="this.remove()">
                 </template>
-                <span class="provenance-badge" :class="app.official ? 'is-official' : 'is-unofficial'" x-text="app.official ? 'Official' : 'Unofficial'"></span>
               </div>
               <div class="app-card-body">
                 <div class="browser-entry-topline">
@@ -416,6 +407,7 @@
                     <a :href="creatorOf(app).url" target="_blank" rel="noopener" @click.stop x-text="creatorOf(app).name"></a>
                   </template>
                   <template x-if="!creatorOf(app).url"><span x-text="creatorOf(app).name"></span></template>
+                  <i class="fas fa-circle-check creator-badge" x-show="app.official" title="First-party — made by SidecarTridge"></i>
                 </p>
                 <div class="app-card-tags">
                   <template x-for="t in (app.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
@@ -453,20 +445,13 @@
               <template x-for="t in (detailApp.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
             </div>
             <h3 x-text="detailApp.name"></h3>
-            <p class="app-detail-provenance">
-              <span class="provenance-badge" :class="detailApp.official ? 'is-official' : 'is-unofficial'" x-text="detailApp.official ? 'Official' : 'Unofficial'"></span>
-              <span>by
-                <template x-if="creatorOf(detailApp).url">
-                  <a :href="creatorOf(detailApp).url" target="_blank" rel="noopener" x-text="creatorOf(detailApp).name"></a>
-                </template>
-                <template x-if="!creatorOf(detailApp).url"><span x-text="creatorOf(detailApp).name"></span></template>
-              </span>
+            <p class="app-detail-provenance">by
+              <template x-if="creatorOf(detailApp).url">
+                <a :href="creatorOf(detailApp).url" target="_blank" rel="noopener" x-text="creatorOf(detailApp).name"></a>
+              </template>
+              <template x-if="!creatorOf(detailApp).url"><span x-text="creatorOf(detailApp).name"></span></template>
+              <i class="fas fa-circle-check creator-badge" x-show="detailApp.official" title="First-party — made by SidecarTridge"></i>
             </p>
-            <!-- unofficial microfirmwares are third-party — labeled, not endorsed (D-07/C-03) -->
-            <div class="unofficial-notice" x-show="!detailApp.official" x-cloak>
-              <i class="fas fa-triangle-exclamation"></i>
-              <p><strong>Unofficial microfirmware.</strong> Not reviewed or endorsed by SidecarTridge — use at your own risk.</p>
-            </div>
             <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
             <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
             <p class="browser-entry-path" x-show="(detailApp.devices || []).length">Devices: <span x-text="(detailApp.devices || []).join(', ')"></span></p>
