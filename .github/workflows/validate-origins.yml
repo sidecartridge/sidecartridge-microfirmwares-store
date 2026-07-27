@@ -1,0 +1,39 @@
+name: Validate origins
+
+# Blocking gate for pull requests that add, modify, or delete an origin (any platform).
+# Runs tools/build_catalog.py --check --strict, which:
+#   - validates each registry (origins/<platform>.json) against schema/origins.schema.json,
+#   - validates every origin's apps.json (local source or fetched remote url) against the
+#     strict schema/apps.schema.json contract,
+#   - fetches remote origins so a newly-added url must be reachable AND compliant,
+#   - fails on ANY invalid/unreachable origin (not just the official one).
+# Writes nothing. Requires jsonschema so validation is the authoritative strict path.
+#
+# To make this required before merging, enable it as a required status check in
+# Settings -> Branches -> branch protection for `main` (context: "Validate origins / validate").
+on:
+  pull_request:
+    paths:
+      - "origins/**"
+      - "schema/**"
+      - "tools/build_catalog.py"
+
+# Read-only: safe for pull requests from forks (no secrets, no write access needed).
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-origins-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install validator
+        run: python3 -m pip install --quiet jsonschema
+
+      - name: Validate origins (strict)
+        run: python3 tools/build_catalog.py --check --strict
