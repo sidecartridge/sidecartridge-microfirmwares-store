@@ -1,0 +1,34 @@
+{
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "image": "assets/platforms/atari-st.png",
+      "official": true
+    }
+  },
+  "apps": [
+    {
+      "uuid": "44444444-4444-4444-8444-444444444444",
+      "name": "DEV APP",
+      "description": "Use this app as a template to create your own app. The UUID is the by default, do not mix.",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Development"
+      ],
+      "devices": [
+        "Atari ST",
+        "Atari STE",
+        "Atari MegaST",
+        "Atari MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/placeholder.uf2",
+      "md5": "087904d8391bf6aa9b47945474826071",
+      "version": "0.0.1dev",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    }
+  ]
+}
