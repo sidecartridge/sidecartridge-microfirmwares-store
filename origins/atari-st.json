@@ -1,6 +1,7 @@
 {
-  "_comment": "Build-time origins registry (D-14). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote url (HTTP or HTTPS — fetched server-side at build time; HTTPS recommended), e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
+  "_comment": "Build-time origins registry (D-14) for the STABLE channel (D-19) — the public default. Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Sibling channels: origins/atari-st-test.json, origins/atari-st-dev.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote url (HTTP or HTTPS — fetched server-side at build time; HTTPS recommended), e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
   "platform": "atari-st",
+  "channel": "stable",
   "origins": [
     {
       "creator": {

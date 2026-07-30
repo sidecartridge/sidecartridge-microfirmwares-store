@@ -38,7 +38,14 @@ jobs:
         run: python3 tools/build_catalog.py --check
 
       - name: Rebuild consolidated catalogs
-        run: python3 tools/build_catalog.py
+        shell: bash
+        run: |
+          # pipefail so a fatal build (e.g. the stable channel) still fails the step
+          set -o pipefail
+          python3 tools/build_catalog.py | tee /tmp/build.log
+          # A failing pre-release channel is non-fatal (its catalog is left unchanged) —
+          # surface it as a job annotation so it can't rot silently. D-19.
+          grep '^WARNING:' /tmp/build.log | sed 's/^/::warning::/' || true
 
       - name: Commit & deploy if changed
         run: |

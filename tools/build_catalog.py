@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""build_catalog.py — consolidate per-platform origins into <platform>/apps.json.
+"""build_catalog.py — consolidate per-platform origins into <platform>/apps[-<channel>].json.
 
 For each `origins/<platform>.json` registry (EPIC-09, D-14) this reads the official
 origin (local `source`), fetches each unofficial origin (remote `url`, HTTP or HTTPS, D-16),
@@ -9,12 +9,18 @@ every app with `official` + `creator`, dedupes by `uuid` (official wins, D-17), 
 writes the consolidated `<platform>/apps.json` (schema/catalog.schema.json, D-15):
 `{ "creators": {<id>: {...}}, "apps": [ {...app, official, creator} ] }`.
 
+Each registry declares a release `channel` (D-19): `stable` (default) writes
+`<platform>/apps.json`, any other channel writes `<platform>/apps-<channel>.json`. Channels
+build independently — a failing non-stable channel leaves its previous file untouched and
+does not stop the others (a failing stable channel is fatal).
+
 Detached from the UI — a maintainer/CI tool. Stdlib only. Run from the repo root:
 
-    python3 tools/build_catalog.py            # rebuild all platforms
+    python3 tools/build_catalog.py            # rebuild all platforms, all channels
     python3 tools/build_catalog.py --check    # validate only, write nothing
     python3 tools/build_catalog.py --check --strict  # PR gate: ANY invalid/unreachable origin fails
     python3 tools/build_catalog.py --platform atari-st
+    python3 tools/build_catalog.py --channel test
 """
 import argparse
 import glob
@@ -28,6 +34,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root 
 APP_REQUIRED = {"uuid", "name", "description", "image", "tags", "devices",
                 "binary", "md5", "version", "previous_versions"}
 FETCH_TIMEOUT = 20
+CHANNELS = ("stable", "test", "dev")   # D-19; "stable" is the default and the public one
+DEFAULT_CHANNEL = "stable"
 
 
 def log(msg):
@@ -119,19 +127,23 @@ def build_platform(registry_rel, check=False, strict=False):
     reg = load_local(registry_rel)
     validate_registry(reg)
     platform = reg["platform"]
+    channel = reg.get("channel", DEFAULT_CHANNEL)
+    if channel not in CHANNELS:
+        raise RuntimeError(f"{platform}: unknown channel '{channel}' (expected one of {', '.join(CHANNELS)})")
+    label = platform if channel == DEFAULT_CHANNEL else f"{platform} [{channel}]"
     all_origins = reg.get("origins", [])
     official = [o for o in all_origins if o.get("official")]
     if len(official) != 1:
-        raise RuntimeError(f"{platform}: exactly one official origin required (found {len(official)})")
+        raise RuntimeError(f"{label}: exactly one official origin required (found {len(official)})")
 
     enabled = [o for o in all_origins if o.get("enabled", True)]
     ordered = sorted(enabled, key=lambda o: 0 if o.get("official") else 1)  # official first
     if not any(o.get("official") for o in ordered):
-        raise RuntimeError(f"{platform}: the official origin must be enabled")
+        raise RuntimeError(f"{label}: the official origin must be enabled")
 
     creators, apps, seen = {}, [], set()
     errors = []
-    log(f"platform {platform}:")
+    log(f"platform {label}:")
     for o in ordered:
         cid = o["creator"]["id"]
         is_official = bool(o.get("official"))
@@ -140,7 +152,7 @@ def build_platform(registry_rel, check=False, strict=False):
             origin_apps = load_origin_apps(o)
         except Exception as e:
             if is_official or strict:
-                errors.append(f"{platform}: origin '{cid}' ({tag}) failed: {e}")
+                errors.append(f"{label}: origin '{cid}' ({tag}) failed: {e}")
                 log(f"  - {cid} ({tag}): ERROR — {e}")
             else:
                 log(f"  - {cid} ({tag}): SKIP — {e}")
@@ -173,7 +185,8 @@ def build_platform(registry_rel, check=False, strict=False):
     consolidated = {"creators": creators, "apps": apps}
     log(f"  => {len(apps)} app(s), {len(creators)} creator(s)")
 
-    out_rel = os.path.join(platform, "apps.json")
+    name = "apps.json" if channel == DEFAULT_CHANNEL else f"apps-{channel}.json"
+    out_rel = os.path.join(platform, name)
     out_abs = os.path.join(ROOT, out_rel)
     text = json.dumps(consolidated, indent=2, ensure_ascii=False) + "\n"
     if check:
@@ -187,35 +200,72 @@ def build_platform(registry_rel, check=False, strict=False):
     return changed
 
 
+def registry_meta(registry_rel):
+    """(platform, channel) for a registry. An unreadable registry reports the default
+    channel so it is treated as fatal rather than silently skipped."""
+    try:
+        reg = load_local(registry_rel)
+        return reg.get("platform"), reg.get("channel", DEFAULT_CHANNEL)
+    except Exception:
+        return None, DEFAULT_CHANNEL
+
+
 def main():
-    ap = argparse.ArgumentParser(description="Consolidate origins into <platform>/apps.json")
+    ap = argparse.ArgumentParser(
+        description="Consolidate origins into <platform>/apps[-<channel>].json")
     ap.add_argument("--check", action="store_true", help="validate origins only; write nothing")
     ap.add_argument("--strict", action="store_true",
                     help="fail on ANY invalid/unreachable origin (not just the official one) and "
                          "require the jsonschema validator; use to gate origin pull requests")
-    ap.add_argument("--platform", help="build only this platform id")
+    ap.add_argument("--platform", help="build only this platform id (all its channels)")
+    ap.add_argument("--channel", choices=CHANNELS, help="build only this release channel")
     args = ap.parse_args()
 
     if args.strict and not HAVE_JSONSCHEMA:
         log("[FAIL] --strict requires the 'jsonschema' package (pip install jsonschema)")
         return 1
 
-    registries = sorted(glob.glob(os.path.join(ROOT, "origins", "*.json")))
-    if args.platform:
-        registries = [r for r in registries
-                      if os.path.splitext(os.path.basename(r))[0] == args.platform]
+    found = sorted(glob.glob(os.path.join(ROOT, "origins", "*.json")))
+    # Select on the registry's own platform/channel fields, not on its filename (D-19).
+    registries = []
+    for reg in found:
+        rel = os.path.relpath(reg, ROOT)
+        plat, chan = registry_meta(rel)
+        if args.platform and plat != args.platform:
+            continue
+        if args.channel and chan != args.channel:
+            continue
+        registries.append((rel, plat, chan))
     if not registries:
-        log("no origins/*.json registries found")
+        log("no matching origins/*.json registries found")
         return 1
 
-    rc, changed_any = 0, False
-    for reg in registries:
-        rel = os.path.relpath(reg, ROOT)
+    # One registry per (platform, channel): a duplicate would overwrite the other's output.
+    seen_pairs = {}
+    for rel, plat, chan in registries:
+        prev = seen_pairs.get((plat, chan))
+        if prev:
+            log(f"[FAIL] duplicate registry for platform '{plat}' channel '{chan}': {prev} and {rel}")
+            return 1
+        seen_pairs[(plat, chan)] = rel
+
+    rc, changed_any, skipped = 0, False, []
+    for rel, _plat, chan in registries:
         try:
             changed_any = build_platform(rel, check=args.check, strict=args.strict) or changed_any
         except Exception as e:
             log(f"[FAIL] {rel}: {e}")
-            rc = 1
+            # A non-stable channel is isolated: its previous output is left untouched and the
+            # other channels still build/commit, so a pre-release outage can't take down
+            # stable (nor the scheduled rebuild's pre-flight --check). Only the PR gate
+            # (--strict) treats every channel as must-pass.
+            if chan == DEFAULT_CHANNEL or args.strict:
+                rc = 1
+            else:
+                skipped.append(chan)
+                log(f"        (channel '{chan}' skipped; its catalog is left unchanged)")
+    for chan in skipped:
+        log(f"WARNING: the '{chan}' channel failed to build and was left unchanged")
     if args.check:
         log("check: OK" if rc == 0 else "check: FAILED")
     elif changed_any:

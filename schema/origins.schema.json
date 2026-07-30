@@ -2,12 +2,18 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://md-store.sidecartridge.com/schema/origins.schema.json",
   "title": "origins.json — per-platform registry of catalog origins (D-14)",
-  "description": "Build-time INPUT consumed by tools/build_catalog.py (EPIC-10). Lists a platform's origins (creators' apps.json); one is official (SidecarTridge, local source), the rest are remote creator URLs. Not loaded by the UI. Invariant (enforced by the batch, not expressible here): exactly one origin has official=true.",
+  "description": "Build-time INPUT consumed by tools/build_catalog.py (EPIC-10). Lists a platform's origins (creators' apps.json) for one release channel (D-19); one is official (SidecarTridge), the rest are creator URLs. Not loaded by the UI. Invariants (enforced by the batch, not expressible here): exactly one origin has official=true, and one registry per (platform, channel) pair.",
   "type": "object",
   "required": ["platform", "origins"],
   "additionalProperties": true,
   "properties": {
     "platform": { "type": "string", "description": "Platform id, matches platforms.json." },
+    "channel": {
+      "type": "string",
+      "enum": ["stable", "test", "dev"],
+      "default": "stable",
+      "description": "Release channel this registry feeds (D-19). Absent = stable. Output: stable -> <platform>/apps.json, otherwise <platform>/apps-<channel>.json."
+    },
     "origins": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/origin" } }
   },
   "$defs": {
