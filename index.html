@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=12.0" />
+  <link rel="stylesheet" href="styles.css?v=13.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -105,6 +105,8 @@
         testMode: false,         // EPIC-06: ?data=test
         dataBase: '',            // '' (real) | 'test/' (fixtures)
         downloadable: false,     // ?downloadable — reveals .uf2 link + md5 in detail (D-13)
+        channel: 'stable',       // EPIC-14: ?channel=stable|test|dev (D-20)
+        channelMissing: false,   // this platform has no catalog for the selected channel
 
         async init() {
           window.addEventListener('hashchange', () => this.applyHash());
@@ -112,6 +114,10 @@
           this.testMode = params.get('data') === 'test';
           this.dataBase = this.testMode ? 'test/' : '';
           this.downloadable = params.has('downloadable');
+          // Only a known channel is honoured; anything else (absent, empty, bogus) is stable,
+          // so a user-supplied value can never build an arbitrary fetch path (D-20).
+          const ch = (params.get('channel') || '').trim().toLowerCase();
+          this.channel = ['stable', 'test', 'dev'].includes(ch) ? ch : 'stable';
           try {
             const res = await fetch(this.dataBase + 'platforms.json', { cache: 'no-cache' });
             if (!res.ok) throw new Error('platforms.json → HTTP ' + res.status);
@@ -215,14 +221,38 @@
         },
 
         // ----- data loading: one consolidated catalog per platform (D-15) -----
+        // stable keeps the plain path; other channels insert -<channel> before .json (D-19/D-20)
+        channelUrl(apps_url) {
+          return this.channel === 'stable'
+            ? apps_url
+            : apps_url.replace(/\.json$/, '-' + this.channel + '.json');
+        },
+        // this URL minus ?channel= — keeps ?data=test / ?downloadable intact
+        stableHref(hash) {
+          const p = new URLSearchParams(location.search);
+          p.delete('channel');
+          const q = p.toString();
+          return './' + (q ? '?' + q : '') + (hash || '');
+        },
+
         async loadPlatform(p) {
           this.activePlatform = p;
           this.apps = [];
           this.creators = {};
           this.appsError = '';
+          this.channelMissing = false;
+          const url = this.channelUrl(p.apps_url);
           try {
-            const res = await fetch(this.dataBase + p.apps_url, { cache: 'no-cache' });
-            if (!res.ok) throw new Error(p.apps_url + ' → HTTP ' + res.status);
+            const res = await fetch(this.dataBase + url, { cache: 'no-cache' });
+            if (!res.ok) {
+              // A 404 off-stable means this platform simply has no such channel — say so
+              // plainly rather than silently falling back, so the URL never lies (D-20).
+              if (res.status === 404 && this.channel !== 'stable') {
+                this.channelMissing = true;
+                return;
+              }
+              throw new Error(url + ' → HTTP ' + res.status);
+            }
             const data = await res.json();
             this.creators = data.creators || {};
             this.apps = Array.isArray(data.apps) ? data.apps : [];
@@ -264,10 +294,20 @@
   <!-- Main Content Area -->
   <main class="main-content browser-main">
 
-    <!-- test-data mode indicator (EPIC-06, D-11) -->
+    <!-- test-data mode indicator (EPIC-06, D-11) — the fixture DATASET, not the release channel -->
     <div class="test-banner" x-show="testMode" x-cloak>
       <i class="fas fa-flask"></i>
       <span>Test data mode (<code>?data=test</code>) — fictional platforms &amp; apps. <a href="./">Back to real data</a>.</span>
+    </div>
+
+    <!-- pre-release channel indicator (EPIC-14, D-20) — which CATALOG of the real platform -->
+    <div class="channel-banner" x-show="channel !== 'stable'" x-cloak>
+      <i class="fas fa-code-branch"></i>
+      <span>
+        Pre-release channel: <strong x-text="channel"></strong>
+        (<code x-text="'?channel=' + channel"></code>) — these microfirmwares may be unfinished or
+        unstable. <a :href="stableHref()">Back to the stable catalog</a>.
+      </span>
     </div>
 
     <!-- global loading -->
@@ -348,6 +388,16 @@
             <p x-show="activePlatform && activePlatform.description" x-text="activePlatform ? activePlatform.description : ''"></p>
           </div>
         </section>
+
+        <!-- this platform publishes nothing on the selected channel (EPIC-14, D-20) -->
+        <div class="browser-empty-state" x-show="channelMissing" x-cloak>
+          <i class="fas fa-code-branch"></i>
+          <p>
+            <span x-text="(activePlatform ? activePlatform.name : 'This platform') + ' has no '"></span><strong
+              x-text="channel"></strong><span> catalog.</span>
+          </p>
+          <p><a :href="stableHref('#' + (activePlatform ? activePlatform.id : ''))">View its stable catalog instead</a>.</p>
+        </div>
 
         <!-- catalog failed to load -->
         <div class="browser-empty-state" x-show="appsError" x-cloak>
