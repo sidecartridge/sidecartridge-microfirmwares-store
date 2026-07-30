@@ -143,6 +143,27 @@ Most failures are one of: a **missing required field**; an **unexpected/extra pr
 
 ---
 
+## 2b. Release channels
+
+Each platform's catalog is published on up to three **channels**:
+
+| Channel | URL | Catalog file | Who it's for |
+| ------- | --- | ------------ | ------------ |
+| `stable` | `/#<platform>` (default) | `<platform>/apps.json` | Everyone — the public catalog. |
+| `test` | `/?channel=test#<platform>` | `<platform>/apps-test.json` | Release candidates being validated. |
+| `dev` | `/?channel=dev#<platform>` | `<platform>/apps-dev.json` | Work in progress; may be broken. |
+
+Anything other than `test` or `dev` — including no parameter — shows **stable**. A platform that
+publishes nothing on a channel simply says so.
+
+**As a creator you are on `stable` by default, and that's usually all you need.** Each channel has
+its own registry (`origins/<platform>.json`, `origins/<platform>-test.json`,
+`origins/<platform>-dev.json`), so being listed on a pre-release channel means adding your origin to
+that channel's registry too — ask the maintainer if you want it. Nothing about your `apps.json`
+changes; you can point a channel at a different URL if you publish pre-release builds separately.
+
+---
+
 ## 3. Your creator identity
 
 You are represented in a platform's registry by a **creator** (one creator ↔ one origin/`apps.json`):
