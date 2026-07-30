@@ -4,10 +4,10 @@
     {
       "id": "atari-st",
       "name": "Atari ST",
-      "description": "Atari ST / STE / MegaST / MegaSTE — real catalog, shown in test mode.",
+      "description": "Atari ST / STE / MegaST / MegaSTE / TT / Falcon — real catalog, shown in test mode.",
       "apps_url": "atari-st/apps.json",
       "image": "assets/platforms/atari-st.png",
-      "devices": ["ST", "STE", "MegaST", "MegaSTE"],
+      "devices": ["ST", "STE", "MegaST", "MegaSTE", "TT", "Falcon"],
       "enabled": true,
       "order": 0
     },
