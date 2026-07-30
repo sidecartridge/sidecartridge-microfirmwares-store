@@ -1,0 +1,165 @@
+{
+  "creators": {
+    "sidecartridge": {
+      "id": "sidecartridge",
+      "name": "SidecarTridge",
+      "url": "https://sidecartridge.com",
+      "image": "assets/platforms/atari-st.png",
+      "official": true
+    }
+  },
+  "apps": [
+    {
+      "uuid": "4f6e8575-1590-4660-95ad-e6167e46715e",
+      "name": "Oric Computer emulator",
+      "description": "A complete Oric 1 and Oric Atmos emulator in your Atari ST/STE/MegaST/MegaSTE.  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/oric-emulator/'>Learn more</a>",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Emulation",
+        "Oric"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/4f6e8575-1590-4660-95ad-e6167e46715e-v1.0.1beta.uf2",
+      "md5": "59e9917d47d9c79eaba53bc866c3714f",
+      "version": "v1.0.1beta",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
+      "uuid": "5a7827c7-6b1a-4d4a-bc96-99d08e81aaac",
+      "name": "DevOps toolkit",
+      "description": "Remote development surface for Atari ST/STE/MegaST/MegaSTE: GEMDRIVE folder-as-drive, HTTP-driven program launcher, Pexec load/exec/unload split, system memory snapshots, and high-bandwidth debug-byte streaming over Wi-Fi or USB CDC.  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/devops/'>Learn more</a>",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Development",
+        "GEMDRIVE",
+        "Troubleshooting"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/5a7827c7-6b1a-4d4a-bc96-99d08e81aaac-v1.0.1beta.uf2",
+      "md5": "f49dff91b2c6fc3ed36d94a48655b305",
+      "version": "v1.0.1beta",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
+      "uuid": "6bc6b136-c177-4cbd-a827-4a310d3cc303",
+      "name": "GPU Demo",
+      "description": "A demo application showcasing graphics co-processing rendering on the RP2040 and Atari ST  <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/gpu-demo/'>Learn how</a>",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Demo",
+        "GPU"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/6bc6b136-c177-4cbd-a827-4a310d3cc303-v2.0.0beta.uf2",
+      "md5": "fa8727e0c49d4c6750f88311b04fd06f",
+      "version": "v2.0.0beta",
+      "previous_versions": [
+        {
+          "version": "v1.0.3beta",
+          "binary": "https://atarist.sidecartridge.com/6bc6b136-c177-4cbd-a827-4a310d3cc303-v1.0.3beta.uf2",
+          "md5": "694fafdbac87d463aea1bc255e3145d1"
+        },
+        {
+          "version": "v1.0.2dev",
+          "binary": "https://atarist.sidecartridge.com/6bc6b136-c177-4cbd-a827-4a310d3cc303-v1.0.2dev.uf2",
+          "md5": "e19a917cf5fe3fa194d6e905972f9178"
+        }
+      ],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
+      "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
+      "name": "MD/JS: JavaScript Worker",
+      "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the Sidecartridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://github.com/neilrackett/md-js\">https://github.com/neilrackett/md-js</a>.",
+      "image": "https://atarist.neilrackett.com/6f3f635c-4a05-4201-8450-39e4b1c32eca.png",
+      "tags": [
+        "Scripting",
+        "Development"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "Atari MegaST",
+        "Atari MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca-v1.0.1beta.uf2",
+      "md5": "9e544d1baa30cf700b648364420dbf98",
+      "version": "v1.0.1beta",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
+      "uuid": "b04ccd04-9b5d-4f6b-abd1-43af82c3b43a",
+      "name": "MV16 Emulator",
+      "description": "Emulates the MV16 audio device for Atari ST computers and outputs audio through Bluetooth audio streams. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/mv16-emulator/'>Learn more</a>",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "Emulation",
+        "Audio"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE",
+        "TT",
+        "Falcon"
+      ],
+      "binary": "https://atarist.sidecartridge.com/b04ccd04-9b5d-4f6b-abd1-43af82c3b43a-v1.0.0alpha.uf2",
+      "md5": "43d1880d3d57dd240163c0e680c02448",
+      "version": "v1.0.0alpha",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
+      "uuid": "c6004dfd-1df1-4000-939b-2c48efa344c8",
+      "name": "MIDI-to-IP",
+      "description": "For MIDI Maze game, redirects Atari ST MIDI IN/OUT traffic to a network endpoint. This allows you to play MIDI Maze over a network with other players.  <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/midi-to-ip/'>Learn how</a> ",
+      "image": "https://placehold.co/256x256/png",
+      "tags": [
+        "MIDI",
+        "Network"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/c6004dfd-1df1-4000-939b-2c48efa344c8-v1.1.1beta.uf2",
+      "md5": "132ec52f0807c45cab62f161567f73d0",
+      "version": "v1.1.1beta",
+      "previous_versions": [
+        {
+          "version": "v1.0.0beta",
+          "binary": "https://atarist.sidecartridge.com/c6004dfd-1df1-4000-939b-2c48efa344c8-v1.0.0beta.uf2",
+          "md5": "7447364bce390ed6d18cd0a2b508b17d"
+        }
+      ],
+      "official": true,
+      "creator": "sidecartridge"
+    }
+  ]
+}
