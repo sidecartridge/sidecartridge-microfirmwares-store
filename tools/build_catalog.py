@@ -118,6 +118,58 @@ def load_origin_apps(origin):
     return data.get("apps", [])
 
 
+def _device_key(name):
+    """Comparison key for a device name: case- and punctuation-insensitive."""
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
+def load_device_canon():
+    """{platform_id: {key: canonical_name}} taken from platforms.json `devices` — the
+    curated allow-list per platform (D-21). A platform absent from platforms.json, or
+    with no `devices`, is simply not normalized."""
+    try:
+        data = load_local("platforms.json")
+    except Exception:
+        return {}
+    canon = {}
+    for p in data.get("platforms", []):
+        names = [d for d in (p.get("devices") or []) if isinstance(d, str) and d.strip()]
+        if p.get("id") and names:
+            canon[p["id"]] = {_device_key(n): n for n in names}
+    return canon
+
+
+DEVICE_CANON = load_device_canon()
+
+
+def normalize_devices(devices, canon):
+    """Map an app's device spellings onto the platform's canonical names.
+
+    Matches ignoring case/punctuation, then by dropping leading qualifier words, so
+    "Atari MegaST" and "atari-megast" both become "MegaST". Each candidate is an exact
+    key lookup (never a suffix match), so "Atari MegaSTE" resolves to "MegaSTE" and
+    cannot collapse into "ST". Unknown values are kept as-is
+    and returned for reporting — normalization never drops data. De-dupes, preserving
+    order (an app listing both "ST" and "Atari ST" ends up with one "ST")."""
+    out, unknown = [], []
+    for d in devices or []:
+        if not isinstance(d, str):
+            out.append(d)
+            continue
+        words = [w for w in re.split(r"[^A-Za-z0-9]+", d) if w]
+        hit = None
+        for i in range(len(words)):      # whole string first, then drop leading words
+            hit = canon.get(_device_key("".join(words[i:])))
+            if hit:
+                break
+        if not hit:
+            hit = d
+            unknown.append(d)
+        if hit not in out:
+            out.append(hit)
+    return out, unknown
+
+
 def build_platform(registry_rel, check=False, strict=False):
     """Build one platform. Returns (changed: bool). Raises on hard errors.
 
@@ -143,6 +195,8 @@ def build_platform(registry_rel, check=False, strict=False):
 
     creators, apps, seen = {}, [], set()
     errors = []
+    canon = DEVICE_CANON.get(platform)     # None => platform not in platforms.json, no allow-list
+    renamed_devices, unknown_devices = 0, {}
     log(f"platform {label}:")
     for o in ordered:
         cid = o["creator"]["id"]
@@ -174,10 +228,24 @@ def build_platform(registry_rel, check=False, strict=False):
                 continue
             if uuid:
                 seen.add(uuid)
+            if canon:                        # normalize device spellings (D-21)
+                devices, unknown = normalize_devices(app.get("devices"), canon)
+                if devices != app.get("devices"):
+                    renamed_devices += 1
+                for u in unknown:
+                    unknown_devices.setdefault(u, 0)
+                    unknown_devices[u] += 1
+                app = {**app, "devices": devices}
             apps.append({**app, "official": is_official, "creator": cid})
             added += 1
         note = f", {dropped} dedup drop(s)" if dropped else ""
         log(f"  - {cid} ({tag}): +{added} app(s){note}")
+
+    if renamed_devices:
+        log(f"  devices: normalized on {renamed_devices} app(s)")
+    if unknown_devices:
+        listed = ", ".join(f"{n!r} x{c}" for n, c in sorted(unknown_devices.items()))
+        log(f"  devices: not in the {platform} allow-list, kept as-is: {listed}")
 
     if errors:
         raise RuntimeError("; ".join(errors))
