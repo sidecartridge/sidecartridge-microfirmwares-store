@@ -1,0 +1,18 @@
+{
+  "_comment": "Build-time origins registry (D-14) for the DEV channel (D-19). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps-dev.json, shown by the UI at ?channel=dev. Note the upstream key is apps-dev.json (apps-devs.json does not exist). Sibling channels: origins/atari-st.json (stable), origins/atari-st-test.json (test).",
+  "platform": "atari-st",
+  "channel": "dev",
+  "origins": [
+    {
+      "creator": {
+        "id": "sidecartridge",
+        "name": "SidecarTridge",
+        "url": "https://sidecartridge.com",
+        "image": "assets/platforms/atari-st.png"
+      },
+      "official": true,
+      "enabled": true,
+      "url": "http://atarist.sidecartridge.com/apps-dev.json"
+    }
+  ]
+}
