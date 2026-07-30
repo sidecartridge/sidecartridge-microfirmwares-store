@@ -70,7 +70,7 @@
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
   <!-- Grid responsiveness (sm, md, lg classes) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-  <link rel="stylesheet" href="styles.css?v=13.0" />
+  <link rel="stylesheet" href="styles.css?v=14.0" />
 
   <!-- Font Awesome for icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -418,8 +418,17 @@
           <div class="filter-group" x-show="creatorList().length > 1">
             <span class="filter-label">Creator</span>
             <div class="browser-taxonomy">
+              <!-- The pill carries the styling but is NOT interactive itself: the filter toggle
+                   and the creator's site link are siblings inside it. An <a> nested in a <button>
+                   would be invalid HTML and break keyboard order (EPIC-16). -->
               <template x-for="c in creatorList()" :key="c.id">
-                <button type="button" class="taxonomy-chip" :class="{ active: activeCreator === c.id }" @click="activeCreator = (activeCreator === c.id ? '' : c.id)"><span x-text="c.name"></span><i class="fas fa-circle-check creator-badge" x-show="c.official" title="First-party (SidecarTridge)"></i></button>
+                <span class="taxonomy-chip chip-with-link" :class="{ active: activeCreator === c.id }">
+                  <button type="button" class="chip-toggle" @click="activeCreator = (activeCreator === c.id ? '' : c.id)"><span x-text="c.name"></span><i class="fas fa-circle-check creator-badge" x-show="c.official" title="First-party (SidecarTridge)"></i></button>
+                  <template x-if="c.url">
+                    <a class="chip-link" :href="c.url" target="_blank" rel="noopener"
+                      :aria-label="'Open the ' + c.name + ' website in a new tab'" :title="'Open the ' + c.name + ' website'"><i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                  </template>
+                </span>
               </template>
             </div>
           </div>
@@ -452,12 +461,14 @@
                   <span class="browser-entry-tag" x-text="app.version"></span>
                 </div>
                 <h4 x-text="app.name"></h4>
+                <!-- creator name is plain text; only the icon links out (EPIC-16) -->
                 <p class="app-card-creator">by
-                  <template x-if="creatorOf(app).url">
-                    <a :href="creatorOf(app).url" target="_blank" rel="noopener" @click.stop x-text="creatorOf(app).name"></a>
-                  </template>
-                  <template x-if="!creatorOf(app).url"><span x-text="creatorOf(app).name"></span></template>
+                  <span class="creator-name" x-text="creatorOf(app).name"></span>
                   <i class="fas fa-circle-check creator-badge" x-show="app.official" title="First-party — made by SidecarTridge"></i>
+                  <template x-if="creatorOf(app).url">
+                    <a class="creator-link" :href="creatorOf(app).url" target="_blank" rel="noopener" @click.stop
+                      :aria-label="'Open the ' + creatorOf(app).name + ' website in a new tab'" :title="'Open the ' + creatorOf(app).name + ' website'"><i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                  </template>
                 </p>
                 <div class="app-card-tags">
                   <template x-for="t in (app.tags || [])" :key="t"><span class="browser-entry-tag" x-text="t"></span></template>
@@ -496,11 +507,12 @@
             </div>
             <h3 x-text="detailApp.name"></h3>
             <p class="app-detail-provenance">by
-              <template x-if="creatorOf(detailApp).url">
-                <a :href="creatorOf(detailApp).url" target="_blank" rel="noopener" x-text="creatorOf(detailApp).name"></a>
-              </template>
-              <template x-if="!creatorOf(detailApp).url"><span x-text="creatorOf(detailApp).name"></span></template>
+              <span class="creator-name" x-text="creatorOf(detailApp).name"></span>
               <i class="fas fa-circle-check creator-badge" x-show="detailApp.official" title="First-party — made by SidecarTridge"></i>
+              <template x-if="creatorOf(detailApp).url">
+                <a class="creator-link" :href="creatorOf(detailApp).url" target="_blank" rel="noopener"
+                  :aria-label="'Open the ' + creatorOf(detailApp).name + ' website in a new tab'" :title="'Open the ' + creatorOf(detailApp).name + ' website'"><i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+              </template>
             </p>
             <!-- description is untrusted third-party HTML → sanitized to a whitelist (C-03) -->
             <div class="app-detail-desc" x-html="sanitize(detailApp.description)"></div>
