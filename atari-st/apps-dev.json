@@ -18,10 +18,10 @@
         "Development"
       ],
       "devices": [
-        "Atari ST",
-        "Atari STE",
-        "Atari MegaST",
-        "Atari MegaSTE"
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
       ],
       "binary": "https://atarist.sidecartridge.com/placeholder.uf2",
       "md5": "087904d8391bf6aa9b47945474826071",

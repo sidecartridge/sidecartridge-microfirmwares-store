@@ -99,8 +99,8 @@
       "devices": [
         "ST",
         "STE",
-        "Atari MegaST",
-        "Atari MegaSTE"
+        "MegaST",
+        "MegaSTE"
       ],
       "binary": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca-v1.0.1beta.uf2",
       "md5": "9e544d1baa30cf700b648364420dbf98",
