@@ -1,5 +1,5 @@
 {
-  "_comment": "Build-time origins registry (D-14) for the STABLE channel (D-19) — the public default. Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Sibling channels: origins/atari-st-test.json, origins/atari-st-dev.json. Exactly one origin is official. Add an unofficial creator by appending an origin with official=false and a remote url (HTTP or HTTPS — fetched server-side at build time; HTTPS recommended), e.g. { \"creator\": {\"id\":\"someone\",\"name\":\"Someone\",\"url\":\"https://…\"}, \"official\": false, \"url\": \"https://someone.example/atari-st/apps.json\" }.",
+  "_comment": "Build-time origins registry (D-14) for the STABLE channel (D-19) — the public default. Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps.json. Sibling channels: origins/atari-st-test.json, origins/atari-st-dev.json. Exactly one origin is official. To add an unofficial creator, copy the template under \"_example_unofficial_origin\" below into \"origins\".",
   "platform": "atari-st",
   "channel": "stable",
   "origins": [
@@ -13,17 +13,17 @@
       "official": true,
       "enabled": true,
       "url": "http://atarist.sidecartridge.com/apps.json"
-    },
-    {
-      "_comment": "SAMPLE unofficial creator (fictional) to exercise the provenance UI. A real unofficial origin would use a remote \"url\" (HTTP or HTTPS) instead of a local \"source\". Remove this entry + origins/atari-st/retro-homebrew.apps.json and rerun tools/build_catalog.py to take it down.",
-      "creator": {
-        "id": "retro-homebrew",
-        "name": "Retro Homebrew Collective",
-        "url": "https://example.com/retro-homebrew"
-      },
-      "official": false,
-      "enabled": true,
-      "source": "origins/atari-st/retro-homebrew.apps.json"
     }
-  ]
+  ],
+  "_example_unofficial_origin": {
+    "_comment": "INERT TEMPLATE — kept as documentation, not a live origin. build_catalog.py only reads the \"origins\" array, so nothing under this key is fetched or published; the schema allows it (additionalProperties: true). To onboard a real creator, copy the object below into \"origins\" (dropping this \"_comment\"), set official=false, and point \"url\" at their apps.json — HTTP or HTTPS, fetched server-side at build time, HTTPS recommended (D-16). Prefer a remote \"url\" over an in-repo \"source\": \"source\" is for the official origin, and using it for a creator means the store, not the creator, owns their listing. Then rerun tools/build_catalog.py. See CREATORS.md.",
+    "creator": {
+      "id": "retro-homebrew",
+      "name": "Retro Homebrew Collective",
+      "url": "https://example.com/retro-homebrew"
+    },
+    "official": false,
+    "enabled": true,
+    "url": "https://example.com/retro-homebrew/atari-st/apps.json"
+  }
 }
