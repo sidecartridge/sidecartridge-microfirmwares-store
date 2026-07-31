@@ -323,10 +323,15 @@
         "TT",
         "Falcon"
       ],
-      "binary": "https://atarist.sidecartridge.com/f6b96229-873c-415d-992f-2555c7f7918d-v2.1.0.uf2",
-      "md5": "dd01c25641ef33ff8551660711408462",
-      "version": "v2.1.0",
+      "binary": "https://atarist.sidecartridge.com/f6b96229-873c-415d-992f-2555c7f7918d-v2.1.1.uf2",
+      "md5": "fd2c63a774883c359cae4435f32ca217",
+      "version": "v2.1.1",
       "previous_versions": [
+        {
+          "version": "v2.1.0",
+          "binary": "https://atarist.sidecartridge.com/f6b96229-873c-415d-992f-2555c7f7918d-v2.1.0.uf2",
+          "md5": "dd01c25641ef33ff8551660711408462"
+        },
         {
           "version": "v2.0.0",
           "binary": "https://atarist.sidecartridge.com/f6b96229-873c-415d-992f-2555c7f7918d-v2.0.0.uf2",
