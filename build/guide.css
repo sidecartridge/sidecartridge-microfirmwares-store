@@ -242,7 +242,10 @@
 }
 .guide-callout > i { flex: 0 0 auto; margin-top: 0.2rem; color: var(--color-ink); font-size: 1rem; }
 .guide-callout-body { min-width: 0; }
-.guide-callout strong { display: block; margin-bottom: 0.2rem; color: var(--color-ink); font-weight: 700; }
+/* Only the callout's own heading is a block. A `strong` nested inside a
+   paragraph or list item stays inline, or it breaks the sentence around it. */
+.guide-callout-body > strong { display: block; margin-bottom: 0.2rem; }
+.guide-callout strong { color: var(--color-ink); font-weight: 700; }
 .guide-callout p { margin: 0 0 0.5rem; }
 .guide-callout > .guide-callout-body > *:last-child { margin-bottom: 0; }
 .guide-callout ul { margin: 0.3rem 0 0.5rem; padding-left: 1.2rem; }
@@ -282,7 +285,9 @@
   accent-color: var(--color-ink);
 }
 .guide-check-body { min-width: 0; }
-.guide-check-body strong { display: block; color: var(--color-ink); font-weight: 700; }
+/* Same rule as the callout heading: only the item's own title is a block. */
+.guide-check-body > strong { display: block; }
+.guide-check-body strong { color: var(--color-ink); font-weight: 700; }
 .guide-check-body span { display: block; font-size: 0.9rem; }
 
 /* ---------- Tabs (progressive enhancement, see guide.js) ---------- */
