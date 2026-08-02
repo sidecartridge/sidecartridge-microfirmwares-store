@@ -204,20 +204,72 @@
 
       <section class="browser-section guide-prose">
         <h2>Put it on the board</h2>
-        <div class="guide-code">
-          <div class="guide-code-head">
-            <span class="guide-code-label">Terminal</span>
-          </div>
-          <pre><code>picotool load dist/44444444-4444-4444-8444-444444444444.uf2</code></pre>
-        </div>
         <p>
-          If <code>picotool</code> is not behaving, its
-          <a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">repository <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> documents the flags, and
-          <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Raspberry Pi's Pico-series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers BOOTSEL mode.
+          Two ways. Take the Wi-Fi one if you turned on developer mode in
+          <a href="/build/atari-st/04-install-booster.html">step 4</a>, because you are about to do
+          this a few hundred times and the difference adds up.
         </p>
+
+        <div class="guide-tabs">
+          <div class="guide-tabpanel" data-tab-label="Over Wi-Fi (v2.3.0)">
+            <p class="guide-tabpanel-title">Over Wi-Fi, Booster v2.3.0 and later</p>
+            <p>
+              Two <code>curl</code> calls. The board stays plugged into the Atari, nothing gets
+              unplugged, and the app launches by itself.
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">upload</span>
+              </div>
+              <pre><code>curl --fail --data-binary @dist/44444444-4444-4444-8444-444444444444.uf2 \
+     -H "Content-Type: application/octet-stream" \
+     "http://sidecart.local/dev_upload.cgi"</code></pre>
+            </div>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">launch</span>
+              </div>
+              <pre><code>curl --fail "http://sidecart.local/mngr_launchapp.cgi?uuid=44444444-4444-4444-8444-444444444444"</code></pre>
+            </div>
+            <p>
+              If <code>sidecart.local</code> does not resolve on your network, use the device's IP
+              address instead. The booster repository documents a <code>make deploy</code> target
+              that runs both calls, and takes <code>DEVICE=192.168.1.50</code> to override the host.
+              Full details in <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+            <p>
+              This only answers while the red <strong>DEVELOPMENT MODE</strong> banner is showing.
+              If <code>curl</code> gets a refusal, you are not on the Development channel or the DEV
+              APP is gone.
+            </p>
+          </div>
+
+          <div class="guide-tabpanel" data-tab-label="Over USB">
+            <p class="guide-tabpanel-title">Over USB with picotool</p>
+            <p>
+              Always works, needs no network, and needs no developer mode. It also means physically
+              getting at the Pico W every time.
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Terminal</span>
+              </div>
+              <pre><code>picotool load dist/44444444-4444-4444-8444-444444444444.uf2</code></pre>
+            </div>
+            <p>
+              If <code>picotool</code> is not behaving, its
+              <a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">repository <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> documents the flags, and
+              <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Raspberry Pi's Pico-series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers BOOTSEL mode.
+            </p>
+            <p>
+              Then power-cycle the Atari, press <kbd>ESC</kbd> at boot to reach the app selector,
+              and launch your app.
+            </p>
+          </div>
+        </div>
+
         <p>
-          Then power-cycle the Atari. Press <kbd>ESC</kbd> at boot to reach the app selector, and
-          launch your app. The template's demo should run. The
+          Either way, the template's demo should now run on the Atari. The
           <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> explains the selector in full.
         </p>
 
@@ -227,8 +279,8 @@
             <strong>This is the moment the whole track turns on.</strong>
             <p>
               From here, everything you do is a variation of: change code, run
-              <code>build.sh</code>, run <code>picotool load</code>, power-cycle, look. Get that
-              loop comfortable now, because you are going to do it a few hundred times.
+              <code>build.sh</code>, deploy, look. Over Wi-Fi that is two commands and a few
+              seconds. Get the loop comfortable now, because it is the rest of the work.
             </p>
           </div>
         </div>
@@ -265,6 +317,12 @@
                 <td>Builds fine, but <code>picotool</code> cannot find the device</td>
                 <td>The Pico W is not in a state that accepts a load. Reconnect it, holding
                   <kbd>BOOTSEL</kbd> if needed.</td>
+              </tr>
+              <tr>
+                <td>The deploy <code>curl</code> is refused or times out</td>
+                <td>Developer mode is off, or the host is wrong. Check the red DEVELOPMENT MODE
+                  banner, then try the device's IP address instead of
+                  <code>sidecart.local</code>.</td>
               </tr>
               <tr>
                 <td>Loads fine, but the app never appears on the Atari</td>

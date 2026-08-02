@@ -287,12 +287,95 @@
           Up to thirty apps can be installed at once. The 1152 KB figure is the one to remember. It
           is a lot of room for C code, and it is why the C half is where your logic belongs.
         </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Choose a catalogue channel</h2>
         <p>
-          The catalogue Booster reads from is switchable, with a stable channel by default plus
-          pre-release channels and custom URLs. Step 10 comes back to this when you publish, because
-          the channel names in Booster and the channel names in this store are not spelled the same
-          way.
+          Booster downloads its list of installable apps from a catalogue on the network. As of
+          <strong>v2.3.0</strong> that catalogue is served by this site, and the
+          <strong>Config</strong> page is the single place that chooses which one:
         </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Config page option</th>
+                <th>What it fetches</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Stable - Tested release (default)</code></td>
+                <td><code>md-store.sidecartridge.com/atari-st/apps.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Testing - unstable releases</code></td>
+                <td><code>.../apps-beta.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Development - Local development only</code></td>
+                <td><code>.../apps-dev.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Custom apps catalog URL</code></td>
+                <td>Anything you type. Never rewritten by an upgrade.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The Stable and Beta chips on the Apps page are a <em>filter</em> over whatever the Config
+          page selected. They used to switch catalogue and quietly rewrite the saved setting, and as
+          of v2.3.0 they no longer do.
+        </p>
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Upgrading from an older Booster.</strong>
+            <p>
+              Devices already on one of the standard channels are moved to the new store
+              automatically. If you had set a custom catalogue URL, it is left exactly as it was.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Turn on developer mode</h2>
+        <p>
+          Do this now. It unlocks a deploy path that makes the rest of the track far less tedious:
+          pushing a build over Wi-Fi instead of unplugging the board every time.
+        </p>
+        <ol>
+          <li>Open <strong>Config</strong> and set the catalogue to
+            <code>Development - Local development only</code>.</li>
+          <li>Go to <strong>Apps</strong> and install the <strong>DEV APP</strong> from that
+            catalogue.</li>
+          <li>Stay on the Development channel. Leaving it closes the gate immediately.</li>
+        </ol>
+        <p>
+          A red <strong>DEVELOPMENT MODE</strong> banner appears when it is active. That banner is
+          how you know the deploy API in
+          <a href="/build/atari-st/06-first-build.html">step 6</a> will answer.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>The deploy API has no authentication.</strong>
+            <p>
+              Anyone who can reach your device on the network can push code to it and run that code
+              on the attached Atari. That is why it is off by default, why it needs two deliberate
+              actions to enable, and why it shuts off the moment you change catalogue or delete the
+              DEV APP.
+            </p>
+            <p>
+              Use it on a network you trust. Turn it off when you are done developing. The full
+              contract is in <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+          </div>
+        </div>
       </section>
 
       <nav class="browse-pager guide-pager" aria-label="Step navigation">

@@ -219,56 +219,69 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       </section>
 
       <section class="browser-section guide-prose">
-        <h2>The two sets of channel names</h2>
+        <h2>Channels, and which ones actually work</h2>
         <p>
-          This catches people out. Both this store and Booster let you choose a pre-release channel,
-          and they do not use the same words for them.
+          Both this store and Booster have three channels. Since Booster
+          <strong>v2.3.0</strong> they are the same three files on this site, which is a large
+          simplification over how it used to work.
         </p>
 
         <div class="guide-tablewrap">
           <table>
             <thead>
               <tr>
-                <th>This store calls it</th>
-                <th>Booster's picker calls it</th>
-                <th>Who it is for</th>
+                <th>Booster Config page</th>
+                <th>File it fetches from this site</th>
+                <th>Published here as</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><code>stable</code>, the default</td>
-                <td>Stable</td>
-                <td>Everyone. What a visitor sees with no parameters.</td>
+                <td><code>Stable - Tested release (default)</code></td>
+                <td><code>/atari-st/apps.json</code></td>
+                <td><code>stable</code>, what a visitor sees with no parameters</td>
               </tr>
               <tr>
-                <td><code>test</code>, via <code>?channel=test</code></td>
-                <td>Beta</td>
-                <td>Testers, ahead of a stable release.</td>
+                <td><code>Testing - unstable releases</code></td>
+                <td><code>/atari-st/apps-beta.json</code></td>
+                <td><strong>nothing yet.</strong> See the warning below</td>
               </tr>
               <tr>
+                <td><code>Development - Local development only</code></td>
+                <td><code>/atari-st/apps-dev.json</code></td>
                 <td><code>dev</code>, via <code>?channel=dev</code></td>
-                <td>Development</td>
-                <td>You, while it is still moving.</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <p>
-          Same three tiers, different labels. If you publish to the <code>dev</code> channel here and
-          then go looking for "dev" in Booster, you want <strong>Development</strong>.
-        </p>
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>The Testing channel is empty, and it is not your fault.</strong>
+            <p>
+              Booster asks for <code>apps-beta.json</code>. This store publishes its middle channel
+              as <code>apps-test.json</code>, which is a different filename, so nothing is served
+              and the app list comes back empty.
+            </p>
+            <p>
+              Stable and Development both line up correctly. Until the names are reconciled, publish
+              pre-release work to <code>dev</code> and tell your testers to select
+              <strong>Development</strong>.
+            </p>
+          </div>
+        </div>
 
         <div class="guide-callout guide-callout-tip">
           <i class="fas fa-lightbulb" aria-hidden="true"></i>
           <div class="guide-callout-body">
-            <strong>When in doubt, use a custom URL.</strong>
+            <strong>A custom URL sidesteps all of it.</strong>
             <p>
-              Booster also accepts a catalogue URL directly. Pointing it at the exact file you
-              published removes the guesswork entirely, and it is the fastest way to test your own
-              listing before it is public. Running your own repository is documented under
-              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/unofficial_firmwares/" target="_blank" rel="noopener">unofficial firmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and installing apps day to day is in the
-              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+              <code>Custom apps catalog URL</code> on the Config page takes any address you like,
+              and an upgrade never rewrites it. Point it at the exact file you published to see your
+              own listing before anybody else does. Running a catalogue of your own is documented
+              under <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/unofficial_firmwares/" target="_blank" rel="noopener">unofficial firmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and installing apps day to day is in
+              the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
             </p>
           </div>
         </div>
@@ -277,10 +290,11 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       <section class="browser-section guide-prose">
         <h2>The loop closes</h2>
         <p>
-          By default, Booster fetches its catalogue from
-          <code>http://atarist.sidecartridge.com/apps.json</code>, and that is precisely the origin
-          this store consolidates into the listing you can
-          <a href="/">browse right now</a>.
+          Since v2.3.0, Booster fetches its catalogue from
+          <code>https://md-store.sidecartridge.com/atari-st/apps.json</code>. That is not a copy of
+          this site or a mirror of it. It <em>is</em> this site, the same file behind the listing
+          you can <a href="/">browse right now</a>, built from the registry your pull request
+          edits.
         </p>
         <p>
           So the thing you publish is the thing the device downloads. Somebody with a

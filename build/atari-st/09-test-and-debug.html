@@ -90,7 +90,8 @@
         <h2>Test and debug.</h2>
         <p>
           Embedded debugging is mostly about restoring the thing you take for granted everywhere
-          else: being able to see what your program is doing. Here is how to get that back.
+          else: being able to see what your program is doing. Deploying got easy in Booster v2.3.0.
+          Seeing inside a running microfirmware did not, and this is how you get it back.
         </p>
       </div>
     </section>
@@ -127,6 +128,11 @@
           Remember to build with <code>debug</code> rather than <code>release</code> while you are
           working. That is the second argument to <code>build.sh</code>, and it is what keeps the
           diagnostics in.
+        </p>
+        <p>
+          The probe and the Wi-Fi deploy API solve different problems, and they work together well.
+          Deploy over Wi-Fi so you never unplug anything, and keep the probe attached the whole time
+          for the log. See <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> for the deploy side.
         </p>
       </section>
 
@@ -212,9 +218,10 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
                   answered. A machine that appears frozen is usually this.</td>
               </tr>
               <tr>
-                <td>Did the flash actually happen?</td>
-                <td><code>picotool</code> reporting success and the board running your new code are
-                  two different claims. Add a <code>DPRINTF</code> at startup and look for it.</td>
+                <td>Did the deploy actually happen?</td>
+                <td><code>picotool</code> or <code>curl</code> reporting success and the board
+                  running your new code are two different claims. Add a <code>DPRINTF</code> at
+                  startup and look for it.</td>
               </tr>
               <tr>
                 <td>Is the Atari-side code over budget?</td>
