@@ -154,7 +154,9 @@
 
         <h3>The C half, on the microcontroller</h3>
         <p>
-          Ordinary C, compiled with the Raspberry Pi Pico SDK, running on the Pico's ARM processor.
+          Ordinary C, compiled with the
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">Raspberry Pi Pico C/C++ SDK <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+          running on the Pico's ARM processor.
           It has room to work: hundreds of kilobytes of code space, a filesystem on the microSD
           card, a network connection. Anything computational belongs here, and so does anything that
           needs memory or talks to the internet.
@@ -189,10 +191,13 @@
           chip. That is all the ST thinks is happening.
         </p>
         <p>
-          The SidecarTridge board is not a ROM chip. It is a microcontroller <em>pretending</em> to
-          be one. When the Atari asks for the contents of an address, the Pico notices the request
-          and supplies a value fast enough that the machine never knows the difference. The whole
-          Atari-side memory range is really the microcontroller answering questions.
+          The <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/"
+            target="_blank" rel="noopener">SidecarTridge board <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a> is not a ROM chip. It is a microcontroller
+          <em>pretending</em> to be one. When the Atari asks for the contents of an address, the
+          Pico notices the request and supplies a value fast enough that the machine never knows the
+          difference. The whole Atari-side memory range is really the microcontroller answering
+          questions.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -221,7 +226,9 @@
         <h2>Booster runs your app</h2>
         <p>
           You are not writing a whole firmware image for the board. A bootloader called
-          <strong>Booster</strong> owns the device. It brings up Wi-Fi, serves a web interface,
+          <strong>Booster</strong> owns the device, and the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          walks a normal user through setting it up. It brings up Wi-Fi, serves a web interface,
           manages the microSD card, and installs and launches apps.
         </p>
         <p>
@@ -241,7 +248,9 @@
         <p>
           Booster fetches a catalogue of available apps over the network and shows them in its web
           interface. That catalogue is what this site publishes, the same list you can browse from
-          the <a href="/">store</a> with no device attached.
+          the <a href="/">store</a> with no device attached, and the same one documented as the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank" rel="noopener">apps catalogue <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          upstream.
         </p>
         <p>
           So the last step of this track is not "compile it". It is getting your microfirmware into

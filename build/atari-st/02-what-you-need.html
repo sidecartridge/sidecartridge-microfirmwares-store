@@ -118,31 +118,37 @@
             <input type="checkbox" id="hw-board">
             <label class="guide-check-body" for="hw-board">
               <strong>A SidecarTridge Multi-device board</strong>
-              <span>The cartridge that plugs into the Atari. This is the thing your code runs
-                on.</span>
+              <span>The cartridge that plugs into the Atari. This is the thing your code runs on.
+                See the <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/" target="_blank" rel="noopener">product page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                or buy one from the <a href="https://store.sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge store <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
           <li class="guide-check">
             <input type="checkbox" id="hw-pico">
             <label class="guide-check-body" for="hw-pico">
               <strong>A Raspberry Pi Pico W or Pico 2W</strong>
-              <span>The microcontroller module that sits on the board. The <em>W</em> matters.
-                Booster needs Wi-Fi for its web interface and for fetching the app
-                catalogue.</span>
+              <span>The microcontroller module that sits on the board. The <em>W</em> matters,
+                because Booster needs Wi-Fi for its web interface and for fetching the app
+                catalogue. Raspberry Pi documents the whole family on the
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
           <li class="guide-check">
             <input type="checkbox" id="hw-sd">
             <label class="guide-check-body" for="hw-sd">
               <strong>A microSD card</strong>
-              <span>Booster keeps installed apps and their files here.</span>
+              <span>Booster keeps installed apps and their files here. Format it as FAT32 or
+                exFAT, as described in the
+                <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
           <li class="guide-check">
             <input type="checkbox" id="hw-atari">
             <label class="guide-check-body" for="hw-atari">
               <strong>An Atari ST, STE, MegaST or MegaSTE</strong>
-              <span>With a working cartridge port. This is what you test on.</span>
+              <span>With a working cartridge port. This is what you test on. Check the
+                <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/compatibility_v2/" target="_blank" rel="noopener">compatibility notes <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                if you have an unusual machine.</span>
             </label>
           </li>
           <li class="guide-check">
@@ -151,7 +157,9 @@
               <strong>A Raspberry Pi Debug Probe, optional but get one</strong>
               <span>Not needed to build or run anything, so you can start without it. It is what
                 turns "the screen is black" into an actual error message, and step 9 is a much
-                shorter step if you have one.</span>
+                shorter step if you have one. See the
+                <a href="https://www.raspberrypi.com/products/debug-probe/" target="_blank" rel="noopener">product page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and its
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
         </ul>
@@ -197,22 +205,26 @@
             <input type="checkbox" id="sw-cmake">
             <label class="guide-check-body" for="sw-cmake">
               <strong>CMake and GNU Make</strong>
-              <span>Standard C build tooling, used by the microcontroller half.</span>
+              <span>Standard C build tooling, used by the microcontroller half. The
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                covers the setup.</span>
             </label>
           </li>
           <li class="guide-check">
             <input type="checkbox" id="sw-arm">
             <label class="guide-check-body" for="sw-arm">
               <strong>An ARM toolchain, plus OpenOCD if you have the debug probe</strong>
-              <span>Produces the binaries that run on the Pico, and lets the debugger talk to
-                it.</span>
+              <span>Produces the binaries that run on the Pico, and lets the debugger talk to it.
+                Both come from the
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK setup <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
           <li class="guide-check">
             <input type="checkbox" id="sw-picotool">
             <label class="guide-check-body" for="sw-picotool">
               <strong>picotool</strong>
-              <span>Copies your built firmware onto the board. You will use this constantly.</span>
+              <span>Copies your built firmware onto the board. You will use this constantly. It
+                lives at <a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">raspberrypi/picotool <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
           <li class="guide-check">
@@ -228,7 +240,12 @@
         <p>
           You do <strong>not</strong> need to install a 68000 assembler, and you do not need to
           download the Pico SDKs separately. The templates carry them as git submodules. Step 3
-          explains both.
+          explains both. The upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank" rel="noopener">programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          covers the same ground in reference form, and its "Prerequisites for Developers and
+          Makers" section in the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          is worth a look before you begin.
         </p>
       </section>
 

@@ -136,8 +136,8 @@
           </table>
         </div>
         <p>
-          The first build is slow, because it is compiling the Pico SDK and pulling the Docker image
-          that assembles the 68000 half. Later builds are much faster.
+          The first build is slow, because it is compiling the <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">Pico SDK <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and pulling the Docker image that assembles the 68000 half. Later builds
+          are much faster.
         </p>
       </section>
 
@@ -210,8 +210,14 @@
           <pre><code>picotool load dist/44444444-4444-4444-8444-444444444444.uf2</code></pre>
         </div>
         <p>
+          If <code>picotool</code> is not behaving, its
+          <a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">repository <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> documents the flags, and
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Raspberry Pi's Pico-series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers BOOTSEL mode.
+        </p>
+        <p>
           Then power-cycle the Atari. Press <kbd>ESC</kbd> at boot to reach the app selector, and
-          launch your app. The template's demo should run.
+          launch your app. The template's demo should run. The
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> explains the selector in full.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -263,7 +269,8 @@
                 <td>Loads fine, but the app never appears on the Atari</td>
                 <td>Booster is not installed. See
                   <a href="/build/atari-st/04-install-booster.html">step 4</a>. Hold
-                  <kbd>SHIFT</kbd> while booting to get back to GEMDOS.</td>
+                  <kbd>SHIFT</kbd> while booting to get back to GEMDOS, then work through
+                  <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</td>
               </tr>
             </tbody>
           </table>

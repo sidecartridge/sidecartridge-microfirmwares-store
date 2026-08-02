@@ -105,9 +105,10 @@
           other end of it.
         </p>
         <p>
-          That something is the <strong>Raspberry Pi Debug Probe</strong>, wired to the board's UART
-          pins: TX, RX, ground. Once connected, open the serial port on your computer and your
-          <code>DPRINTF</code> lines appear as your app runs.
+          That something is the <a href="https://www.raspberrypi.com/products/debug-probe/" target="_blank" rel="noopener"><strong>Raspberry Pi Debug Probe</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+          wired to the board's UART pins: TX, RX, ground. Once connected, open the serial port on
+          your computer and your <code>DPRINTF</code> lines appear as your app runs. Its
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers the wiring and the UART bridge.
         </p>
 
         <div class="guide-callout guide-callout-tip">
@@ -150,7 +151,8 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
         </div>
         <p>
           If the debugger fails to launch, these are the first thing to check. The error messages are
-          not helpful about it.
+          not helpful about it. Raspberry Pi's <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> is where both
+          the toolchain and OpenOCD come from, so it is the place to go if either is missing.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -227,7 +229,9 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
               <tr>
                 <td>Is Booster still installed?</td>
                 <td>Flashing certain images over it will replace it. Reinstall from
-                  <a href="/build/atari-st/04-install-booster.html">step 4</a>.</td>
+                  <a href="/build/atari-st/04-install-booster.html">step 4</a>, and check
+                  <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/faq_v2/" target="_blank" rel="noopener">the FAQ <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> for symptoms
+                  that are not about your code.</td>
               </tr>
             </tbody>
           </table>

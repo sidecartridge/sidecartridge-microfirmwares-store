@@ -91,7 +91,9 @@
         <p>
           Booster is the bootloader that owns the board and runs microfirmwares. Until it is
           flashed, nothing on the device knows how to load your app, so this has to happen before
-          your first build rather than after it.
+          your first build rather than after it. The upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers this same setup for ordinary users, in
+          more detail than here.
         </p>
       </div>
     </section>
@@ -127,11 +129,27 @@
           Get the current release from the
           <a href="https://github.com/sidecartridge/rp2-booster-bootloader" target="_blank"
             rel="noopener">rp2-booster-bootloader repository <i class="fas fa-up-right-from-square"
-              aria-hidden="true"></i></a>.
-          There are two ways to install it. Use whichever you find easier, they do the same thing.
+              aria-hidden="true"></i></a>
+          or from the <a href="https://sidecartridge.com/downloads/" target="_blank" rel="noopener">SidecarTridge downloads page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+          There are three ways to install it, all documented upstream. Use whichever you find
+          easiest, they do the same thing.
         </p>
 
         <div class="guide-tabs">
+          <div class="guide-tabpanel" data-tab-label="Browser installer">
+            <p class="guide-tabpanel-title">Browser installer</p>
+            <p>
+              The route the upstream documentation recommends, and the one to try first. A
+              browser-based installer flashes the board over USB with no tools installed at all.
+              Follow
+              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-1-using-the-browser-based-installer-recommended" target="_blank" rel="noopener">option 1 in the getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+            <p>
+              It needs a browser with WebUSB support. If yours refuses, fall back to one of the
+              other two routes.
+            </p>
+          </div>
+
           <div class="guide-tabpanel" data-tab-label="Drag and drop">
             <p class="guide-tabpanel-title">Drag and drop</p>
             <p>
@@ -146,8 +164,11 @@
               <pre><code>rp-booster-&lt;version&gt;-full.uf2</code></pre>
             </div>
             <p>
-              The Pico reboots by itself once the copy finishes. No tools required, which makes this
-              the easier route the first time.
+              The Pico reboots by itself once the copy finishes. No tools required beyond a file
+              manager. This is
+              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-2-using-the-drag-and-drop-method" target="_blank" rel="noopener">option 2 upstream <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+              and <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Raspberry Pi's Pico-series documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> explains what
+              BOOTSEL mode is doing.
             </p>
           </div>
 
@@ -164,8 +185,9 @@
               <pre><code>picotool load -xv /path/to/rp-booster-&lt;version&gt;.uf2</code></pre>
             </div>
             <p>
-              This is the same command shape you will use for your own builds in step 6, so getting
-              comfortable with it now pays off.
+              This is <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-3-using-picotool" target="_blank" rel="noopener">option 3 upstream <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and the
+              same command shape you will use for your own builds in step 6, so getting comfortable
+              with it now pays off.
             </p>
           </div>
         </div>
@@ -186,7 +208,11 @@
         <h2>Bring it up</h2>
         <p>
           Put the Pico on the board, the board in the Atari's cartridge port, and power on. Booster
-          starts, and you configure Wi-Fi and reach its web interface from a browser.
+          starts, and you configure Wi-Fi and reach its web interface from a browser. The
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#initial-factory-configuration" target="_blank" rel="noopener">initial factory configuration <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          section walks through it, including a headless option that reads Wi-Fi credentials from a
+          file on the card. Day-to-day use of the web interface is covered in the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and every setting is listed in <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/parameters_v2/" target="_blank" rel="noopener">parameters <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
         </p>
         <p>
           On the Atari side you will see a terminal-driven selector. Two keys are worth remembering
@@ -199,7 +225,9 @@
         </ul>
         <p>
           That second one is your escape hatch. If you later flash a microfirmware that hangs the
-          machine, holding <kbd>SHIFT</kbd> gets you back to a usable computer.
+          machine, holding <kbd>SHIFT</kbd> gets you back to a usable computer. If the board does
+          not come up at all, work through
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> before assuming it is broken.
         </p>
 
         <div class="guide-callout guide-callout-tip">

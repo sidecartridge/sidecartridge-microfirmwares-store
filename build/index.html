@@ -61,9 +61,11 @@
         <h2>Make something that runs on real hardware.</h2>
         <p>
           This store lists microfirmwares, the apps that run on a
-          <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
-          Multi-device board plugged into a vintage computer. This guide is about writing one
-          yourself, starting from a template rather than a blank page.
+          <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/"
+            target="_blank" rel="noopener">SidecarTridge Multi-device board <i
+              class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          plugged into a vintage computer. This guide is about writing one yourself, starting from a
+          template rather than a blank page.
         </p>
         <div class="guide-hero-meta">
           <span><i class="fas fa-list-check" aria-hidden="true"></i> Ten steps, in order</span>
@@ -148,13 +150,16 @@
           You do not ship a whole firmware image. A bootloader called <strong>Booster</strong> owns
           the device: Wi-Fi, the web interface, the microSD card, installing and launching apps.
           Your microfirmware is one app it can load, which is why it is a <em>micro</em>firmware.
+          Setting it up on a device is covered by the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
         </p>
 
         <h3>4. It reaches users through this store</h3>
         <p>
           Booster fetches a catalogue of available apps over the network. That catalogue is what
-          this site publishes. Getting listed is the last step of every track, and it is the same
-          process for everyone, documented in
+          this site publishes, and it is also written up upstream as the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank" rel="noopener">apps catalogue <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>. Getting listed is the last step of
+          every track, and it is the same process for everyone, documented in
           <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
             target="_blank" rel="noopener">CREATORS.md <i class="fas fa-up-right-from-square"
               aria-hidden="true"></i></a>.
@@ -169,6 +174,19 @@
           works. Keep it open in another tab.
         </p>
         <ul>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/introduction/" target="_blank" rel="noopener">Introduction <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, the shortest description of what
+            the Multi-device is and does.
+          </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">Getting started <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, flashing the firmware,
+            Wi-Fi setup and the web interface.
+          </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">User guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/parameters_v2/" target="_blank" rel="noopener">Parameters <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, for living with the device once it
+            works.
+          </li>
           <li>
             <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank"
               rel="noopener">Programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
@@ -191,7 +209,21 @@
             pinouts and timing and the PIO state machine, if you want to know how the illusion
             works.
           </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/compatibility_v2/" target="_blank" rel="noopener">Compatibility <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">Troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/faq_v2/" target="_blank" rel="noopener">the FAQ <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, for when the hardware rather than your code is
+            the problem.
+          </li>
         </ul>
+        <p>
+          For the hardware itself, Raspberry Pi document the
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico-series boards <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+          the <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          you will build against, and the
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">Debug Probe <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          you will want by step 9.
+        </p>
       </section>
 
     </div>

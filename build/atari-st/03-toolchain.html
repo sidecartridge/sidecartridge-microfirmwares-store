@@ -91,7 +91,8 @@
         <p>
           Your microfirmware is compiled twice, by two completely different compilers: one for the
           Raspberry Pi Pico, one for the Atari's 68000. This step installs both, plus the editor
-          that drives them.
+          that drives them. It condenses the environment setup from the upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank" rel="noopener">programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
         </p>
       </div>
     </section>
@@ -127,14 +128,16 @@
             </thead>
             <tbody>
               <tr>
-                <td><strong>Pico SDK</strong>, <strong>Pico Extras</strong>, <strong>FatFS SDK</strong></td>
+                <td><a href="https://github.com/raspberrypi/pico-sdk" target="_blank" rel="noopener"><strong>Pico SDK</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+                  <a href="https://github.com/raspberrypi/pico-extras" target="_blank" rel="noopener"><strong>Pico Extras</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+                  <strong>FatFS SDK</strong></td>
                 <td>Compile the C half of your app, the part that runs on the microcontroller and
                   does the real work.</td>
               </tr>
               <tr>
                 <td><strong>ARM toolchain</strong> plus <strong>OpenOCD</strong></td>
-                <td>Produce ARM binaries, and let the debugger talk to the chip over a Debug
-                  Probe.</td>
+                <td>Produce ARM binaries, and let the debugger talk to the chip over a
+                  <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">Debug Probe <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</td>
               </tr>
               <tr>
                 <td><strong>atarist-toolkit-docker</strong></td>
@@ -153,13 +156,17 @@
         <p>
           You also need the ordinary things a C project needs, <code>git</code>, <code>cmake</code>
           and <code>make</code>, plus <code>picotool</code>, which copies your built firmware onto
-          the board. Install those the way you normally would on your system. The
-          <a href="https://www.raspberrypi.com/documentation/microcontrollers/" target="_blank"
-            rel="noopener">Raspberry Pi Pico documentation <i class="fas fa-up-right-from-square"
-              aria-hidden="true"></i></a>
-          is the authority for the ARM toolchain, OpenOCD and <code>picotool</code> on your
-          platform.
+          the board. Install those the way you normally would on your system. Raspberry Pi's own
+          documentation is the authority for the rest:
         </p>
+        <ul>
+          <li><a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">The C/C++ SDK <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers the ARM toolchain, OpenOCD and the
+            CMake setup, per platform.</li>
+          <li><a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">raspberrypi/picotool <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> is
+            where <code>picotool</code> comes from, with build and install instructions.</li>
+          <li><a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico-series boards <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> documents the hardware itself, including
+            the Pico W and Pico 2 W.</li>
+        </ul>
       </section>
 
       <section class="browser-section guide-prose">
@@ -311,7 +318,9 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
         <p>
           You can write a microfirmware in any editor, but the debugging setup in
           <a href="/build/atari-st/09-test-and-debug.html">step 9</a> assumes VS Code and
-          Cortex-Debug, and it is much less pleasant to reconstruct by hand.
+          Cortex-Debug, and it is much less pleasant to reconstruct by hand. Raspberry Pi also
+          publish an official Pico extension for VS Code, described in
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">the C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
         </p>
       </section>
 

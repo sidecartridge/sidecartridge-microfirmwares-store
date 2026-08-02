@@ -91,7 +91,8 @@
         <p>
           The template is running. Now find out what is in it: which half is which, how they share
           memory, and which limits you have to design around rather than discover at three in the
-          morning.
+          morning. This step is the practical read of the upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank" rel="noopener">programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
         </p>
       </div>
     </section>
@@ -135,7 +136,8 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
 
         <p>
           <code>rp/</code> is portable. It is the part that would survive a port to another host
-          computer. <code>target/atarist/</code> is Atari-specific by definition. If another
+          computer, and it targets the RP2040 or RP235x described in Raspberry Pi's
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/microcontroller-chips.html" target="_blank" rel="noopener">microcontroller chips documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>. <code>target/atarist/</code> is Atari-specific by definition. If another
           platform is ever supported, it appears alongside as a sibling directory, and the C half
           barely changes.
         </p>
@@ -148,7 +150,9 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
               <code>romemul.c</code>, <code>romemul.pio</code>, <code>commemul.c</code> and
               <code>commemul.pio</code> are the cycle-accurate machinery that makes the board look
               like a ROM chip. They are timed against the Atari's bus and there is no margin in
-              them. Nothing you want to build requires editing these files.
+              them. Nothing you want to build requires editing these files. If you want to know what
+              they are doing, the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/" target="_blank" rel="noopener">hardware interface documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> walks
+              through the PIO state machine step by step.
             </p>
           </div>
         </div>
@@ -302,7 +306,8 @@ chandler_addCB(my_command_handler);</code></pre>
               <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/architecture_and_design/"
                 target="_blank" rel="noopener">architecture and design documentation <i
                   class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-              explains each properly. You do not need it to build something, but it turns these
+              explains each properly, and the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/" target="_blank" rel="noopener">hardware interface page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers
+              the timing side. You do not need it to build something, but it turns these
               rules from arbitrary into obvious.
             </p>
           </div>
