@@ -175,7 +175,8 @@
       <section class="browser-section guide-prose">
         <h2>What you get</h2>
         <p>
-          A successful build leaves three files in <code>dist/</code>, all named after the UUID:
+          <code>build.sh</code> wipes <code>dist/</code> and rebuilds it, so what is in there is
+          always the current build and nothing else:
         </p>
         <div class="guide-tablewrap">
           <table>
@@ -187,23 +188,27 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>&lt;uuid&gt;.uf2</code></td>
-                <td>The firmware image. This is what goes on the board.</td>
+                <td><code>&lt;uuid&gt;-&lt;version&gt;.uf2</code></td>
+                <td>The firmware image. This is what goes on the board. The version comes from
+                  <code>version.txt</code> at the repository root.</td>
               </tr>
               <tr>
                 <td><code>&lt;uuid&gt;.json</code></td>
-                <td>The app's metadata, the entry that describes it to Booster and the store.</td>
+                <td>The app's descriptor, built from <code>desc/app.json</code> with the UUID,
+                  version and checksum filled in. Step 10 is about this file.</td>
               </tr>
               <tr>
-                <td><code>&lt;uuid&gt;.md5</code></td>
-                <td>A checksum, so a download can be verified.</td>
+                <td><code>rp.uf2.md5sum</code></td>
+                <td>The checksum, as <code>md5sum</code> wrote it. The hash itself is already
+                  copied into the descriptor, so this is a byproduct rather than something you
+                  publish.</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p>
-          Only the first matters today. All three matter in step 10, where that trio is essentially
-          what publishing consists of.
+          Note the version in the <code>.uf2</code> filename. It catches people out when they go
+          looking for <code>&lt;uuid&gt;.uf2</code> and find nothing.
         </p>
       </section>
 
@@ -226,7 +231,9 @@
               <div class="guide-code-head">
                 <span class="guide-code-label">upload</span>
               </div>
-              <pre><code>curl --fail --data-binary @dist/44444444-4444-4444-8444-444444444444.uf2 \
+              <pre><code>UF2=dist/44444444-4444-4444-8444-444444444444-$(cat version.txt).uf2
+
+curl --fail --data-binary @"$UF2" \
      -H "Content-Type: application/octet-stream" \
      "http://sidecart.local/dev_upload.cgi"</code></pre>
             </div>
@@ -260,7 +267,7 @@
               <div class="guide-code-head">
                 <span class="guide-code-label">Terminal</span>
               </div>
-              <pre><code>picotool load dist/44444444-4444-4444-8444-444444444444.uf2</code></pre>
+              <pre><code>picotool load dist/*.uf2</code></pre>
             </div>
             <p>
               If <code>picotool</code> is not behaving, its

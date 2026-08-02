@@ -313,12 +313,13 @@ spreading it across frames rather than dropping the frame rate.</code></pre>
           <pre><code>./build.sh pico_w debug 44444444-4444-4444-8444-444444444444
 
 # with developer mode on, push it over Wi-Fi and launch it:
-curl --fail --data-binary @dist/44444444-4444-4444-8444-444444444444.uf2 \
+UF2=dist/44444444-4444-4444-8444-444444444444-$(cat version.txt).uf2
+curl --fail --data-binary @"$UF2" \
      -H "Content-Type: application/octet-stream" \
      "http://sidecart.local/dev_upload.cgi"
 curl --fail "http://sidecart.local/mngr_launchapp.cgi?uuid=44444444-4444-4444-8444-444444444444"
 
-# or over USB: picotool load dist/&lt;uuid&gt;.uf2, then power-cycle the Atari</code></pre>
+# or over USB: picotool load dist/*.uf2, then power-cycle the Atari</code></pre>
         </div>
         <p>
           Run it after small changes rather than large ones. When something breaks after ten accepted

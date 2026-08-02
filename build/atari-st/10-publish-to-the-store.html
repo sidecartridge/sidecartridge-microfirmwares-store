@@ -156,13 +156,148 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
           <code>dist/</code>, now named after your UUID:
         </p>
         <ul>
-          <li><code>&lt;uuid&gt;.uf2</code>, the firmware people will download and install.</li>
-          <li><code>&lt;uuid&gt;.json</code>, the metadata describing your app.</li>
-          <li><code>&lt;uuid&gt;.md5</code>, the checksum that lets a download be verified.</li>
+          <li><code>&lt;uuid&gt;-&lt;version&gt;.uf2</code>, the firmware people download and
+            install.</li>
+          <li><code>&lt;uuid&gt;.json</code>, your app's descriptor, filled in and ready to
+            publish.</li>
+          <li><code>rp.uf2.md5sum</code>, the checksum, already copied into the descriptor.</li>
         </ul>
         <p>
           <strong>Flash this build and test it once more.</strong> A release build is not identical
           to a debug build, and "it worked in debug" has surprised people before.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Describe your app in desc/app.json</h2>
+        <p>
+          That <code>&lt;uuid&gt;.json</code> in <code>dist/</code> is not written by hand. It is
+          generated from <code>desc/app.json</code> in your repository, and if you have not edited
+          that file yet then what you just built still describes itself as the template.
+        </p>
+        <p>
+          The template ships two files in
+          <a href="https://github.com/sidecartridge/md-microfirmware-template/tree/main/desc" target="_blank" rel="noopener">its <code>desc/</code> folder <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+          <code>app.json.template</code> is the blank form. <code>app.json</code> is the working
+          copy that <code>build.sh</code> actually reads, and the one you edit.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Leave three placeholders alone.</strong>
+            <p>
+              <code>&lt;APP_UUID&gt;</code>, <code>&lt;APP_VERSION&gt;</code> and
+              <code>&lt;BINARY_MD5_HASH&gt;</code> are filled in by <code>build.sh</code> every time
+              it runs. Hard-code them and they go stale the moment you cut a new version, which is
+              exactly when a wrong checksum does the most damage.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Who fills it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>name</code>, <code>description</code></td>
+                <td>You. This is what a visitor reads in the store.</td>
+              </tr>
+              <tr>
+                <td><code>image</code></td>
+                <td>You. A 256x256 PNG works well. Optional.</td>
+              </tr>
+              <tr>
+                <td><code>tags</code></td>
+                <td>You. Short words a visitor might filter by, such as
+                  <code>Emulation</code> or <code>Utility</code>.</td>
+              </tr>
+              <tr>
+                <td><code>devices</code></td>
+                <td>You. <code>ST</code>, <code>STE</code>, <code>MegaST</code>,
+                  <code>MegaSTE</code>. The store normalises the spelling.</td>
+              </tr>
+              <tr>
+                <td><code>binary</code></td>
+                <td>You, but write it with the placeholders. See below.</td>
+              </tr>
+              <tr>
+                <td><code>uuid</code>, <code>version</code>, <code>md5</code></td>
+                <td><code>build.sh</code>. The version comes from <code>version.txt</code>, the
+                  checksum from the binary it just built.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The binary URL is templated too</h3>
+        <p>
+          The built firmware is named <code>&lt;uuid&gt;-&lt;version&gt;.uf2</code>, so the URL that
+          points at it has to carry the version. Write the placeholders and let the build fill them,
+          and the URL stays correct across every release without you touching it:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">desc/app.json</span>
+          </div>
+          <pre><code>{
+  "uuid": "&lt;APP_UUID&gt;",
+  "name": "My Microfirmware",
+  "description": "What it does, in one sentence.",
+  "image": "https://example.com/my-app-256.png",
+  "tags": [
+    "Utility"
+  ],
+  "devices": [
+    "ST",
+    "STE",
+    "MegaST",
+    "MegaSTE"
+  ],
+  "binary": "https://example.com/downloads/&lt;APP_UUID&gt;-&lt;APP_VERSION&gt;.uf2",
+  "md5": "&lt;BINARY_MD5_HASH&gt;",
+  "version": "&lt;APP_VERSION&gt;"
+}</code></pre>
+        </div>
+        <p>
+          Bump <code>version.txt</code>, rebuild, and both the filename and the URL follow.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>build.sh refuses to run without it.</strong>
+            <p>
+              If <code>desc/app.json</code> is missing, the build stops and tells you to create one.
+              It never invents a descriptor for you.
+            </p>
+          </div>
+        </div>
+
+        <h3>From one descriptor to a catalogue</h3>
+        <p>
+          Your <code>apps.json</code> is a list of descriptors under an <code>apps</code> key. One
+          app, one entry, exactly as <code>build.sh</code> produced it:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">apps.json</span>
+          </div>
+          <pre><code>{
+  "apps": [
+    { ... the contents of dist/&lt;uuid&gt;.json ... }
+  ]
+}</code></pre>
+        </div>
+        <p>
+          Publish more than one app and they sit side by side in that array. The store adds the
+          <code>creator</code> attribution when it folds your listing into the public catalogue, so
+          leave that out of your own file.
         </p>
       </section>
 
