@@ -153,6 +153,11 @@
           <code>44444444-4444-4444-8444-444444444444</code> is the shared <strong>development</strong>
           UUID. Everyone uses it while building, which is fine because it never leaves your desk.
         </p>
+        <p>
+          It is also the reason step 4 put the device on the Development channel. That UUID is the
+          DEV APP slot, and <strong>the slot only exists on Development</strong>. Build with it while
+          the device is on Stable or Testing and there is nowhere for the result to go.
+        </p>
 
         <div class="guide-callout guide-callout-warn">
           <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
@@ -238,9 +243,10 @@
               Full details in <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
             </p>
             <p>
-              This only answers while the red <strong>DEVELOPMENT MODE</strong> banner is showing.
-              If <code>curl</code> gets a refusal, you are not on the Development channel or the DEV
-              APP is gone.
+              This only answers while the device is on the <strong>Development</strong> channel with
+              the DEV APP installed, which is what the red <strong>DEVELOPMENT MODE</strong> banner
+              tells you. A refused <code>curl</code> almost always means the channel was switched or
+              the DEV APP was removed.
             </p>
           </div>
 
@@ -263,7 +269,9 @@
             </p>
             <p>
               Then power-cycle the Atari, press <kbd>ESC</kbd> at boot to reach the app selector,
-              and launch your app.
+              and launch your app. The device still has to be on the <strong>Development</strong>
+              channel, because that is where the development UUID's slot lives. USB changes how the
+              build gets across, not where it lands.
             </p>
           </div>
         </div>

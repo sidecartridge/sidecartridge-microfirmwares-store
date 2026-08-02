@@ -329,6 +329,10 @@
           page selected. They used to switch catalogue and quietly rewrite the saved setting, and as
           of v2.3.0 they no longer do.
         </p>
+        <p>
+          For this guide you want <strong>Development</strong>, and the next section explains why it
+          is a requirement rather than a preference.
+        </p>
         <div class="guide-callout guide-callout-note">
           <i class="fas fa-circle-info" aria-hidden="true"></i>
           <div class="guide-callout-body">
@@ -343,16 +347,33 @@
 
       <section class="browser-section guide-prose">
         <h2>Turn on developer mode</h2>
-        <p>
-          Do this now. It unlocks a deploy path that makes the rest of the track far less tedious:
-          pushing a build over Wi-Fi instead of unplugging the board every time.
-        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Development is not optional for this track.</strong>
+            <p>
+              Everything you build from step 6 onward uses the development UUID,
+              <code>44444444-4444-4444-8444-444444444444</code>. That UUID is the DEV APP slot, and
+              <strong>it only exists on the Development channel</strong>. On Stable or Testing there
+              is nothing for your build to land in.
+            </p>
+            <p>
+              So set the channel now and leave it there for the whole of the rest of this guide. You
+              switch away at the end, in
+              <a href="/build/atari-st/10-publish-to-the-store.html">step 10</a>, once your app has
+              a real UUID of its own.
+            </p>
+          </div>
+        </div>
+
         <ol>
           <li>Open <strong>Config</strong> and set the catalogue to
             <code>Development - Local development only</code>.</li>
           <li>Go to <strong>Apps</strong> and install the <strong>DEV APP</strong> from that
-            catalogue.</li>
-          <li>Stay on the Development channel. Leaving it closes the gate immediately.</li>
+            catalogue. This is the slot your builds get pushed into.</li>
+          <li>Stay on the Development channel. Changing catalogue or deleting the DEV APP closes the
+            gate immediately.</li>
         </ol>
         <p>
           A red <strong>DEVELOPMENT MODE</strong> banner appears when it is active. That banner is

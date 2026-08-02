@@ -219,11 +219,11 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       </section>
 
       <section class="browser-section guide-prose">
-        <h2>Channels, and which ones actually work</h2>
+        <h2>Pick a channel to publish to</h2>
         <p>
-          Both this store and Booster have three channels. Since Booster
-          <strong>v2.3.0</strong> they are the same three files on this site, which is a large
-          simplification over how it used to work.
+          Both this store and Booster have three channels, and since Booster
+          <strong>v2.3.0</strong> they are the same three files on this site. What you publish here
+          is what the Config page on somebody's device fetches.
         </p>
 
         <div class="guide-tablewrap">
@@ -231,25 +231,25 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
             <thead>
               <tr>
                 <th>Booster Config page</th>
-                <th>File it fetches from this site</th>
-                <th>Published here as</th>
+                <th>Fetches from this site</th>
+                <th>Publish here when</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><code>Stable - Tested release (default)</code></td>
                 <td><code>/atari-st/apps.json</code></td>
-                <td><code>stable</code>, what a visitor sees with no parameters</td>
+                <td>It is finished and you are happy for anyone to install it.</td>
               </tr>
               <tr>
                 <td><code>Testing - unstable releases</code></td>
                 <td><code>/atari-st/apps-beta.json</code></td>
-                <td><strong>nothing yet.</strong> See the warning below</td>
+                <td>You want testers on it before it goes out to everyone.</td>
               </tr>
               <tr>
                 <td><code>Development - Local development only</code></td>
                 <td><code>/atari-st/apps-dev.json</code></td>
-                <td><code>dev</code>, via <code>?channel=dev</code></td>
+                <td>Never, for a finished app. This is the channel you have been developing on.</td>
               </tr>
             </tbody>
           </table>
@@ -258,16 +258,15 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
         <div class="guide-callout guide-callout-warn">
           <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
           <div class="guide-callout-body">
-            <strong>The Testing channel is empty, and it is not your fault.</strong>
+            <strong>Come off the Development channel now.</strong>
             <p>
-              Booster asks for <code>apps-beta.json</code>. This store publishes its middle channel
-              as <code>apps-test.json</code>, which is a different filename, so nothing is served
-              and the app list comes back empty.
+              You have been on it since step 4, because the development UUID's slot only exists
+              there. Your app has its own UUID now, so it no longer needs that slot, and staying on
+              Development leaves the unauthenticated deploy API open on your network.
             </p>
             <p>
-              Stable and Development both line up correctly. Until the names are reconciled, publish
-              pre-release work to <code>dev</code> and tell your testers to select
-              <strong>Development</strong>.
+              Switch the Config page to Stable or Testing, and confirm the red
+              <strong>DEVELOPMENT MODE</strong> banner has gone.
             </p>
           </div>
         </div>
@@ -275,13 +274,13 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
         <div class="guide-callout guide-callout-tip">
           <i class="fas fa-lightbulb" aria-hidden="true"></i>
           <div class="guide-callout-body">
-            <strong>A custom URL sidesteps all of it.</strong>
+            <strong>A custom URL sidesteps the channels entirely.</strong>
             <p>
               <code>Custom apps catalog URL</code> on the Config page takes any address you like,
               and an upgrade never rewrites it. Point it at the exact file you published to see your
-              own listing before anybody else does. Running a catalogue of your own is documented
-              under <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/unofficial_firmwares/" target="_blank" rel="noopener">unofficial firmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and installing apps day to day is in
-              the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+              own listing before anybody else does, or to run a catalogue that is not in this store
+              at all. Running your own is documented under <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/unofficial_firmwares/" target="_blank" rel="noopener">unofficial firmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+              and installing apps day to day is in the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
             </p>
           </div>
         </div>
