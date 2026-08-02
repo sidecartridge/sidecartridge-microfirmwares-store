@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 8 — Build your idea with Claude Code — Atari ST — SidecarTridge</title>
+  <meta name="description"
+    content="What context and constraints to give an AI assistant so the microfirmware code it writes actually fits this hardware." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/08-build-with-claude-code.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 8 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1 — What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2 — What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3 — Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4 — Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5 — Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6 — Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7 — How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html" aria-current="step"
+          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9 — Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10 — Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 8 · Atari ST</span>
+        <h2>Build your idea with Claude Code.</h2>
+        <p>
+          An assistant that knows nothing about this hardware will write code that compiles, looks
+          right, and fails on the board for reasons you cannot diagnose. An assistant that has been
+          told the constraints is genuinely fast here. This page is about the difference.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>What an assistant is good and bad at here</h2>
+        <p>
+          Be deliberate about this, because the failure mode is expensive: confident, plausible code
+          that violates a limit nothing in the source file mentions.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Good at</th>
+                <th>Bad at</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Explaining an unfamiliar codebase back to you</td>
+                <td>Anything cycle-sensitive — PIO, bus timing, the emulation path</td>
+              </tr>
+              <tr>
+                <td>Ordinary C in the <code>rp/</code> half: parsing, state machines, file handling</td>
+                <td>68000 assembly, unless you check it closely</td>
+              </tr>
+              <tr>
+                <td>Filling in the shape of a command handler you have described</td>
+                <td>Guessing sizes and budgets it was never told about</td>
+              </tr>
+              <tr>
+                <td>Reading a build error and telling you which line matters</td>
+                <td>Knowing that the Atari side cannot use normal RAM</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The pattern that works: <strong>you decide where code goes and what it may not do; the
+            assistant writes it.</strong> The decisions on this page are the ones you keep.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>The context block</h2>
+        <p>
+          Paste this at the start of a session, before asking for any code. It is the compressed
+          version of steps 1 and 7 — the things this project knows that a general-purpose assistant
+          cannot infer from the files in front of it.
+        </p>
+
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">paste this first</span>
+          </div>
+          <pre><code>This project is a microfirmware for the SidecarTridge Multi-device, a
+cartridge for the Atari ST built around a Raspberry Pi Pico (RP2040/RP235x).
+
+ARCHITECTURE
+- The app has two halves that ship together.
+- rp/ is C, compiled with the Raspberry Pi Pico SDK, running on the
+  microcontroller. Almost all logic belongs here.
+- target/atarist/ is 68000 assembly running on the Atari itself.
+- The board emulates a ROM cartridge. The Atari reads addresses; the
+  microcontroller answers them fast enough that the illusion holds.
+- A bootloader called Booster owns the device and launches this app.
+
+SHARED MEMORY (same bytes, two addresses)
+  $FA0000 = 0x20030000   8 KB    cartridge code
+  $FA2000 = 0x20032000   4 B     command sentinel
+  $FA2004 = 0x20032004   4 B     token reply
+  $FAE0C0 = 0x2003E0C0   8000 B  framebuffer
+
+HARD CONSTRAINTS — do not violate these
+- The Atari-side code in target/atarist/src/userfw.s has 6 KB. The other
+  2 KB of the 8 KB cartridge image belongs to main.s. Do not grow the
+  Atari half casually; move work to the C half instead.
+- The Atari side CANNOT use the Atari's normal RAM. Use the ROM address
+  space it already has, or push data to the microcontroller's shared
+  memory.
+- 128 KB of the microcontroller's 264 KB RAM is reserved as that shared
+  region. Roughly half the RAM is available to the application.
+- Commands are POLLED, not interrupt-driven. chandler_loop() must keep
+  being called; never block inside the main loop. Break long work into
+  pieces across iterations.
+- Flash writes have a limited lifetime and must never sit on the critical
+  path of ROM emulation. Persist settings at deliberate moments only.
+
+OFF LIMITS
+- romemul.c, romemul.pio, commemul.c, commemul.pio. These are timed
+  against the Atari's bus and have no margin. If a task seems to need
+  changing them, stop and tell me instead.
+
+WHEN YOU ARE UNSURE
+Say so, and cite which of the constraints above is making you unsure.
+Do not guess a size, an address or a timing figure.</code></pre>
+        </div>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Make it permanent.</strong>
+            <p>
+              If your assistant supports a project instructions file — Claude Code reads
+              <code>CLAUDE.md</code> from the repository root — put that block in it and commit it.
+              Then it applies to every session, including sessions six months from now when you have
+              forgotten why the rules exist.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          Also give it the reference documentation. These four pages are fetchable, and an assistant
+          that has read them argues with you far less:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">worth pointing it at</span>
+          </div>
+          <pre><code>https://docs.sidecartridge.com/sidecartridge-multidevice/programming/
+https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/
+https://docs.sidecartridge.com/sidecartridge-multidevice/architecture_and_design/
+https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/</code></pre>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Prompts for real tasks</h2>
+        <p>
+          Three shapes that come up constantly. Note what they have in common: they say where the
+          code goes, and they state the limit that applies.
+        </p>
+
+        <h3>Adding a command handler</h3>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Prompt</span>
+          </div>
+          <pre><code>Add a command that the Atari side can send to ask for &lt;what you want&gt;.
+
+- Register it through chandler_addCB, following the existing handler in
+  rp/src/ as the pattern.
+- The handler must return quickly; chandler_loop() has to keep turning.
+  If the work is slow, split it across iterations and tell me how.
+- On the Atari side, add the send_sync call in userfw.s. Keep it minimal
+  — that file has a 6 KB budget.
+
+Show me the C side first. Do not touch the emulation files.</code></pre>
+        </div>
+
+        <h3>Reading a file from the SD card</h3>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Prompt</span>
+          </div>
+          <pre><code>In the C half, read &lt;file&gt; from the microSD card and &lt;what to do with it&gt;.
+
+Use the existing FatFs setup (sdcard_initFilesystem, the SDCARD_INIT_OK
+check) rather than introducing another filesystem API. Handle the card
+being absent or the file missing — this runs on real hardware where both
+happen. Use DPRINTF for diagnostics.
+
+Remember roughly half the 264 KB of RAM is available; do not read a whole
+file into memory without checking its size first.</code></pre>
+        </div>
+
+        <h3>Drawing to the framebuffer</h3>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Prompt</span>
+          </div>
+          <pre><code>Using the framebuffer template's model, draw &lt;what you want&gt;.
+
+The buffer is 320x200, one byte per pixel. Write pixels, then call
+fb_publish() once per frame. There is roughly a 19 ms compute window per
+vertical blank at 50 Hz — if the work will not fit, say so and propose
+spreading it across frames rather than dropping the frame rate.</code></pre>
+        </div>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Watch for the two things it will get wrong.</strong>
+            <p>
+              First, drift toward the Atari half — assembly is where the interesting-looking
+              hardware is, and an assistant will happily put logic there that should be in C. Push
+              back every time.
+            </p>
+            <p>
+              Second, blocking work in the main loop. <code>sleep</code>, a busy wait, a long parse
+              — anything that stops <code>chandler_loop()</code> stops the Atari being answered, and
+              the symptom is a machine that appears to freeze rather than an error.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Verify it, do not trust it</h2>
+        <p>
+          Generated code that compiles has cleared a very low bar. The loop that actually tells you
+          something is the one from step 6, and it is short:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">after every meaningful change</span>
+          </div>
+          <pre><code>./build.sh pico_w debug 44444444-4444-4444-8444-444444444444
+picotool load dist/44444444-4444-4444-8444-444444444444.uf2
+# power-cycle the Atari, ESC at boot, run it, watch</code></pre>
+        </div>
+        <p>
+          Run it after small changes rather than large ones. When something breaks after ten
+          accepted suggestions, you have ten candidates; after one, you have one.
+        </p>
+        <p>
+          Two questions worth asking about any non-trivial change before you accept it:
+        </p>
+        <ul>
+          <li><strong>Which half did this go in, and is that right?</strong></li>
+          <li><strong>Does anything here block, allocate a lot, or write to flash?</strong></li>
+        </ul>
+        <p>
+          If the answer to the second is yes, ask why. Sometimes it is fine. Sometimes it is the
+          bug you would otherwise spend an evening on.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Read the existing microfirmwares.</strong>
+            <p>
+              Several are open source, and they are the best available answer to "what does a real
+              one look like?" — a drives emulator, a ROM emulator, an RTC emulator, a web browser, a
+              MIDI bridge. Pointing your assistant at a repository that already solves a similar
+              problem beats describing the problem from scratch. You can find them from the
+              <a href="/">store</a>, and the sources live under the
+              <a href="https://github.com/sidecartridge" target="_blank" rel="noopener">sidecartridge
+                organisation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/07-code-layout.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 7 — How the code is laid out</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/09-test-and-debug.html">
+          <span>Step 9 — Test and debug</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

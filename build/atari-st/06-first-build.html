@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 6 — Your first build — Atari ST — SidecarTridge</title>
+  <meta name="description"
+    content="Compile the unmodified template, flash it with picotool, and watch it run on real Atari ST hardware." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/06-first-build.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 6 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1 — What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2 — What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3 — Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4 — Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5 — Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html" aria-current="step"
+          aria-label="Step 6 — Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7 — How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9 — Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10 — Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 6 · Atari ST</span>
+        <h2>Your first build.</h2>
+        <p>
+          Compile the template <strong>without changing a single line</strong>, put it on the board,
+          and watch it run. This is the step that proves your whole toolchain works, while the code
+          is still known-good.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>Build it</h2>
+        <p>
+          From the root of your cloned repository:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>./build.sh pico_w debug 44444444-4444-4444-8444-444444444444</code></pre>
+        </div>
+        <p>The three arguments are:</p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Argument</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pico_w</code></td>
+                <td>The board you are building for.</td>
+              </tr>
+              <tr>
+                <td><code>debug</code></td>
+                <td>Build type. Debug keeps the diagnostics you will want in step 9.
+                  <code>release</code> is for publishing.</td>
+              </tr>
+              <tr>
+                <td><code>44444444-…-444444444444</code></td>
+                <td>The app's UUID. See below — this particular one is special.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The first build is slow: it is compiling the Pico SDK, and pulling the Docker image that
+          assembles the 68000 half. Later builds are much faster.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>About that UUID</h2>
+        <p>
+          Every microfirmware is identified by a UUID, not by its name. Booster uses it to decide
+          which settings sector belongs to which app, and the store uses it to tell releases of the
+          same app apart from different apps.
+        </p>
+        <p>
+          <code>44444444-4444-4444-8444-444444444444</code> is the shared <strong>development</strong>
+          UUID. Everyone uses it while building, which is fine because it never leaves your desk.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Never publish anything built with the development UUID.</strong>
+            <p>
+              Two published apps sharing a UUID collide: they fight over the same settings sector,
+              and the catalogue cannot tell them apart. Step 10 has you generate a real UUIDv4 of
+              your own for the release build. Until then, the development UUID is exactly right.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>What you get</h2>
+        <p>
+          A successful build leaves three files in <code>dist/</code>, all named after the UUID:
+        </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>What it is</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>&lt;uuid&gt;.uf2</code></td>
+                <td>The firmware image. This is what goes on the board.</td>
+              </tr>
+              <tr>
+                <td><code>&lt;uuid&gt;.json</code></td>
+                <td>The app's metadata — the entry that describes it to Booster and the store.</td>
+              </tr>
+              <tr>
+                <td><code>&lt;uuid&gt;.md5</code></td>
+                <td>A checksum, so a download can be verified.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Only the first matters today. All three matter in step 10 — that trio is essentially what
+          publishing consists of.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Put it on the board</h2>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>picotool load dist/44444444-4444-4444-8444-444444444444.uf2</code></pre>
+        </div>
+        <p>
+          Then power-cycle the Atari. Press <kbd>ESC</kbd> at boot to reach the app selector, and
+          launch your app. The template's demo should run.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>This is the moment the whole track turns on.</strong>
+            <p>
+              From here, everything you do is a variation of: change code, run
+              <code>build.sh</code>, run <code>picotool load</code>, power-cycle, look. Get that
+              loop comfortable now — you are going to do it a few hundred times.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>If it did not work</h2>
+        <p>
+          Almost every first-build failure is one of four things, and all four are environment
+          problems rather than code problems — which is exactly why you ran the template unmodified.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>What you see</th>
+                <th>Almost certainly</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Missing headers, or a complaint about the SDK</td>
+                <td>An environment variable is unset in this shell, or the submodules were never
+                  initialised. Back to <a href="/build/atari-st/03-toolchain.html">step 3</a> and
+                  <a href="/build/atari-st/05-pick-a-template.html">step 5</a>.</td>
+              </tr>
+              <tr>
+                <td>Something about Docker, or the Atari half not building</td>
+                <td>Docker is not running, or the image did not resolve — the
+                  <a href="/build/atari-st/03-toolchain.html"><code>stcmd</code> fix in step 3</a>.</td>
+              </tr>
+              <tr>
+                <td>Builds fine, but <code>picotool</code> cannot find the device</td>
+                <td>The Pico is not in a state that accepts a load. Reconnect it, holding
+                  <kbd>BOOTSEL</kbd> if needed.</td>
+              </tr>
+              <tr>
+                <td>Loads fine, but the app never appears on the Atari</td>
+                <td>Booster is not installed —
+                  <a href="/build/atari-st/04-install-booster.html">step 4</a>. Hold
+                  <kbd>SHIFT</kbd> while booting to get back to GEMDOS.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="guide-callout guide-callout-llm">
+          <i class="fas fa-robot" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Give your assistant the whole failure, not a summary.</strong>
+            <p>
+              Build failures here are long and mostly noise, with one real line in the middle.
+              Paste the lot — the command, the full output, and what you have already checked:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Prompt</span>
+              </div>
+              <pre><code>Building a SidecarTridge microfirmware for the Atari ST from the official
+template. The C half targets a Raspberry Pi Pico W via the Pico SDK; the
+68000 half is assembled inside a Docker container.
+
+Command:
+  ./build.sh pico_w debug 44444444-4444-4444-8444-444444444444
+
+Full output:
+&lt;paste everything&gt;
+
+I have already confirmed: &lt;env vars set / submodules initialised / Docker
+running — whichever are true&gt;.
+
+Which line is the real error, and what do I do about it?</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/05-pick-a-template.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 5 — Pick a template</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/07-code-layout.html">
+          <span>Step 7 — How the code is laid out</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

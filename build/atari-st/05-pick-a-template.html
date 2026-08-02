@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 5 — Pick a template — Atari ST — SidecarTridge</title>
+  <meta name="description"
+    content="Choose between the command-driven microfirmware template and the framebuffer template, then clone it and initialise its submodules." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/05-pick-a-template.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 5 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1 — What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2 — What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3 — Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4 — Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html" aria-current="step"
+          aria-label="Step 5 — Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6 — Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7 — How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9 — Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10 — Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 5 · Atari ST</span>
+        <h2>Pick a template.</h2>
+        <p>
+          You do not start from an empty directory. There are two official templates, and choosing
+          between them is the one decision in this track that is genuinely expensive to reverse —
+          so it is worth two minutes of thought.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>The question to ask</h2>
+        <p>
+          <strong>Are you drawing the screen, or are you answering commands?</strong>
+        </p>
+        <p>
+          That is the whole decision. The two templates are built around different relationships
+          between the Atari and the microcontroller, and switching later is closer to a restart than
+          a refactor.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>md-microfirmware-template</th>
+                <th>md-framebuffer-template</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Shape of the app</th>
+                <td>The Atari sends commands; the microcontroller does work and replies.</td>
+                <td>The microcontroller renders a full screen; the Atari displays it.</td>
+              </tr>
+              <tr>
+                <th>Good for</th>
+                <td>Emulated peripherals, network services, file and disk tools, anything
+                  terminal-driven.</td>
+                <td>Demos, games, visualisers — anything where you own the display.</td>
+              </tr>
+              <tr>
+                <th>You write</th>
+                <td>C, plus some 68000 in <code>userfw.s</code>.</td>
+                <td>Mostly just C. The template hides the assembly and the bus timing.</td>
+              </tr>
+              <tr>
+                <th>Display model</th>
+                <td>Whatever you build.</td>
+                <td>320×200, one byte per pixel. Write pixels, call
+                  <code>fb_publish()</code> once per frame.</td>
+              </tr>
+              <tr>
+                <th>Also gives you</th>
+                <td>The command handler framework and the shared-memory protocol.</td>
+                <td>YM2149 audio, Atari keyboard input, SD card access through FatFs.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>If you are new to this, the framebuffer template is the gentler start.</strong>
+            <p>
+              It gives you a ~19 ms compute window every vertical blank at 50 Hz, and a simple
+              contract: fill a buffer, publish it, repeat. You get something visible on screen
+              sooner, and you can stay in C almost the whole time.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          Both are GPL-3.0. Whatever you build on top inherits that, which matters when you get to
+          publishing in step 10 — so decide now if that is a problem for you rather than later.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Create your repository from it</h2>
+        <p>
+          Both repositories are marked as GitHub <em>template</em> repositories, so you do not fork
+          them — you generate a fresh repository with its own clean history.
+        </p>
+        <ul>
+          <li>
+            <a href="https://github.com/sidecartridge/md-microfirmware-template" target="_blank"
+              rel="noopener">md-microfirmware-template <i class="fas fa-up-right-from-square"
+                aria-hidden="true"></i></a>
+            — command-driven apps.
+          </li>
+          <li>
+            <a href="https://github.com/sidecartridge/md-framebuffer-template" target="_blank"
+              rel="noopener">md-framebuffer-template <i class="fas fa-up-right-from-square"
+                aria-hidden="true"></i></a>
+            — framebuffer apps.
+          </li>
+        </ul>
+        <p>
+          Open the one you chose and press <strong>Use this template</strong> → <strong>Create a new
+            repository</strong>. Then clone your new repository and pull in its submodules:
+        </p>
+
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>git clone git@github.com:&lt;your-user&gt;/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+git submodule update --init --recursive</code></pre>
+        </div>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Do not skip the submodule command.</strong>
+            <p>
+              The templates carry <code>pico-sdk</code>, <code>pico-extras</code> and
+              <code>fatfs-sdk</code> as submodules, pinned to versions known to work together. Clone
+              without them and you get empty directories and a build that fails with confusing
+              missing-header errors.
+            </p>
+            <p>
+              This is also the answer to "where do I download the Pico SDK from?" — you do not. It
+              is right there.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Strip it down to something you can read</h2>
+        <p>
+          The templates ship with demo code so that they do something visible on first build. That
+          is useful once — you will run it unmodified in step 6 — and then it is in your way.
+        </p>
+        <p>
+          The framebuffer template includes a script that reduces it to a minimal starting point:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">from the repository root</span>
+          </div>
+          <pre><code>examples/hello_text/apply.sh</code></pre>
+        </div>
+        <p>
+          Run the unmodified template first (step 6), confirm it works, and only then strip it. If
+          you strip first and something breaks, you will not know whether it was the template or
+          your environment.
+        </p>
+
+        <div class="guide-callout guide-callout-llm">
+          <i class="fas fa-robot" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Have your assistant read the template before you change anything.</strong>
+            <p>
+              This is the highest-value thing you can do with an assistant right now — much more
+              useful than asking it to write code. Point it at the freshly cloned repository and
+              ask it to explain the layout back to you:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Prompt</span>
+              </div>
+              <pre><code>This repository is a template for a SidecarTridge Multi-device microfirmware
+for the Atari ST. Read it and tell me:
+
+1. Which files are the C code that runs on the Raspberry Pi Pico, and which
+   are the 68000 code that runs on the Atari.
+2. Which files are infrastructure I should not modify, and which are the
+   ones I am expected to edit.
+3. Where the entry point of my own application code is.
+
+Do not change anything yet.</code></pre>
+            </div>
+            <p>
+              Step 7 covers the same ground properly. Doing both is not wasted — you will read it
+              once from the assistant with your own repository in front of you, and once here with
+              the reasoning behind it.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/04-install-booster.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 4 — Install Booster</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/06-first-build.html">
+          <span>Step 6 — Your first build</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
