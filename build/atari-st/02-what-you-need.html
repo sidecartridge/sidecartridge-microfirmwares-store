@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 2 — What you need — Atari ST — SidecarTridge</title>
+  <title>Step 2: What you need (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="The hardware and software checklist for building an Atari ST microfirmware: board, Pico W, microSD, debug probe, and the tools to install." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/02-what-you-need.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 2 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html" aria-current="step"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -106,8 +106,8 @@
             <p>
               The microcontroller half of a microfirmware emulates the Atari's cartridge bus in real
               time, in hardware. That cannot be simulated on a PC. Emulators help you test
-              Atari-side code, but you cannot develop, run or debug a microfirmware without the
-              physical board.
+              Atari-side code, but you cannot develop or debug a microfirmware without the physical
+              board.
             </p>
           </div>
         </div>
@@ -126,8 +126,9 @@
             <input type="checkbox" id="hw-pico">
             <label class="guide-check-body" for="hw-pico">
               <strong>A Raspberry Pi Pico W or Pico 2W</strong>
-              <span>The microcontroller module that sits on the board. The <em>W</em> matters —
-                Booster needs Wi-Fi for its web interface and for fetching the app catalogue.</span>
+              <span>The microcontroller module that sits on the board. The <em>W</em> matters.
+                Booster needs Wi-Fi for its web interface and for fetching the app
+                catalogue.</span>
             </label>
           </li>
           <li class="guide-check">
@@ -147,7 +148,7 @@
           <li class="guide-check">
             <input type="checkbox" id="hw-probe">
             <label class="guide-check-body" for="hw-probe">
-              <strong>A Raspberry Pi Debug Probe — optional, but get one</strong>
+              <strong>A Raspberry Pi Debug Probe, optional but get one</strong>
               <span>Not needed to build or run anything, so you can start without it. It is what
                 turns "the screen is black" into an actual error message, and step 9 is a much
                 shorter step if you have one.</span>
@@ -226,7 +227,7 @@
 
         <p>
           You do <strong>not</strong> need to install a 68000 assembler, and you do not need to
-          download the Pico SDKs separately — the templates carry them as git submodules. Step 3
+          download the Pico SDKs separately. The templates carry them as git submodules. Step 3
           explains both.
         </p>
       </section>
@@ -239,10 +240,10 @@
           hardware before. Where those come up, they are explained.
         </p>
         <p>
-          It also assumes you will be leaning on an AI assistant for the parts you have not done
-          before. That is a reasonable way to work here, and step 8 is about doing it well rather
-          than badly — the failure mode is an assistant that writes plausible code which cannot
-          possibly fit in six kilobytes.
+          It also assumes you will lean on an AI assistant for the parts you have not done before.
+          That is a reasonable way to work here. Step 8 is about doing it well rather than badly,
+          because the failure mode is an assistant that writes plausible code which cannot possibly
+          fit in six kilobytes.
         </p>
 
         <div class="guide-callout guide-callout-tip">
@@ -260,10 +261,10 @@
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/01-what-a-microfirmware-is.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 1 — What a microfirmware is</span>
+          <span>Step 1: What a microfirmware is</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/03-toolchain.html">
-          <span>Step 3 — Set up the toolchain</span>
+          <span>Step 3: Set up the toolchain</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

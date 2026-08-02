@@ -1,4 +1,4 @@
-/* Build guide (EPIC-17) — progressive enhancement for the /build/ tutorial pages.
+/* Build guide (EPIC-17). Progressive enhancement for the /build/ tutorial pages.
    Loaded with `defer`, so the DOM is ready. Both features below ADD behaviour to
    markup that already works without JavaScript:
      - copy buttons are created here, so no dead button is ever rendered;

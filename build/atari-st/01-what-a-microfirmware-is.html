@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 1 — What a microfirmware is — Atari ST — SidecarTridge</title>
+  <title>Step 1: What a microfirmware is (Atari ST) | SidecarTridge</title>
   <meta name="description"
-    content="The two halves of a SidecarTridge microfirmware, where each one runs, and how Booster loads it — the model everything else in this guide depends on." />
+    content="The two halves of a SidecarTridge microfirmware, where each one runs, and how Booster loads it. This is the model everything else in the guide depends on." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/01-what-a-microfirmware-is.html" />
 
   <!-- Pure.css (CDN) -->
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 1 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html" aria-current="step"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -89,9 +89,9 @@
         <span class="browser-kicker">Step 1 · Atari ST</span>
         <h2>What a microfirmware is.</h2>
         <p>
-          Before you install anything, it is worth five minutes to understand what you are actually
-          building — because it is not one program, and the half you spend most of your time in is
-          probably not the half you expect.
+          Spend five minutes here before you install anything. What you are building is not one
+          program, and the half you will spend most of your time in is probably not the half you
+          expect.
         </p>
       </div>
     </section>
@@ -102,13 +102,13 @@
         <h2>Your app has two halves</h2>
         <p>
           A microfirmware is <strong>two programs that ship as one thing</strong>. They are written
-          in different languages, compiled by different compilers, and run on different processors
-          about thirty years apart in age.
+          in different languages and compiled by different compilers, and the processors they run on
+          are about thirty years apart.
         </p>
 
         <figure class="guide-figure">
           <svg class="guide-diagram" viewBox="0 0 760 300" role="img"
-            aria-label="Diagram: the Atari ST runs the 68000 half of your app from the cartridge address space; the SidecarTridge board runs the C half on a Raspberry Pi Pico alongside Booster; the board also reaches a microSD card and, over Wi-Fi, this store.">
+            aria-label="Diagram: the Atari ST runs the 68000 half of your app from the cartridge address space. The SidecarTridge board runs the C half on a Raspberry Pi Pico alongside Booster. The board also reaches a microSD card and, over Wi-Fi, this store.">
             <rect class="d-box" x="12" y="34" width="270" height="166" rx="5" />
             <text class="d-title" x="30" y="60">Atari ST</text>
             <text class="d-sub" x="30" y="79">68000, 8 MHz, 1985</text>
@@ -131,9 +131,9 @@
             <text class="d-sub" x="480" y="79">Raspberry Pi Pico W / Pico 2W</text>
             <rect class="d-box-accent" x="480" y="94" width="250" height="52" rx="4" />
             <text class="d-label" x="496" y="115">Your C half</text>
-            <text class="d-mono" x="496" y="135">rp/ — where the real work happens</text>
+            <text class="d-mono" x="496" y="135">rp/ &gt; where the real work happens</text>
             <rect class="d-box-plain" x="480" y="152" width="250" height="34" rx="4" />
-            <text class="d-sub" x="496" y="174">Booster — loads and runs your app</text>
+            <text class="d-sub" x="496" y="174">Booster loads and runs your app</text>
 
             <path class="d-line" d="M560 200 V240" />
             <path class="d-fill" d="M560 240 l-5 -11 h10 z" />
@@ -147,25 +147,25 @@
             <text class="d-sub" x="662" y="278">this store</text>
           </svg>
           <figcaption>
-            The C half is where you will spend almost all of your time. The 68000 half is small,
-            constrained, and mostly exists to let the Atari talk to the other half.
+            The C half is where you will spend almost all of your time. The 68000 half is small and
+            heavily constrained. It mostly exists to let the Atari talk to the other half.
           </figcaption>
         </figure>
 
-        <h3>The C half — on the microcontroller</h3>
+        <h3>The C half, on the microcontroller</h3>
         <p>
           Ordinary C, compiled with the Raspberry Pi Pico SDK, running on the Pico's ARM processor.
           It has room to work: hundreds of kilobytes of code space, a filesystem on the microSD
-          card, and a network connection. Anything computational, anything that needs memory,
-          anything that talks to the internet belongs here.
+          card, a network connection. Anything computational belongs here, and so does anything that
+          needs memory or talks to the internet.
         </p>
 
-        <h3>The 68000 half — on the Atari</h3>
+        <h3>The 68000 half, on the Atari</h3>
         <p>
-          A small program in 68000 assembly that the Atari executes directly. It is tiny — six
-          kilobytes — and it lives under real constraints, the most surprising of which is that
-          <strong>it cannot use the Atari's normal RAM</strong>. Its job is usually to collect
-          input, ask the C half to do something, and put results on screen.
+          A small program in 68000 assembly that the Atari executes directly. It is tiny, six
+          kilobytes, and it lives under real constraints. The most surprising one is that
+          <strong>it cannot use the Atari's normal RAM</strong>. Its job is usually to collect input,
+          ask the C half to do the work, then put the result on screen.
         </p>
 
         <div class="guide-callout guide-callout-tip">
@@ -173,9 +173,9 @@
           <div class="guide-callout-body">
             <strong>The practical takeaway.</strong>
             <p>
-              When you are deciding where a feature goes, the default answer is "the C half". You
-              move work to the Atari side only when it has to happen on the Atari — drawing, reading
-              the keyboard, responding to the machine itself.
+              When you are deciding where a feature goes, the default answer is "the C half". Move
+              work to the Atari side only when it has to happen on the Atari: drawing, reading the
+              keyboard, responding to the machine itself.
             </p>
           </div>
         </div>
@@ -190,7 +190,7 @@
         </p>
         <p>
           The SidecarTridge board is not a ROM chip. It is a microcontroller <em>pretending</em> to
-          be one: when the Atari asks for the contents of an address, the Pico notices the request
+          be one. When the Atari asks for the contents of an address, the Pico notices the request
           and supplies a value fast enough that the machine never knows the difference. The whole
           Atari-side memory range is really the microcontroller answering questions.
         </p>
@@ -200,9 +200,9 @@
           <div class="guide-callout-body">
             <strong>You will never write this part.</strong>
             <p>
-              The bus emulation is already built, and it is the single most timing-sensitive code in
-              the project. You inherit it from the template and you leave it alone. What matters to
-              you is the <em>consequence</em>: a region of Atari address space is shared with the
+              The bus emulation is already built, and it is the most timing-sensitive code in the
+              project. You inherit it from the template and you leave it alone. What matters to you
+              is the <em>consequence</em>: a region of Atari address space is shared with the
               microcontroller, and that is how your two halves talk to each other.
             </p>
             <p>
@@ -210,7 +210,7 @@
               <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/"
                 target="_blank" rel="noopener">hardware interface documentation <i
                   class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-              goes down to signal timing and the PIO state machine. It is genuinely interesting and
+              goes down to signal timing and the PIO state machine. It is interesting, and it is
               completely optional.
             </p>
           </div>
@@ -221,11 +221,11 @@
         <h2>Booster runs your app</h2>
         <p>
           You are not writing a whole firmware image for the board. A bootloader called
-          <strong>Booster</strong> owns the device: it brings up Wi-Fi, serves a web interface,
-          manages the microSD card, and installs, updates and launches apps.
+          <strong>Booster</strong> owns the device. It brings up Wi-Fi, serves a web interface,
+          manages the microSD card, and installs and launches apps.
         </p>
         <p>
-          Your microfirmware is one of those apps — which is exactly why it is a
+          Your microfirmware is one of those apps, which is exactly why it is a
           <em>micro</em>firmware rather than a firmware. The board can hold up to thirty of them,
           and the user picks which one is active.
         </p>
@@ -240,7 +240,7 @@
         <h2>How it reaches other people</h2>
         <p>
           Booster fetches a catalogue of available apps over the network and shows them in its web
-          interface. That catalogue is what this site publishes — the same list you can browse from
+          interface. That catalogue is what this site publishes, the same list you can browse from
           the <a href="/">store</a> with no device attached.
         </p>
         <p>
@@ -253,10 +253,10 @@
           <div class="guide-callout-body">
             <strong>A good moment to brief your assistant.</strong>
             <p>
-              If you are going to work with an AI assistant on this — and this guide assumes you
-              will — it is worth giving it this page's model up front, before it sees any code.
-              Assistants that do not know about the two halves will happily suggest putting
-              filesystem access in the 68000 code.
+              If you are going to work with an AI assistant on this, and this guide assumes you
+              will, give it this page's model up front, before it sees any code. Assistants that do
+              not know about the two halves will happily suggest putting filesystem access in the
+              68000 code.
             </p>
             <p>
               Step 8 gives you a full context block to paste. For now, just know that the split
@@ -272,7 +272,7 @@
           <span>Track overview</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/02-what-you-need.html">
-          <span>Step 2 — What you need</span>
+          <span>Step 2: What you need</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

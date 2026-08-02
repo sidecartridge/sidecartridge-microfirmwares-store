@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 3 — Set up the toolchain — Atari ST — SidecarTridge</title>
+  <title>Step 3: Set up the toolchain (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="Install the Raspberry Pi Pico SDKs, the Atari ST cross-compiler in Docker and VS Code, and set the five environment variables that tie them together." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/03-toolchain.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 3 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html" aria-current="step"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -105,16 +105,16 @@
             <strong>This is the longest step. Do it properly once.</strong>
             <p>
               Almost every confusing failure later in this track traces back to a half-finished
-              toolchain — a missing environment variable, a Docker image that never pulled. The
-              upstream guide says the same thing: take your time here.
+              toolchain: a missing environment variable, a Docker image that never pulled. The
+              upstream guide says the same thing. Take your time here.
             </p>
           </div>
         </div>
 
         <h2>What you are installing, and why</h2>
         <p>
-          Four separate things, doing four separate jobs. It helps to know which is which before
-          you start, because when something breaks you need to know who to blame.
+          Four separate things, doing four separate jobs. Knowing which is which before you start
+          helps, because when something breaks you need to know who to blame.
         </p>
 
         <div class="guide-tablewrap">
@@ -128,12 +128,13 @@
             <tbody>
               <tr>
                 <td><strong>Pico SDK</strong>, <strong>Pico Extras</strong>, <strong>FatFS SDK</strong></td>
-                <td>Compile the C half of your app — the part that runs on the microcontroller and
+                <td>Compile the C half of your app, the part that runs on the microcontroller and
                   does the real work.</td>
               </tr>
               <tr>
-                <td><strong>ARM toolchain</strong> + <strong>OpenOCD</strong></td>
-                <td>Produce ARM binaries, and let the debugger talk to the chip over a Debug Probe.</td>
+                <td><strong>ARM toolchain</strong> plus <strong>OpenOCD</strong></td>
+                <td>Produce ARM binaries, and let the debugger talk to the chip over a Debug
+                  Probe.</td>
               </tr>
               <tr>
                 <td><strong>atarist-toolkit-docker</strong></td>
@@ -141,7 +142,7 @@
                   assembler on your machine by hand.</td>
               </tr>
               <tr>
-                <td><strong>VS Code</strong> + extensions</td>
+                <td><strong>VS Code</strong> and its extensions</td>
                 <td>Edit, build and step through code. The templates ship VS Code configuration
                   that expects these extensions.</td>
               </tr>
@@ -150,10 +151,9 @@
         </div>
 
         <p>
-          You also need the ordinary things a C project needs — <code>git</code>,
-          <code>cmake</code>, <code>make</code> — and <code>picotool</code>, which copies your
-          built firmware onto the board. Install those the way you normally would on your system;
-          the
+          You also need the ordinary things a C project needs, <code>git</code>, <code>cmake</code>
+          and <code>make</code>, plus <code>picotool</code>, which copies your built firmware onto
+          the board. Install those the way you normally would on your system. The
           <a href="https://www.raspberrypi.com/documentation/microcontrollers/" target="_blank"
             rel="noopener">Raspberry Pi Pico documentation <i class="fas fa-up-right-from-square"
               aria-hidden="true"></i></a>
@@ -165,8 +165,8 @@
       <section class="browser-section guide-prose">
         <h2>Where the Pico SDKs come from</h2>
         <p>
-          There are two ways to have the SDKs on your machine, and it is worth understanding which
-          one you are doing, because it decides what your environment variables point at.
+          There are two ways to have the SDKs on your machine. Understand which one you are doing,
+          because it decides what your environment variables point at.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -178,7 +178,7 @@
               <code>fatfs-sdk</code> as git submodules, pinned to known-good commits. When you clone
               a template in <a href="/build/atari-st/05-pick-a-template.html">step 5</a> and run
               <code>git submodule update --init --recursive</code>, you get all three inside the
-              project — you do not have to clone them separately.
+              project. You do not have to clone them separately.
             </p>
             <p>
               The upstream programming guide also describes a standalone, system-wide Pico
@@ -193,9 +193,8 @@
         <h2>Set the environment variables</h2>
         <p>
           The build scripts find everything through five environment variables. Set them in your
-          shell profile so they survive a new terminal — if you only export them once, the next
-          build will fail with a message about a missing SDK and you will not connect the two
-          events.
+          shell profile so they survive a new terminal. If you only export them once, the next build
+          fails with a message about a missing SDK and you will not connect the two events.
         </p>
 
         <div class="guide-tabs">
@@ -230,10 +229,10 @@ export PICO_OPENOCD_PATH=/path/to/openocd/tcl</code></pre>
 $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
             </div>
             <p>
-              The three SDK paths are set exactly the same way — for example
-              <code>$env:PICO_SDK_PATH="C:\Path\to\pico-sdk"</code>. Note that
-              <code>$env:</code> assignments only last for the current PowerShell session; use
-              <em>System Properties → Environment Variables</em>, or add them to your PowerShell
+              The three SDK paths are set exactly the same way, for example
+              <code>$env:PICO_SDK_PATH="C:\Path\to\pico-sdk"</code>. Watch out for one thing:
+              <code>$env:</code> assignments only last for the current PowerShell session. Use
+              <em>System Properties &gt; Environment Variables</em>, or add them to your PowerShell
               profile, to make them permanent.
             </p>
           </div>
@@ -244,8 +243,8 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
           <div class="guide-callout-body">
             <strong>Use absolute paths.</strong>
             <p>
-              <code>~/pico-sdk</code> and <code>./pico-sdk</code> will both bite you — the build
-              runs from directories you are not thinking about. Write the path out in full.
+              <code>~/pico-sdk</code> and <code>./pico-sdk</code> will both bite you, because the
+              build runs from directories you are not thinking about. Write the path out in full.
             </p>
           </div>
         </div>
@@ -286,7 +285,7 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
         </div>
 
         <p>
-          Confirm Docker itself is running before you go further — a stopped Docker daemon produces
+          Confirm Docker itself is running before you go further. A stopped Docker daemon produces
           build errors that look nothing like "Docker is not running".
         </p>
         <div class="guide-code">
@@ -304,9 +303,9 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
           configuration that expects these four extensions. Install all of them:
         </p>
         <ul>
-          <li><strong>C/C++ Extension Pack</strong> — language support for the C half.</li>
-          <li><strong>CMake</strong> and <strong>CMake Tools</strong> — drive the build.</li>
-          <li><strong>Cortex-Debug</strong> — step through code on the microcontroller over the
+          <li><strong>C/C++ Extension Pack</strong>, language support for the C half.</li>
+          <li><strong>CMake</strong> and <strong>CMake Tools</strong>, which drive the build.</li>
+          <li><strong>Cortex-Debug</strong>, to step through code on the microcontroller over the
             Debug Probe.</li>
         </ul>
         <p>
@@ -327,8 +326,8 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
             <input type="checkbox" id="chk-env">
             <label class="guide-check-body" for="chk-env">
               <strong>All five environment variables survive a new terminal</strong>
-              <span>Open a fresh terminal and run <code>echo $PICO_SDK_PATH</code> (or
-                <code>echo $env:PICO_SDK_PATH</code> in PowerShell). An empty line means it is not
+              <span>Open a fresh terminal and run <code>echo $PICO_SDK_PATH</code>, or
+                <code>echo $env:PICO_SDK_PATH</code> in PowerShell. An empty line means it is not
                 set.</span>
             </label>
           </li>
@@ -395,10 +394,10 @@ What is missing, and what exactly should I run to fix it?</code></pre>
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/02-what-you-need.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 2 — What you need</span>
+          <span>Step 2: What you need</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/04-install-booster.html">
-          <span>Step 4 — Install Booster</span>
+          <span>Step 4: Install Booster</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

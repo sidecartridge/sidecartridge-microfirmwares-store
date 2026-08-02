@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 10 — Publish to the store — Atari ST — SidecarTridge</title>
+  <title>Step 10: Publish to the store (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="Generate a real UUID, make a release build, host your apps.json, and open the pull request that lists your microfirmware here." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/10-publish-to-the-store.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 10 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html" aria-current="step"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -90,7 +90,7 @@
         <h2>Publish to the store.</h2>
         <p>
           Your microfirmware works on your board. This last step makes it something other people's
-          boards can find — which closes the loop back to the catalogue you are reading this on.
+          boards can find, which closes the loop back to the catalogue you are reading this on.
         </p>
       </div>
     </section>
@@ -101,10 +101,10 @@
         <h2>Give it a real UUID</h2>
         <p>
           Everything so far used the shared development UUID. That has to change before anything
-          leaves your desk: two published apps with the same UUID fight over the same settings
+          leaves your desk. Two published apps with the same UUID fight over the same settings
           sector, and the catalogue cannot tell them apart.
         </p>
-        <p>Generate a UUIDv4 and keep it — it identifies this app for the rest of its life.</p>
+        <p>Generate a UUIDv4 and keep it. It identifies this app for the rest of its life.</p>
 
         <div class="guide-tabs">
           <div class="guide-tabpanel" data-tab-label="macOS / Linux">
@@ -134,7 +134,7 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
           <div class="guide-callout-body">
             <strong>Write it down somewhere permanent.</strong>
             <p>
-              Every future release of this app must use the same UUID — that is how an update is
+              Every future release of this app must use the same UUID. That is how an update is
               recognised as an update rather than a different app. Losing it means your users get a
               stranger instead of a new version. Put it in your README.
             </p>
@@ -156,9 +156,9 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
           <code>dist/</code>, now named after your UUID:
         </p>
         <ul>
-          <li><code>&lt;uuid&gt;.uf2</code> — the firmware people will download and install.</li>
-          <li><code>&lt;uuid&gt;.json</code> — the metadata describing your app.</li>
-          <li><code>&lt;uuid&gt;.md5</code> — the checksum that lets a download be verified.</li>
+          <li><code>&lt;uuid&gt;.uf2</code>, the firmware people will download and install.</li>
+          <li><code>&lt;uuid&gt;.json</code>, the metadata describing your app.</li>
+          <li><code>&lt;uuid&gt;.md5</code>, the checksum that lets a download be verified.</li>
         </ul>
         <p>
           <strong>Flash this build and test it once more.</strong> A release build is not identical
@@ -169,13 +169,13 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       <section class="browser-section guide-prose">
         <h2>Host it, then get listed</h2>
         <p>
-          Publishing is two separate things, and it helps to keep them apart in your head:
+          Publishing is two separate things, and keeping them apart in your head helps:
         </p>
         <ol>
           <li>
             <strong>You host your own files.</strong> The <code>.uf2</code> and an
-            <code>apps.json</code> describing it live somewhere you control — a GitHub release, a
-            web host, anywhere reachable. You keep ownership of your own listing.
+            <code>apps.json</code> describing it live somewhere you control: a GitHub release, a web
+            host, anywhere reachable. You keep ownership of your own listing.
           </li>
           <li>
             <strong>This store points at them.</strong> You open a pull request adding your origin
@@ -185,8 +185,8 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
         </ol>
 
         <p>
-          The full contract for <code>apps.json</code> — every field, the rules, a worked example,
-          and the exact pull request to open — is documented separately and kept up to date with the
+          The full contract for <code>apps.json</code>, every field, the rules, a worked example and
+          the exact pull request to open, is documented separately and kept up to date with the
           build that validates it:
         </p>
         <p>
@@ -205,12 +205,12 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
             <p>
               An automated check validates your JSON strictly and reports on the PR. A maintainer
               reviews it. Once merged, a scheduled job fetches your <code>apps.json</code>, folds it
-              into the consolidated catalogue and deploys — so your app appears without anyone
+              into the consolidated catalogue and deploys, so your app appears without anyone
               editing the catalogue by hand.
             </p>
             <p>
               A couple of things the build does to your data are worth knowing before they surprise
-              you: device names are normalised to a standard spelling, and descriptions are
+              you. Device names are normalised to a standard spelling, and descriptions are
               sanitised. The creator guide explains both.
             </p>
           </div>
@@ -220,8 +220,8 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       <section class="browser-section guide-prose">
         <h2>The two sets of channel names</h2>
         <p>
-          This catches people out, so it is worth being explicit. Both this store and Booster let
-          you choose a pre-release channel — and they do not use the same words for them.
+          This catches people out. Both this store and Booster let you choose a pre-release channel,
+          and they do not use the same words for them.
         </p>
 
         <div class="guide-tablewrap">
@@ -235,17 +235,17 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
             </thead>
             <tbody>
               <tr>
-                <td><code>stable</code> — the default</td>
+                <td><code>stable</code>, the default</td>
                 <td>Stable</td>
                 <td>Everyone. What a visitor sees with no parameters.</td>
               </tr>
               <tr>
-                <td><code>test</code> — <code>?channel=test</code></td>
+                <td><code>test</code>, via <code>?channel=test</code></td>
                 <td>Beta</td>
                 <td>Testers, ahead of a stable release.</td>
               </tr>
               <tr>
-                <td><code>dev</code> — <code>?channel=dev</code></td>
+                <td><code>dev</code>, via <code>?channel=dev</code></td>
                 <td>Development</td>
                 <td>You, while it is still moving.</td>
               </tr>
@@ -275,14 +275,13 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
         <h2>The loop closes</h2>
         <p>
           By default, Booster fetches its catalogue from
-          <code>http://atarist.sidecartridge.com/apps.json</code> — and that is precisely the origin
+          <code>http://atarist.sidecartridge.com/apps.json</code>, and that is precisely the origin
           this store consolidates into the listing you can
           <a href="/">browse right now</a>.
         </p>
         <p>
-          So the thing you publish is the thing the device downloads. Somebody with a
-          SidecarTridge, an Atari ST and no idea who you are opens Booster, sees your app in the
-          list, and installs it.
+          So the thing you publish is the thing the device downloads. Somebody with a SidecarTridge,
+          an Atari ST and no idea who you are opens Booster, sees your app in the list, installs it.
         </p>
 
         <div class="guide-callout guide-callout-tip">
@@ -291,15 +290,15 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
             <strong>You have finished the track.</strong>
             <p>
               You installed a toolchain, flashed a bootloader, built from a template, learned the
-              memory map, wrote something of your own, debugged it on real 1980s hardware, and
-              published it. That is the whole thing.
+              memory map, wrote something of your own, debugged it on real 1980s hardware and
+              published it.
             </p>
             <p>
-              If any page here was wrong, unclear, or out of date, please
+              If any page here was wrong, unclear or out of date, please
               <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/issues"
                 target="_blank" rel="noopener">say so <i class="fas fa-up-right-from-square"
-                  aria-hidden="true"></i></a>
-              — the next person following this will thank you.
+                  aria-hidden="true"></i></a>.
+              The next person following this will thank you.
             </p>
           </div>
         </div>
@@ -308,7 +307,7 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/09-test-and-debug.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 9 — Test and debug</span>
+          <span>Step 9: Test and debug</span>
         </a>
         <a class="guide-pager-link" href="/">
           <span>Browse the store</span>

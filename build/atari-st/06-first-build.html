@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 6 — Your first build — Atari ST — SidecarTridge</title>
+  <title>Step 6: Your first build (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="Compile the unmodified template, flash it with picotool, and watch it run on real Atari ST hardware." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/06-first-build.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 6 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html" aria-current="step"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -129,15 +129,15 @@
                   <code>release</code> is for publishing.</td>
               </tr>
               <tr>
-                <td><code>44444444-…-444444444444</code></td>
-                <td>The app's UUID. See below — this particular one is special.</td>
+                <td><code>44444444-...-444444444444</code></td>
+                <td>The app's UUID. See below, this particular one is special.</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p>
-          The first build is slow: it is compiling the Pico SDK, and pulling the Docker image that
-          assembles the 68000 half. Later builds are much faster.
+          The first build is slow, because it is compiling the Pico SDK and pulling the Docker image
+          that assembles the 68000 half. Later builds are much faster.
         </p>
       </section>
 
@@ -158,7 +158,7 @@
           <div class="guide-callout-body">
             <strong>Never publish anything built with the development UUID.</strong>
             <p>
-              Two published apps sharing a UUID collide: they fight over the same settings sector,
+              Two published apps sharing a UUID collide. They fight over the same settings sector,
               and the catalogue cannot tell them apart. Step 10 has you generate a real UUIDv4 of
               your own for the release build. Until then, the development UUID is exactly right.
             </p>
@@ -186,7 +186,7 @@
               </tr>
               <tr>
                 <td><code>&lt;uuid&gt;.json</code></td>
-                <td>The app's metadata — the entry that describes it to Booster and the store.</td>
+                <td>The app's metadata, the entry that describes it to Booster and the store.</td>
               </tr>
               <tr>
                 <td><code>&lt;uuid&gt;.md5</code></td>
@@ -196,8 +196,8 @@
           </table>
         </div>
         <p>
-          Only the first matters today. All three matter in step 10 — that trio is essentially what
-          publishing consists of.
+          Only the first matters today. All three matter in step 10, where that trio is essentially
+          what publishing consists of.
         </p>
       </section>
 
@@ -221,7 +221,7 @@
             <p>
               From here, everything you do is a variation of: change code, run
               <code>build.sh</code>, run <code>picotool load</code>, power-cycle, look. Get that
-              loop comfortable now — you are going to do it a few hundred times.
+              loop comfortable now, because you are going to do it a few hundred times.
             </p>
           </div>
         </div>
@@ -231,7 +231,7 @@
         <h2>If it did not work</h2>
         <p>
           Almost every first-build failure is one of four things, and all four are environment
-          problems rather than code problems — which is exactly why you ran the template unmodified.
+          problems rather than code problems. That is exactly why you ran the template unmodified.
         </p>
 
         <div class="guide-tablewrap">
@@ -251,7 +251,7 @@
               </tr>
               <tr>
                 <td>Something about Docker, or the Atari half not building</td>
-                <td>Docker is not running, or the image did not resolve — the
+                <td>Docker is not running, or the image did not resolve. See the
                   <a href="/build/atari-st/03-toolchain.html"><code>stcmd</code> fix in step 3</a>.</td>
               </tr>
               <tr>
@@ -261,7 +261,7 @@
               </tr>
               <tr>
                 <td>Loads fine, but the app never appears on the Atari</td>
-                <td>Booster is not installed —
+                <td>Booster is not installed. See
                   <a href="/build/atari-st/04-install-booster.html">step 4</a>. Hold
                   <kbd>SHIFT</kbd> while booting to get back to GEMDOS.</td>
               </tr>
@@ -274,8 +274,8 @@
           <div class="guide-callout-body">
             <strong>Give your assistant the whole failure, not a summary.</strong>
             <p>
-              Build failures here are long and mostly noise, with one real line in the middle.
-              Paste the lot — the command, the full output, and what you have already checked:
+              Build failures here are long and mostly noise, with one real line in the middle. Paste
+              the lot: the command, the full output, and what you have already checked.
             </p>
             <div class="guide-code">
               <div class="guide-code-head">
@@ -292,7 +292,7 @@ Full output:
 &lt;paste everything&gt;
 
 I have already confirmed: &lt;env vars set / submodules initialised / Docker
-running — whichever are true&gt;.
+running, whichever are true&gt;.
 
 Which line is the real error, and what do I do about it?</code></pre>
             </div>
@@ -303,10 +303,10 @@ Which line is the real error, and what do I do about it?</code></pre>
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/05-pick-a-template.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 5 — Pick a template</span>
+          <span>Step 5: Pick a template</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/07-code-layout.html">
-          <span>Step 7 — How the code is laid out</span>
+          <span>Step 7: How the code is laid out</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

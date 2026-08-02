@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 8 — Build your idea with Claude Code — Atari ST — SidecarTridge</title>
+  <title>Step 8: Build your idea with Claude Code (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="What context and constraints to give an AI assistant so the microfirmware code it writes actually fits this hardware." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/08-build-with-claude-code.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 8 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html" aria-current="step"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -91,7 +91,7 @@
         <p>
           An assistant that knows nothing about this hardware will write code that compiles, looks
           right, and fails on the board for reasons you cannot diagnose. An assistant that has been
-          told the constraints is genuinely fast here. This page is about the difference.
+          told the constraints is fast here. This page is about the difference.
         </p>
       </div>
     </section>
@@ -116,7 +116,7 @@
             <tbody>
               <tr>
                 <td>Explaining an unfamiliar codebase back to you</td>
-                <td>Anything cycle-sensitive — PIO, bus timing, the emulation path</td>
+                <td>Anything cycle-sensitive: PIO, bus timing, the emulation path</td>
               </tr>
               <tr>
                 <td>Ordinary C in the <code>rp/</code> half: parsing, state machines, file handling</td>
@@ -135,7 +135,7 @@
         </div>
 
         <p>
-          The pattern that works: <strong>you decide where code goes and what it may not do; the
+          The pattern that works: <strong>you decide where code goes and what it may not do, the
             assistant writes it.</strong> The decisions on this page are the ones you keep.
         </p>
       </section>
@@ -144,7 +144,7 @@
         <h2>The context block</h2>
         <p>
           Paste this at the start of a session, before asking for any code. It is the compressed
-          version of steps 1 and 7 — the things this project knows that a general-purpose assistant
+          version of steps 1 and 7, the things this project knows that a general-purpose assistant
           cannot infer from the files in front of it.
         </p>
 
@@ -170,7 +170,7 @@ SHARED MEMORY (same bytes, two addresses)
   $FA2004 = 0x20032004   4 B     token reply
   $FAE0C0 = 0x2003E0C0   8000 B  framebuffer
 
-HARD CONSTRAINTS — do not violate these
+HARD CONSTRAINTS, do not violate these
 - The Atari-side code in target/atarist/src/userfw.s has 6 KB. The other
   2 KB of the 8 KB cartridge image belongs to main.s. Do not grow the
   Atari half casually; move work to the C half instead.
@@ -200,8 +200,8 @@ Do not guess a size, an address or a timing figure.</code></pre>
           <div class="guide-callout-body">
             <strong>Make it permanent.</strong>
             <p>
-              If your assistant supports a project instructions file — Claude Code reads
-              <code>CLAUDE.md</code> from the repository root — put that block in it and commit it.
+              If your assistant supports a project instructions file, and Claude Code reads
+              <code>CLAUDE.md</code> from the repository root, put that block in it and commit it.
               Then it applies to every session, including sessions six months from now when you have
               forgotten why the rules exist.
             </p>
@@ -241,8 +241,8 @@ https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/</co
   rp/src/ as the pattern.
 - The handler must return quickly; chandler_loop() has to keep turning.
   If the work is slow, split it across iterations and tell me how.
-- On the Atari side, add the send_sync call in userfw.s. Keep it minimal
-  — that file has a 6 KB budget.
+- On the Atari side, add the send_sync call in userfw.s. Keep it minimal,
+  that file has a 6 KB budget.
 
 Show me the C side first. Do not touch the emulation files.</code></pre>
         </div>
@@ -256,8 +256,8 @@ Show me the C side first. Do not touch the emulation files.</code></pre>
 
 Use the existing FatFs setup (sdcard_initFilesystem, the SDCARD_INIT_OK
 check) rather than introducing another filesystem API. Handle the card
-being absent or the file missing — this runs on real hardware where both
-happen. Use DPRINTF for diagnostics.
+being absent or the file missing, because this runs on real hardware where
+both happen. Use DPRINTF for diagnostics.
 
 Remember roughly half the 264 KB of RAM is available; do not read a whole
 file into memory without checking its size first.</code></pre>
@@ -272,7 +272,7 @@ file into memory without checking its size first.</code></pre>
 
 The buffer is 320x200, one byte per pixel. Write pixels, then call
 fb_publish() once per frame. There is roughly a 19 ms compute window per
-vertical blank at 50 Hz — if the work will not fit, say so and propose
+vertical blank at 50 Hz. If the work will not fit, say so and propose
 spreading it across frames rather than dropping the frame rate.</code></pre>
         </div>
 
@@ -281,14 +281,14 @@ spreading it across frames rather than dropping the frame rate.</code></pre>
           <div class="guide-callout-body">
             <strong>Watch for the two things it will get wrong.</strong>
             <p>
-              First, drift toward the Atari half — assembly is where the interesting-looking
-              hardware is, and an assistant will happily put logic there that should be in C. Push
-              back every time.
+              First, drift toward the Atari half. Assembly is where the interesting-looking hardware
+              is, and an assistant will happily put logic there that should be in C. Push back every
+              time.
             </p>
             <p>
-              Second, blocking work in the main loop. <code>sleep</code>, a busy wait, a long parse
-              — anything that stops <code>chandler_loop()</code> stops the Atari being answered, and
-              the symptom is a machine that appears to freeze rather than an error.
+              Second, blocking work in the main loop. A <code>sleep</code>, a busy wait, a long
+              parse: anything that stops <code>chandler_loop()</code> stops the Atari being
+              answered, and the symptom is a machine that appears to freeze rather than an error.
             </p>
           </div>
         </div>
@@ -309,8 +309,8 @@ picotool load dist/44444444-4444-4444-8444-444444444444.uf2
 # power-cycle the Atari, ESC at boot, run it, watch</code></pre>
         </div>
         <p>
-          Run it after small changes rather than large ones. When something breaks after ten
-          accepted suggestions, you have ten candidates; after one, you have one.
+          Run it after small changes rather than large ones. When something breaks after ten accepted
+          suggestions you have ten candidates. After one, you have one.
         </p>
         <p>
           Two questions worth asking about any non-trivial change before you accept it:
@@ -320,8 +320,8 @@ picotool load dist/44444444-4444-4444-8444-444444444444.uf2
           <li><strong>Does anything here block, allocate a lot, or write to flash?</strong></li>
         </ul>
         <p>
-          If the answer to the second is yes, ask why. Sometimes it is fine. Sometimes it is the
-          bug you would otherwise spend an evening on.
+          If the answer to the second is yes, ask why. Sometimes it is fine. Sometimes it is the bug
+          you would otherwise spend an evening on.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -330,9 +330,9 @@ picotool load dist/44444444-4444-4444-8444-444444444444.uf2
             <strong>Read the existing microfirmwares.</strong>
             <p>
               Several are open source, and they are the best available answer to "what does a real
-              one look like?" — a drives emulator, a ROM emulator, an RTC emulator, a web browser, a
-              MIDI bridge. Pointing your assistant at a repository that already solves a similar
-              problem beats describing the problem from scratch. You can find them from the
+              one look like?". There is a drives emulator, a ROM emulator, an RTC emulator, a web
+              browser, a MIDI bridge. Pointing your assistant at a repository that already solves a
+              similar problem beats describing the problem from scratch. You can find them from the
               <a href="/">store</a>, and the sources live under the
               <a href="https://github.com/sidecartridge" target="_blank" rel="noopener">sidecartridge
                 organisation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
@@ -344,10 +344,10 @@ picotool load dist/44444444-4444-4444-8444-444444444444.uf2
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/07-code-layout.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 7 — How the code is laid out</span>
+          <span>Step 7: How the code is laid out</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/09-test-and-debug.html">
-          <span>Step 9 — Test and debug</span>
+          <span>Step 9: Test and debug</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

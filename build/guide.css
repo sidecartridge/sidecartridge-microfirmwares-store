@@ -1,5 +1,5 @@
 /* ============================================================================
-   Build guide (EPIC-17) — components used only by the /build/ tutorial pages.
+   Build guide (EPIC-17). Components used only by the /build/ tutorial pages.
 
    Loaded AFTER /styles.css, which owns the brand tokens, the chrome (header,
    nav, footer) and the shared primitives this file deliberately reuses rather
@@ -107,7 +107,7 @@
 .guide-prose li > ul,
 .guide-prose li > ol { margin: 0.35rem 0 0.15rem; }
 
-/* inline code — distinct from the block form below */
+/* inline code, distinct from the block form below */
 .guide-prose code,
 .guide-prose kbd,
 .guide-callout code,

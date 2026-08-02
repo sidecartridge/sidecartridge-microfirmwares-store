@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 4 — Install Booster — Atari ST — SidecarTridge</title>
+  <title>Step 4: Install Booster (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="Flash the Booster bootloader onto your Raspberry Pi Pico W. Nothing else in this guide works until this is done." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/04-install-booster.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 4 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html" aria-current="step"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -90,8 +90,8 @@
         <h2>Install Booster.</h2>
         <p>
           Booster is the bootloader that owns the board and runs microfirmwares. Until it is
-          flashed, there is nothing on the device that knows how to load your app — so this has to
-          happen before your first build, not after it.
+          flashed, nothing on the device knows how to load your app, so this has to happen before
+          your first build rather than after it.
         </p>
       </div>
     </section>
@@ -101,17 +101,17 @@
       <section class="browser-section guide-prose">
         <h2>What Booster actually does for you</h2>
         <p>
-          It is easy to read "bootloader" and assume it is a formality. It is not — Booster provides
+          It is easy to read "bootloader" and assume it is a formality. It is not. Booster provides
           most of the infrastructure your microfirmware would otherwise have to implement itself:
         </p>
         <ul>
           <li><strong>Wi-Fi and networking</strong>, so your app does not have to bring up a network
             stack.</li>
-          <li><strong>A web interface</strong> for managing the device from a browser on your
-            phone or laptop.</li>
+          <li><strong>A web interface</strong> for managing the device from a browser on your phone
+            or laptop.</li>
           <li><strong>microSD access</strong>, with installed apps living in an <code>/apps</code>
             folder.</li>
-          <li><strong>App management</strong> — downloading, installing, updating and launching
+          <li><strong>App management</strong>: downloading, installing, updating and launching
             microfirmwares, including yours.</li>
           <li><strong>Over-the-air updates</strong> of itself.</li>
         </ul>
@@ -128,7 +128,7 @@
           <a href="https://github.com/sidecartridge/rp2-booster-bootloader" target="_blank"
             rel="noopener">rp2-booster-bootloader repository <i class="fas fa-up-right-from-square"
               aria-hidden="true"></i></a>.
-          There are two ways to install it; use whichever you find easier. Both do the same thing.
+          There are two ways to install it. Use whichever you find easier, they do the same thing.
         </p>
 
         <div class="guide-tabs">
@@ -154,8 +154,8 @@
           <div class="guide-tabpanel" data-tab-label="picotool">
             <p class="guide-tabpanel-title">picotool</p>
             <p>
-              If you already installed <code>picotool</code> in step 3, use it — it is faster and
-              it verifies what it wrote:
+              If you already installed <code>picotool</code> in step 3, use it. It is faster and it
+              verifies what it wrote:
             </p>
             <div class="guide-code">
               <div class="guide-code-head">
@@ -164,8 +164,8 @@
               <pre><code>picotool load -xv /path/to/rp-booster-&lt;version&gt;.uf2</code></pre>
             </div>
             <p>
-              This is the same command shape you will use for your own builds in step 6, so it is
-              worth getting comfortable with it now.
+              This is the same command shape you will use for your own builds in step 6, so getting
+              comfortable with it now pays off.
             </p>
           </div>
         </div>
@@ -176,7 +176,7 @@
             <strong>Two different files.</strong>
             <p>
               The drag-and-drop route uses the <code>-full</code> image. Match the route to the
-              file — grabbing the wrong one is the most common stumble here.
+              file. Grabbing the wrong one is the most common stumble here.
             </p>
           </div>
         </div>
@@ -208,8 +208,8 @@
             <strong>Install something from the catalogue before you write anything.</strong>
             <p>
               Pick any app from Booster's list and install it. It proves the board, the microSD
-              card, Wi-Fi and the catalogue connection all work — and it means that when your own
-              app misbehaves in step 6, you already know the platform underneath it is fine.
+              card, Wi-Fi and the catalogue connection all work. When your own app misbehaves in
+              step 6, you will already know the platform underneath it is fine.
             </p>
           </div>
         </div>
@@ -234,7 +234,7 @@
               <tr>
                 <td>Active app</td>
                 <td>1152 KB</td>
-                <td>The microfirmware currently running — yours, when you flash it.</td>
+                <td>The microfirmware currently running, which will be yours once you flash it.</td>
               </tr>
               <tr>
                 <td>Per-app settings</td>
@@ -256,24 +256,24 @@
           </table>
         </div>
         <p>
-          Up to thirty apps can be installed at once. The 1152 KB figure is the one to remember: it
+          Up to thirty apps can be installed at once. The 1152 KB figure is the one to remember. It
           is a lot of room for C code, and it is why the C half is where your logic belongs.
         </p>
         <p>
-          The catalogue Booster reads from is switchable — a stable channel by default, with
-          pre-release channels and custom URLs available. Step 10 comes back to this when you
-          publish, because the channel names in Booster and the channel names in this store are not
-          spelled the same way.
+          The catalogue Booster reads from is switchable, with a stable channel by default plus
+          pre-release channels and custom URLs. Step 10 comes back to this when you publish, because
+          the channel names in Booster and the channel names in this store are not spelled the same
+          way.
         </p>
       </section>
 
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/03-toolchain.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 3 — Set up the toolchain</span>
+          <span>Step 3: Set up the toolchain</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/05-pick-a-template.html">
-          <span>Step 5 — Pick a template</span>
+          <span>Step 5: Pick a template</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

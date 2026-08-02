@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 9 — Test and debug — Atari ST — SidecarTridge</title>
+  <title>Step 9: Test and debug (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="Serial output over the debug probe, DPRINTF, the Cortex-Debug setup, and what to try when the screen stays black." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/09-test-and-debug.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 9 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html" aria-current="step"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -101,12 +101,12 @@
         <h2>Printf, but over a wire</h2>
         <p>
           The C half prints diagnostics with <code>DPRINTF</code>. There is no console attached to a
-          microcontroller, so that output goes out of the serial port — and you need something at
-          the other end of it.
+          microcontroller, so that output goes out of the serial port, and you need something at the
+          other end of it.
         </p>
         <p>
           That something is the <strong>Raspberry Pi Debug Probe</strong>, wired to the board's UART
-          pins: TX, RX and ground. Once connected, open the serial port on your computer and your
+          pins: TX, RX, ground. Once connected, open the serial port on your computer and your
           <code>DPRINTF</code> lines appear as your app runs.
         </p>
 
@@ -115,16 +115,16 @@
           <div class="guide-callout-body">
             <strong>This is the single biggest quality-of-life change in the whole track.</strong>
             <p>
-              Without it you are inferring behaviour from what appears on the Atari's screen. With
-              it you have a log. If you have been putting off buying the probe, this is the step
-              where it pays for itself.
+              Without it you are inferring behaviour from what appears on the Atari's screen. With it
+              you have a log. If you have been putting off buying the probe, this is the step where
+              it pays for itself.
             </p>
           </div>
         </div>
 
         <p>
           Remember to build with <code>debug</code> rather than <code>release</code> while you are
-          working — that is the second argument to <code>build.sh</code>, and it is what keeps the
+          working. That is the second argument to <code>build.sh</code>, and it is what keeps the
           diagnostics in.
         </p>
       </section>
@@ -134,7 +134,7 @@
         <p>
           The templates ship a <code>.vscode/</code> directory with a <code>launch.json</code> set
           up for <strong>Cortex-Debug</strong>, which drives the probe through OpenOCD. With the
-          extension installed (step 3) and the probe connected, you get real breakpoints, stepping
+          extension installed in step 3 and the probe connected, you get real breakpoints, stepping
           and variable inspection on the microcontroller.
         </p>
         <p>
@@ -149,8 +149,8 @@
 PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
         </div>
         <p>
-          If the debugger fails to launch, these are the first thing to check — the error messages
-          are not helpful about it.
+          If the debugger fails to launch, these are the first thing to check. The error messages are
+          not helpful about it.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -159,7 +159,7 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
             <strong>Debugging changes timing.</strong>
             <p>
               Halting at a breakpoint stops the microcontroller answering the Atari's bus reads. The
-              Atari does not pause politely and wait — expect the host machine to misbehave while
+              Atari does not pause politely and wait, so expect the host machine to misbehave while
               you are stopped. This is normal, and it is why <code>DPRINTF</code> logging is often
               more useful than breakpoints for anything involving the emulation path.
             </p>
@@ -177,7 +177,7 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
             already control.</li>
           <li><strong>Bisect by building.</strong> Comment out half of what you added, rebuild,
             reload. Slow, but it always converges.</li>
-          <li><strong>The SELECT button</strong> on the board is a physical input you can read —
+          <li><strong>The SELECT button</strong> on the board is a physical input you can read,
             useful as a manual trigger when you cannot type.</li>
           <li><strong>Hold <kbd>SHIFT</kbd> at boot</strong> to skip straight to GEMDOS. This is
             your way back when a build hangs the machine.</li>
@@ -202,7 +202,7 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
               <tr>
                 <td>Does the unmodified template still run?</td>
                 <td>Reflash the step 6 build. If that fails too, the problem is the board or
-                  Booster, not your code — and you have just saved yourself hours.</td>
+                  Booster rather than your code, and you have just saved yourself hours.</td>
               </tr>
               <tr>
                 <td>Are you blocking in the main loop?</td>
@@ -221,8 +221,8 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
               </tr>
               <tr>
                 <td>Is the microSD card present and readable?</td>
-                <td>Code that assumes a mounted filesystem fails early and silently when it is
-                  not there.</td>
+                <td>Code that assumes a mounted filesystem fails early and silently when it is not
+                  there.</td>
               </tr>
               <tr>
                 <td>Is Booster still installed?</td>
@@ -239,7 +239,7 @@ PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
         <p>
           <strong>Hatari</strong> and <strong>STEEM</strong> emulate the Atari ST. They do not
           emulate the SidecarTridge board, so they cannot run your microfirmware. What they are good
-          for is Atari-side logic you can exercise independently — screen layout, keyboard handling,
+          for is Atari-side logic you can exercise independently: screen layout, keyboard handling,
           anything that does not depend on the board answering.
         </p>
         <p>
@@ -264,7 +264,7 @@ What I changed since it last worked:
 &lt;the diff, or a description&gt;
 
 DPRINTF output over the debug probe:
-&lt;paste it — including where it stops&gt;
+&lt;paste it, including where it stops&gt;
 
 Already ruled out:
 - the unmodified template still runs correctly
@@ -285,10 +285,10 @@ I instrument next?</code></pre>
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/08-build-with-claude-code.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 8 — Build your idea with Claude Code</span>
+          <span>Step 8: Build your idea with Claude Code</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/10-publish-to-the-store.html">
-          <span>Step 10 — Publish to the store</span>
+          <span>Step 10: Publish to the store</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

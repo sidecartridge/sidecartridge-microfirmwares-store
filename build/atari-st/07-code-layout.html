@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Step 7 — How the code is laid out — Atari ST — SidecarTridge</title>
+  <title>Step 7: How the code is laid out (Atari ST) | SidecarTridge</title>
   <meta name="description"
     content="The two source trees, the shared memory map between the Atari ST and the microcontroller, and the hard limits you must design around." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/07-code-layout.html" />
@@ -62,25 +62,25 @@
       <span class="guide-rail-label">Step 7 of 10</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
-          aria-label="Step 1 — What a microfirmware is">1</a>
+          aria-label="Step 1: What a microfirmware is">1</a>
         <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
-          aria-label="Step 2 — What you need">2</a>
+          aria-label="Step 2: What you need">2</a>
         <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
-          aria-label="Step 3 — Set up the toolchain">3</a>
+          aria-label="Step 3: Set up the toolchain">3</a>
         <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
-          aria-label="Step 4 — Install Booster">4</a>
+          aria-label="Step 4: Install Booster">4</a>
         <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
-          aria-label="Step 5 — Pick a template">5</a>
+          aria-label="Step 5: Pick a template">5</a>
         <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
-          aria-label="Step 6 — Your first build">6</a>
+          aria-label="Step 6: Your first build">6</a>
         <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html" aria-current="step"
-          aria-label="Step 7 — How the code is laid out">7</a>
+          aria-label="Step 7: How the code is laid out">7</a>
         <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
-          aria-label="Step 8 — Build your idea with Claude Code">8</a>
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
         <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
-          aria-label="Step 9 — Test and debug">9</a>
+          aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
-          aria-label="Step 10 — Publish to the store">10</a>
+          aria-label="Step 10: Publish to the store">10</a>
       </span>
     </nav>
 
@@ -89,7 +89,7 @@
         <span class="browser-kicker">Step 7 · Atari ST</span>
         <h2>How the code is laid out.</h2>
         <p>
-          The template is running. Now find out what is in it — which half is which, how they share
+          The template is running. Now find out what is in it: which half is which, how they share
           memory, and which limits you have to design around rather than discover at three in the
           morning.
         </p>
@@ -108,12 +108,12 @@
           <div class="guide-code-head">
             <span class="guide-code-label">project layout</span>
           </div>
-          <pre><code>rp/                     C — runs on the RP2040 / RP235x
+          <pre><code>rp/                     C, runs on the RP2040 / RP235x
   src/
     main.c              entry point and the main loop
     chandler.c          command handler: drains the ring, dispatches
     commemul.c/.pio     the command channel
-    romemul.c/.pio      ROM emulation — do not touch
+    romemul.c/.pio      ROM emulation, do not touch
     sdcard.c            FatFs on the microSD card
     network.c           Wi-Fi
     term.c              terminal rendering
@@ -121,7 +121,7 @@
   CMakeLists.txt
   build.sh
 
-target/atarist/         68000 assembly — runs on the Atari
+target/atarist/         68000 assembly, runs on the Atari
   src/
     inc/                helper macros
     main.s              boot and dispatch (2 KB)
@@ -134,7 +134,7 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
         </div>
 
         <p>
-          <code>rp/</code> is portable — it is the part that would survive a port to another host
+          <code>rp/</code> is portable. It is the part that would survive a port to another host
           computer. <code>target/atarist/</code> is Atari-specific by definition. If another
           platform is ever supported, it appears alongside as a sibling directory, and the C half
           barely changes.
@@ -157,43 +157,43 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
       <section class="browser-section guide-prose">
         <h2>The shared memory map</h2>
         <p>
-          This is the part worth understanding properly, because it is how your two halves actually
-          communicate. One region of memory has two addresses: the Atari sees it in its cartridge
-          address space, the microcontroller sees it in its RAM.
+          Understand this part properly, because it is how your two halves actually communicate. One
+          region of memory has two addresses: the Atari sees it in its cartridge address space, the
+          microcontroller sees it in its RAM.
         </p>
 
         <figure class="guide-figure">
           <svg class="guide-diagram" viewBox="0 0 760 330" role="img"
-            aria-label="Memory map: the Atari address $FA0000 corresponds to microcontroller address 0x20030000 and holds 8 KB of cartridge code, split into a 2 KB boot section (main.s) and a 6 KB user section (userfw.s). $FA2000 maps to 0x20032000 and holds a 4-byte command sentinel. $FA2004 maps to 0x20032004 and holds a 4-byte token reply. $FAE0C0 maps to 0x2003E0C0 and holds an 8000-byte framebuffer.">
+            aria-label="Memory map. The Atari address $FA0000 corresponds to microcontroller address 0x20030000 and holds 8 KB of cartridge code, split into a 2 KB boot section in main.s and a 6 KB user section in userfw.s. $FA2000 maps to 0x20032000 and holds a 4-byte command sentinel. $FA2004 maps to 0x20032004 and holds a 4-byte token reply. $FAE0C0 maps to 0x2003E0C0 and holds an 8000-byte framebuffer.">
             <text class="d-sub" x="20" y="22">Atari ST sees</text>
             <text class="d-sub" x="590" y="22">microcontroller sees</text>
 
             <rect class="d-box-accent" x="150" y="34" width="420" height="96" rx="4" />
-            <text class="d-label" x="166" y="55">Cartridge code — 8 KB</text>
+            <text class="d-label" x="166" y="55">Cartridge code, 8 KB</text>
             <rect class="d-box" x="166" y="64" width="388" height="26" rx="3" />
-            <text class="d-mono" x="180" y="82">main.s — boot and dispatch (2 KB)</text>
+            <text class="d-mono" x="180" y="82">main.s, boot and dispatch (2 KB)</text>
             <rect class="d-box" x="166" y="94" width="388" height="26" rx="3" />
-            <text class="d-mono" x="180" y="112">userfw.s — your code (6 KB)</text>
+            <text class="d-mono" x="180" y="112">userfw.s, your code (6 KB)</text>
             <text class="d-mono" x="20" y="55">$FA0000</text>
             <text class="d-mono" x="590" y="55">0x20030000</text>
 
             <rect class="d-box" x="150" y="140" width="420" height="38" rx="4" />
-            <text class="d-label" x="166" y="164">Command sentinel — 4 bytes</text>
+            <text class="d-label" x="166" y="164">Command sentinel, 4 bytes</text>
             <text class="d-mono" x="20" y="164">$FA2000</text>
             <text class="d-mono" x="590" y="164">0x20032000</text>
 
             <rect class="d-box" x="150" y="186" width="420" height="38" rx="4" />
-            <text class="d-label" x="166" y="210">Token reply — 4 bytes</text>
+            <text class="d-label" x="166" y="210">Token reply, 4 bytes</text>
             <text class="d-mono" x="20" y="210">$FA2004</text>
             <text class="d-mono" x="590" y="210">0x20032004</text>
 
             <rect class="d-box" x="150" y="232" width="420" height="62" rx="4" />
-            <text class="d-label" x="166" y="256">Framebuffer — 8000 bytes</text>
+            <text class="d-label" x="166" y="256">Framebuffer, 8000 bytes</text>
             <text class="d-sub" x="166" y="276">used by the framebuffer template</text>
             <text class="d-mono" x="20" y="256">$FAE0C0</text>
             <text class="d-mono" x="590" y="256">0x2003E0C0</text>
 
-            <text class="d-sub" x="150" y="316">Not to scale — the gaps between these regions are much larger than shown.</text>
+            <text class="d-sub" x="150" y="316">Not to scale. The gaps between these regions are much larger than shown.</text>
           </svg>
           <figcaption>
             The same bytes, two addresses. Writing at <code>0x20032000</code> on the microcontroller
@@ -219,7 +219,7 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
 
         <div class="guide-code">
           <div class="guide-code-head">
-            <span class="guide-code-label">rp/src/main.c — setup</span>
+            <span class="guide-code-label">rp/src/main.c, setup</span>
           </div>
           <pre><code>init_romemul(false);
 commemul_init();
@@ -229,7 +229,7 @@ chandler_addCB(my_command_handler);</code></pre>
 
         <div class="guide-code">
           <div class="guide-code-head">
-            <span class="guide-code-label">rp/src/main.c — the main loop</span>
+            <span class="guide-code-label">rp/src/main.c, the main loop</span>
           </div>
           <pre><code>while (keepActive) {
   chandler_loop();   // drain the ring, dispatch commands
@@ -239,7 +239,7 @@ chandler_addCB(my_command_handler);</code></pre>
         </div>
 
         <p>
-          Commands are <strong>polled, not interrupt-driven</strong> — that changed in v1.1.0. It
+          Commands are <strong>polled, not interrupt-driven</strong>. That changed in v1.1.0. It
           means your main loop has to keep turning: block inside it and the Atari stops being
           answered. Long work needs to be broken into pieces across iterations.
         </p>
@@ -252,9 +252,9 @@ chandler_addCB(my_command_handler);</code></pre>
           <pre><code>send_sync APP_TERMINAL_KEYSTROKE, 4</code></pre>
         </div>
         <p>
-          It expands to set up registers and call the routine that talks to the board. The pattern
-          is always the same: the Atari raises a command, the microcontroller notices it in
-          <code>chandler_loop()</code>, does the work, and writes back into shared memory.
+          It expands to set up registers and call the routine that talks to the board. The pattern is
+          always the same. The Atari raises a command, the microcontroller notices it in
+          <code>chandler_loop()</code>, does the work, then writes back into shared memory.
         </p>
       </section>
 
@@ -282,14 +282,13 @@ chandler_addCB(my_command_handler);</code></pre>
         <h3>128 KB of the microcontroller's RAM is spoken for</h3>
         <p>
           The chip has 264 KB, and 128 KB of it is reserved as the shared region the Atari reads.
-          That leaves roughly half for your application. Generous compared to 6 KB, but not
-          unlimited.
+          That leaves roughly half for your application. Generous compared to 6 KB, not unlimited.
         </p>
 
         <h3>Flash writes are not free</h3>
         <p>
           Writing to flash has a limited lifetime and cannot sit on the critical path of ROM
-          emulation. Save settings at deliberate moments — not every frame, not in a loop.
+          emulation. Save settings at deliberate moments, not every frame and not in a loop.
         </p>
 
         <div class="guide-callout guide-callout-note">
@@ -297,9 +296,9 @@ chandler_addCB(my_command_handler);</code></pre>
           <div class="guide-callout-body">
             <strong>Where these limits come from.</strong>
             <p>
-              All four trace back to a handful of hardware realities — the RP2040's internal bus
-              contention, the number of usable GPIOs, and the 500 ns window the Atari gives a
-              cartridge to answer. The
+              All four trace back to a handful of hardware realities: the RP2040's internal bus
+              contention, the number of usable GPIOs, the 500 ns window the Atari gives a cartridge
+              to answer. The
               <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/architecture_and_design/"
                 target="_blank" rel="noopener">architecture and design documentation <i
                   class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
@@ -345,10 +344,10 @@ if (sdcardErr != SDCARD_INIT_OK) {
       <nav class="browse-pager guide-pager" aria-label="Step navigation">
         <a class="guide-pager-link" href="/build/atari-st/06-first-build.html">
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
-          <span>Step 6 — Your first build</span>
+          <span>Step 6: Your first build</span>
         </a>
         <a class="guide-pager-link" href="/build/atari-st/08-build-with-claude-code.html">
-          <span>Step 8 — Build your idea with Claude Code</span>
+          <span>Step 8: Build your idea with Claude Code</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>

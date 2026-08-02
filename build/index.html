@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>Build a microfirmware — SidecarTridge Microfirmware Store</title>
+  <title>Build a microfirmware | SidecarTridge Microfirmware Store</title>
   <meta name="description"
-    content="Start here: pick your platform, then follow a step-by-step guide to building your own microfirmware for the SidecarTridge Multi-device — written for developers new to the hardware." />
+    content="Start here: pick your platform, then follow a step-by-step guide to building your own microfirmware for the SidecarTridge Multi-device. Written for developers new to the hardware." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/" />
 
   <!-- Pure.css (CDN) -->
@@ -60,7 +60,7 @@
         <span class="browser-kicker">Build a microfirmware</span>
         <h2>Make something that runs on real hardware.</h2>
         <p>
-          This store lists microfirmwares — the apps that run on a
+          This store lists microfirmwares, the apps that run on a
           <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
           Multi-device board plugged into a vintage computer. This guide is about writing one
           yourself, starting from a template rather than a blank page.
@@ -76,12 +76,12 @@
     <div class="browser-shell">
 
       <section class="browser-section guide-prose">
-        <h2>Step 0 — pick your platform</h2>
+        <h2>Step 0: pick your platform</h2>
         <p>
           Every SidecarTridge board does the same fundamental thing, but the computer on the other
-          end of the cartridge port changes almost everything practical about the work: which
-          toolchain you install, which assembler the target half is written in, which template you
-          start from, and how you test it. So the guide splits into one <strong>track</strong> per
+          end of the cartridge port changes almost everything practical about the work. It decides
+          which toolchain you install, which assembler the target half is written in, which template
+          you start from, how you test it. So the guide splits into one <strong>track</strong> per
           platform, and you choose yours before you install anything.
         </p>
       </section>
@@ -116,8 +116,8 @@
             <strong>Atari ST is the only track today.</strong>
             <p>
               It is the only platform with a published catalogue in this store, so it is the only
-              one with a guide. When another platform ships, it gets its own track here — the
-              shared ideas below will carry over, the commands will not.
+              one with a guide. When another platform ships, it gets its own track here. The shared
+              ideas below will carry over, the commands will not.
             </p>
           </div>
         </div>
@@ -132,29 +132,29 @@
         <p>
           One half is C, compiled for the Raspberry Pi Pico microcontroller on the board. The other
           half is a small program in the host computer's native code, living in the address space
-          the board pretends to be. The two talk to each other; most of your logic belongs in the C
-          half, where you have room to work.
+          the board pretends to be. The two talk to each other, and most of your logic belongs in
+          the C half, where you have room to work.
         </p>
 
         <h3>2. The board pretends to be a ROM cartridge</h3>
         <p>
           The host computer thinks it is reading a memory chip. The microcontroller answers those
-          reads fast enough that the illusion holds. You never write that emulation yourself — it
-          is already done, and it is the part you must be careful not to disturb.
+          reads fast enough that the illusion holds. You never write that emulation yourself. It is
+          already done, and it is the part you must be careful not to disturb.
         </p>
 
         <h3>3. Booster runs your app</h3>
         <p>
           You do not ship a whole firmware image. A bootloader called <strong>Booster</strong> owns
-          the device — Wi-Fi, the web interface, the microSD card, and installing and launching
-          apps. Your microfirmware is one app it can load, which is why it is a <em>micro</em>firmware.
+          the device: Wi-Fi, the web interface, the microSD card, installing and launching apps.
+          Your microfirmware is one app it can load, which is why it is a <em>micro</em>firmware.
         </p>
 
         <h3>4. It reaches users through this store</h3>
         <p>
           Booster fetches a catalogue of available apps over the network. That catalogue is what
           this site publishes. Getting listed is the last step of every track, and it is the same
-          process for everyone — documented in
+          process for everyone, documented in
           <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
             target="_blank" rel="noopener">CREATORS.md <i class="fas fa-up-right-from-square"
               aria-hidden="true"></i></a>.
@@ -164,30 +164,32 @@
       <section class="browser-section guide-prose">
         <h2>You will want the reference docs too</h2>
         <p>
-          This guide is the walked path: it tells you what to type and why, in order. It does not
+          This guide is the walked path. It tells you what to type and why, in order. It does not
           replace the reference documentation, which goes far deeper into how the hardware actually
           works. Keep it open in another tab.
         </p>
         <ul>
           <li>
             <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank"
-              rel="noopener">Programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-            — the full development environment and project structure.
+              rel="noopener">Programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+            the full development environment and project structure.
           </li>
           <li>
             <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank"
-              rel="noopener">Microfirmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-            — what they are and how users install them.
+              rel="noopener">Microfirmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+            what they are and how users install them.
           </li>
           <li>
             <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/architecture_and_design/" target="_blank"
-              rel="noopener">Architecture and design <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-            — memory, flash, bus contention, the design constraints behind the rules you will follow.
+              rel="noopener">Architecture and design <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+            covering memory, flash and bus contention, the constraints behind the rules you will
+            follow.
           </li>
           <li>
             <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/" target="_blank"
-              rel="noopener">Hardware interface <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
-            — pinouts, timing and the PIO state machine, if you want to know how the illusion works.
+              rel="noopener">Hardware interface <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+            pinouts and timing and the PIO state machine, if you want to know how the illusion
+            works.
           </li>
         </ul>
       </section>
