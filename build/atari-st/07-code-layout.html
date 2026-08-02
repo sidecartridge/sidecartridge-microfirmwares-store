@@ -109,7 +109,7 @@
           <div class="guide-code-head">
             <span class="guide-code-label">project layout</span>
           </div>
-          <pre><code>rp/                     C, runs on the RP2040 / RP235x
+          <pre><code>rp/                     C, runs on the RP2040 (Pico W)
   src/
     main.c              entry point and the main loop
     chandler.c          command handler: drains the ring, dispatches
@@ -136,7 +136,7 @@ dist/                   build output: &lt;uuid&gt;.uf2 / .json / .md5
 
         <p>
           <code>rp/</code> is portable. It is the part that would survive a port to another host
-          computer, and it targets the RP2040 or RP235x described in Raspberry Pi's
+          computer, and it targets the RP2040 described in Raspberry Pi's
           <a href="https://www.raspberrypi.com/documentation/microcontrollers/microcontroller-chips.html" target="_blank" rel="noopener">microcontroller chips documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>. <code>target/atarist/</code> is Atari-specific by definition. If another
           platform is ever supported, it appears alongside as a sibling directory, and the C half
           barely changes.

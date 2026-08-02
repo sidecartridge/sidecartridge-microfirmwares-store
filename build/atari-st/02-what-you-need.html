@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Step 2: What you need (Atari ST) | SidecarTridge</title>
   <meta name="description"
-    content="The hardware and software checklist for building an Atari ST microfirmware: board, Pico W, microSD, debug probe, and the tools to install." />
+    content="The hardware and software checklist for building an Atari ST microfirmware. It must be a Raspberry Pi Pico W, not a plain Pico and not a Pico 2 W." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/02-what-you-need.html" />
 
   <!-- Pure.css (CDN) -->
@@ -126,10 +126,10 @@
           <li class="guide-check">
             <input type="checkbox" id="hw-pico">
             <label class="guide-check-body" for="hw-pico">
-              <strong>A Raspberry Pi Pico W or Pico 2W</strong>
-              <span>The microcontroller module that sits on the board. The <em>W</em> matters,
-                because Booster needs Wi-Fi for its web interface and for fetching the app
-                catalogue. Raspberry Pi documents the whole family on the
+              <strong>A Raspberry Pi Pico W</strong>
+              <span>The microcontroller module that sits on the board. It has to be the
+                <strong>Pico W</strong> exactly. Not the plain Pico, and not the Pico 2 W. See the
+                warning below before you buy anything. Raspberry Pi document the family on the
                 <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
             </label>
           </li>
@@ -163,6 +163,28 @@
             </label>
           </li>
         </ul>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>It must be a Pico W. No other Pico works.</strong>
+            <p>
+              This is the easiest way to waste money on this list, because the boards look almost
+              identical and the names are one character apart.
+            </p>
+            <ul>
+              <li><strong>Raspberry Pi Pico W</strong> is the supported module. Buy this one.</li>
+              <li><strong>Raspberry Pi Pico</strong>, without the W, has no Wi-Fi. Booster needs it
+                for the web interface and for fetching the app catalogue.</li>
+              <li><strong>Raspberry Pi Pico 2 W</strong> is a different chip, the RP2350, and it is
+                <strong>not supported</strong>. Newer is not better here.</li>
+            </ul>
+            <p>
+              Check the silkscreen on the board itself rather than trusting the listing you bought
+              it from.
+            </p>
+          </div>
+        </div>
 
         <div class="guide-callout guide-callout-note">
           <i class="fas fa-circle-info" aria-hidden="true"></i>
