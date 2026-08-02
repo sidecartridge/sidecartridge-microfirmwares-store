@@ -164,10 +164,18 @@
 
         <h3>The 68000 half, on the Atari</h3>
         <p>
-          A small program in 68000 assembly that the Atari executes directly. It is tiny, six
-          kilobytes, and it lives under real constraints. The most surprising one is that
-          <strong>it cannot use the Atari's normal RAM</strong>. Its job is usually to collect input,
-          ask the C half to do the work, then put the result on screen.
+          A small program in 68000 assembly that the Atari executes directly. Here is the part
+          people miss, and everything awkward about this half follows from it:
+          <strong>your code runs in place, from the ROM cartridge address space</strong> that the
+          board is pretending to be. It is never copied into memory first. The Atari is executing
+          instructions straight out of the region the microcontroller is answering for.
+        </p>
+        <p>
+          Two consequences. It is tiny, six kilobytes, because that address space is fixed and
+          shared. And <strong>it cannot use the Atari's normal RAM</strong>, so anything it needs to
+          keep either lives in the address space it already has, or gets pushed across to the
+          microcontroller. Its job is usually to collect input, ask the C half to do the work, then
+          put the result on screen.
         </p>
 
         <div class="guide-callout guide-callout-tip">

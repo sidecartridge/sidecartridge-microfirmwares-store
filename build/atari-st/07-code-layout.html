@@ -271,10 +271,11 @@ chandler_addCB(my_command_handler);</code></pre>
 
         <h3>The Atari side cannot use normal RAM</h3>
         <p>
-          Your cartridge code runs from the ROM address space, and it cannot rely on the Atari's
-          ordinary RAM being available to it. Anything that needs storage either lives in the
-          address space you already have, or gets pushed across to the microcontroller's shared
-          memory. This surprises everyone once.
+          Your cartridge code executes in place, out of the ROM address space above, and is never
+          copied into memory first. That is why it cannot rely on the Atari's ordinary RAM being
+          available to it. Anything that needs storage either lives in the address space you
+          already have, or gets pushed across to the microcontroller's shared memory. This
+          surprises everyone once.
         </p>
 
         <h3>Six kilobytes of Atari-side code</h3>

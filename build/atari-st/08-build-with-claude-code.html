@@ -159,7 +159,9 @@ ARCHITECTURE
 - The app has two halves that ship together.
 - rp/ is C, compiled with the Raspberry Pi Pico SDK, running on the
   microcontroller. Almost all logic belongs here.
-- target/atarist/ is 68000 assembly running on the Atari itself.
+- target/atarist/ is 68000 assembly running on the Atari itself. It executes
+  in place from the ROM cartridge address space the board emulates; it is
+  never loaded into RAM.
 - The board emulates a ROM cartridge. The Atari reads addresses; the
   microcontroller answers them fast enough that the illusion holds.
 - A bootloader called Booster owns the device and launches this app.
