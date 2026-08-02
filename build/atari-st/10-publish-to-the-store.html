@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 10: Publish to the store (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="Generate a real UUID, make a release build, host your apps.json, and open the pull request that lists your microfirmware here." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/10-publish-to-the-store.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 10 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html" aria-current="step"
+          aria-label="Step 10: Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 10 · Atari ST</span>
+        <h2>Publish to the store.</h2>
+        <p>
+          Your microfirmware works on your board. This last step makes it something other people's
+          boards can find, which closes the loop back to the catalogue you are reading this on.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>Give it a real UUID</h2>
+        <p>
+          Everything so far used the shared development UUID. That has to change before anything
+          leaves your desk. Two published apps with the same UUID fight over the same settings
+          sector, and the catalogue cannot tell them apart.
+        </p>
+        <p>Generate a UUIDv4 and keep it. It identifies this app for the rest of its life.</p>
+
+        <div class="guide-tabs">
+          <div class="guide-tabpanel" data-tab-label="macOS / Linux">
+            <p class="guide-tabpanel-title">macOS / Linux</p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Terminal</span>
+              </div>
+              <pre><code>uuidgen
+# or, if you would rather not care which tools are installed:
+python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
+            </div>
+          </div>
+          <div class="guide-tabpanel" data-tab-label="Windows (PowerShell)">
+            <p class="guide-tabpanel-title">Windows (PowerShell)</p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">PowerShell</span>
+              </div>
+              <pre><code>[guid]::NewGuid().ToString()</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Write it down somewhere permanent.</strong>
+            <p>
+              Every future release of this app must use the same UUID. That is how an update is
+              recognised as an update rather than a different app. Losing it means your users get a
+              stranger instead of a new version. Put it in your README.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Make a release build</h2>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>./build.sh pico_w release &lt;YOUR UUID4 HERE&gt;</code></pre>
+        </div>
+        <p>
+          Note both changes from step 6: <code>release</code> instead of <code>debug</code>, and
+          your own UUID instead of the development one. You get the same three files in
+          <code>dist/</code>, now named after your UUID:
+        </p>
+        <ul>
+          <li><code>&lt;uuid&gt;-&lt;version&gt;.uf2</code>, the firmware people download and
+            install.</li>
+          <li><code>&lt;uuid&gt;.json</code>, your app's descriptor, filled in and ready to
+            publish.</li>
+          <li><code>rp.uf2.md5sum</code>, the checksum, already copied into the descriptor.</li>
+        </ul>
+        <p>
+          <strong>Flash this build and test it once more.</strong> A release build is not identical
+          to a debug build, and "it worked in debug" has surprised people before.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Describe your app in desc/app.json</h2>
+        <p>
+          That <code>&lt;uuid&gt;.json</code> in <code>dist/</code> is not written by hand. It is
+          generated from <code>desc/app.json</code> in your repository, and if you have not edited
+          that file yet then what you just built still describes itself as the template.
+        </p>
+        <p>
+          The template ships two files in
+          <a href="https://github.com/sidecartridge/md-microfirmware-template/tree/main/desc" target="_blank" rel="noopener">its <code>desc/</code> folder <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+          <code>app.json.template</code> is the blank form. <code>app.json</code> is the working
+          copy that <code>build.sh</code> actually reads, and the one you edit.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Leave three placeholders alone.</strong>
+            <p>
+              <code>&lt;APP_UUID&gt;</code>, <code>&lt;APP_VERSION&gt;</code> and
+              <code>&lt;BINARY_MD5_HASH&gt;</code> are filled in by <code>build.sh</code> every time
+              it runs. Hard-code them and they go stale the moment you cut a new version, which is
+              exactly when a wrong checksum does the most damage.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Who fills it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>name</code>, <code>description</code></td>
+                <td>You. This is what a visitor reads in the store.</td>
+              </tr>
+              <tr>
+                <td><code>image</code></td>
+                <td>You. A 256x256 PNG works well. Optional.</td>
+              </tr>
+              <tr>
+                <td><code>tags</code></td>
+                <td>You. Short words a visitor might filter by, such as
+                  <code>Emulation</code> or <code>Utility</code>.</td>
+              </tr>
+              <tr>
+                <td><code>devices</code></td>
+                <td>You. <code>ST</code>, <code>STE</code>, <code>MegaST</code>,
+                  <code>MegaSTE</code>. The store normalises the spelling.</td>
+              </tr>
+              <tr>
+                <td><code>binary</code></td>
+                <td>You, but write it with the placeholders. See below.</td>
+              </tr>
+              <tr>
+                <td><code>uuid</code>, <code>version</code>, <code>md5</code></td>
+                <td><code>build.sh</code>. The version comes from <code>version.txt</code>, the
+                  checksum from the binary it just built.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>The binary URL is templated too</h3>
+        <p>
+          The built firmware is named <code>&lt;uuid&gt;-&lt;version&gt;.uf2</code>, so the URL that
+          points at it has to carry the version. Write the placeholders and let the build fill them,
+          and the URL stays correct across every release without you touching it:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">desc/app.json</span>
+          </div>
+          <pre><code>{
+  "uuid": "&lt;APP_UUID&gt;",
+  "name": "My Microfirmware",
+  "description": "What it does, in one sentence.",
+  "image": "https://example.com/my-app-256.png",
+  "tags": [
+    "Utility"
+  ],
+  "devices": [
+    "ST",
+    "STE",
+    "MegaST",
+    "MegaSTE"
+  ],
+  "binary": "https://example.com/downloads/&lt;APP_UUID&gt;-&lt;APP_VERSION&gt;.uf2",
+  "md5": "&lt;BINARY_MD5_HASH&gt;",
+  "version": "&lt;APP_VERSION&gt;"
+}</code></pre>
+        </div>
+        <p>
+          Bump <code>version.txt</code>, rebuild, and both the filename and the URL follow.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>build.sh refuses to run without it.</strong>
+            <p>
+              If <code>desc/app.json</code> is missing, the build stops and tells you to create one.
+              It never invents a descriptor for you.
+            </p>
+          </div>
+        </div>
+
+        <h3>From one descriptor to a catalogue</h3>
+        <p>
+          Your <code>apps.json</code> is a list of descriptors under an <code>apps</code> key. One
+          app, one entry, exactly as <code>build.sh</code> produced it:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">apps.json</span>
+          </div>
+          <pre><code>{
+  "apps": [
+    { ... the contents of dist/&lt;uuid&gt;.json ... }
+  ]
+}</code></pre>
+        </div>
+        <p>
+          Publish more than one app and they sit side by side in that array. The store adds the
+          <code>creator</code> attribution when it folds your listing into the public catalogue, so
+          leave that out of your own file.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Host it, then get listed</h2>
+        <p>
+          Publishing is two separate things, and keeping them apart in your head helps:
+        </p>
+        <ol>
+          <li>
+            <strong>You host your own files.</strong> The <code>.uf2</code> and an
+            <code>apps.json</code> describing it live somewhere you control: a GitHub release, a web
+            host, anywhere reachable. You keep ownership of your own listing.
+          </li>
+          <li>
+            <strong>This store points at them.</strong> You open a pull request adding your origin
+            to the registry. A build job then folds your listing into the catalogue every device
+            downloads.
+          </li>
+        </ol>
+
+        <p>
+          The full contract for <code>apps.json</code>, every field, the rules, a worked example and
+          the exact pull request to open, is documented separately and kept up to date with the
+          build that validates it:
+        </p>
+        <p>
+          <a class="btn-primary"
+            href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
+            target="_blank" rel="noopener">
+            <i class="fas fa-paper-plane" aria-hidden="true"></i>
+            Read the creator guide
+          </a>
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>What to expect from the pull request.</strong>
+            <p>
+              An automated check validates your JSON strictly and reports on the PR. A maintainer
+              reviews it. Once merged, a scheduled job fetches your <code>apps.json</code>, folds it
+              into the consolidated catalogue and deploys, so your app appears without anyone
+              editing the catalogue by hand, alongside the apps already listed in the
+              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank" rel="noopener">upstream catalogue <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+            <p>
+              A couple of things the build does to your data are worth knowing before they surprise
+              you. Device names are normalised to a standard spelling, and descriptions are
+              sanitised. The creator guide explains both.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Pick a channel to publish to</h2>
+        <p>
+          Both this store and Booster have three channels, and since Booster
+          <strong>v2.3.0</strong> they are the same three files on this site. What you publish here
+          is what the Config page on somebody's device fetches.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Booster Config page</th>
+                <th>Fetches from this site</th>
+                <th>Publish here when</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Stable - Tested release (default)</code></td>
+                <td><code>/atari-st/apps.json</code></td>
+                <td>It is finished and you are happy for anyone to install it.</td>
+              </tr>
+              <tr>
+                <td><code>Testing - unstable releases</code></td>
+                <td><code>/atari-st/apps-test.json</code></td>
+                <td>You want testers on it before it goes out to everyone.</td>
+              </tr>
+              <tr>
+                <td><code>Development - Local development only</code></td>
+                <td><code>/atari-st/apps-dev.json</code></td>
+                <td>Never, for a finished app. This is the channel you have been developing on.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Come off the Development channel now.</strong>
+            <p>
+              You have been on it since step 4, because the development UUID's slot only exists
+              there. Your app has its own UUID now, so it no longer needs that slot, and staying on
+              Development leaves the unauthenticated deploy API open on your network.
+            </p>
+            <p>
+              Switch the Config page to Stable or Testing, and confirm the red
+              <strong>DEVELOPMENT MODE</strong> banner has gone.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>A custom URL sidesteps the channels entirely.</strong>
+            <p>
+              <code>Custom apps catalog URL</code> on the Config page takes any address you like,
+              and an upgrade never rewrites it. Point it at the exact file you published to see your
+              own listing before anybody else does, or to run a catalogue that is not in this store
+              at all. Running your own is documented under <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/unofficial_firmwares/" target="_blank" rel="noopener">unofficial firmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+              and installing apps day to day is in the <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>The loop closes</h2>
+        <p>
+          Since v2.3.0, Booster fetches its catalogue from
+          <code>https://md-store.sidecartridge.com/atari-st/apps.json</code>. That is not a copy of
+          this site or a mirror of it. It <em>is</em> this site, the same file behind the listing
+          you can <a href="/">browse right now</a>, built from the registry your pull request
+          edits.
+        </p>
+        <p>
+          So the thing you publish is the thing the device downloads. Somebody with a
+          <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/" target="_blank" rel="noopener">SidecarTridge <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+          an Atari ST and no idea who you are opens Booster, sees your app in the list, installs
+          it.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>You have finished the track.</strong>
+            <p>
+              You installed a toolchain, flashed a bootloader, built from a template, learned the
+              memory map, wrote something of your own, debugged it on real 1980s hardware and
+              published it.
+            </p>
+            <p>
+              If any page here was wrong, unclear or out of date, please
+              <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/issues"
+                target="_blank" rel="noopener">say so <i class="fas fa-up-right-from-square"
+                  aria-hidden="true"></i></a>.
+              The next person following this will thank you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/09-test-and-debug.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 9: Test and debug</span>
+        </a>
+        <a class="guide-pager-link" href="/">
+          <span>Browse the store</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

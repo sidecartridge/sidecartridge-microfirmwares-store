@@ -284,6 +284,7 @@
   <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
     <div class="app-nav-inner">
       <a href="#" class="app-nav-link is-active" aria-current="page">Store</a>
+      <a href="/build/" class="app-nav-link" @click="navMenuOpen = false">Build</a>
       <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
         @click="navMenuOpen = false">Docs</a>
       <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"

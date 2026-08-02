@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 9: Test and debug (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="Serial output over the debug probe, DPRINTF, the Cortex-Debug setup, and what to try when the screen stays black." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/09-test-and-debug.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 9 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html" aria-current="step"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10: Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 9 · Atari ST</span>
+        <h2>Test and debug.</h2>
+        <p>
+          Embedded debugging is mostly about restoring the thing you take for granted everywhere
+          else: being able to see what your program is doing. Deploying got easy in Booster v2.3.0.
+          Seeing inside a running microfirmware did not, and this is how you get it back.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>Printf, but over a wire</h2>
+        <p>
+          The C half prints diagnostics with <code>DPRINTF</code>. There is no console attached to a
+          microcontroller, so that output goes out of the serial port, and you need something at the
+          other end of it.
+        </p>
+        <p>
+          That something is the <a href="https://www.raspberrypi.com/products/debug-probe/" target="_blank" rel="noopener"><strong>Raspberry Pi Debug Probe</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+          wired to the board's UART pins: TX, RX, ground. Once connected, open the serial port on
+          your computer and your <code>DPRINTF</code> lines appear as your app runs. Its
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers the wiring and the UART bridge.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>This is the single biggest quality-of-life change in the whole track.</strong>
+            <p>
+              Without it you are inferring behaviour from what appears on the Atari's screen. With it
+              you have a log. If you have been putting off buying the probe, this is the step where
+              it pays for itself.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          Remember to build with <code>debug</code> rather than <code>release</code> while you are
+          working. That is the second argument to <code>build.sh</code>, and it is what keeps the
+          diagnostics in.
+        </p>
+        <p>
+          The probe and the Wi-Fi deploy API solve different problems, and they work together well.
+          Deploy over Wi-Fi so you never unplug anything, and keep the probe attached the whole time
+          for the log. See <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> for the deploy side.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Stepping through code in VS Code</h2>
+        <p>
+          The templates ship a <code>.vscode/</code> directory with a <code>launch.json</code> set
+          up for <strong>Cortex-Debug</strong>, which drives the probe through OpenOCD. With the
+          extension installed in step 3 and the probe connected, you get real breakpoints, stepping
+          and variable inspection on the microcontroller.
+        </p>
+        <p>
+          This is where the two environment variables that looked pointless in step 3 earn their
+          place:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">needed by the debugger</span>
+          </div>
+          <pre><code>ARM_GDB_PATH        # your ARM toolchain, for arm-none-eabi-gdb
+PICO_OPENOCD_PATH   # OpenOCD's tcl directory</code></pre>
+        </div>
+        <p>
+          If the debugger fails to launch, these are the first thing to check. The error messages are
+          not helpful about it. Raspberry Pi's <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> is where both
+          the toolchain and OpenOCD come from, so it is the place to go if either is missing.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Debugging changes timing.</strong>
+            <p>
+              Halting at a breakpoint stops the microcontroller answering the Atari's bus reads. The
+              Atari does not pause politely and wait, so expect the host machine to misbehave while
+              you are stopped. This is normal, and it is why <code>DPRINTF</code> logging is often
+              more useful than breakpoints for anything involving the emulation path.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Without a probe</h2>
+        <p>
+          You can still make progress, just more slowly:
+        </p>
+        <ul>
+          <li><strong>Put state on the Atari's screen.</strong> Crude, but it is a display you
+            already control.</li>
+          <li><strong>Bisect by building.</strong> Comment out half of what you added, rebuild,
+            reload. Slow, but it always converges.</li>
+          <li><strong>The SELECT button</strong> on the board is a physical input you can read,
+            useful as a manual trigger when you cannot type.</li>
+          <li><strong>Hold <kbd>SHIFT</kbd> at boot</strong> to skip straight to GEMDOS. This is
+            your way back when a build hangs the machine.</li>
+        </ul>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>When the screen stays black</h2>
+        <p>
+          Work down this list in order. It is roughly sorted by how often each one is the answer.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Does the unmodified template still run?</td>
+                <td>Reflash the step 6 build. If that fails too, the problem is the board or
+                  Booster rather than your code, and you have just saved yourself hours.</td>
+              </tr>
+              <tr>
+                <td>Are you blocking in the main loop?</td>
+                <td>Anything that stops <code>chandler_loop()</code> stops the Atari being
+                  answered. A machine that appears frozen is usually this.</td>
+              </tr>
+              <tr>
+                <td>Did the deploy actually happen?</td>
+                <td><code>picotool</code> or <code>curl</code> reporting success and the board
+                  running your new code are two different claims. Add a <code>DPRINTF</code> at
+                  startup and look for it.</td>
+              </tr>
+              <tr>
+                <td>Is the Atari-side code over budget?</td>
+                <td><code>userfw.s</code> has 6 KB. Overrunning it produces failures that look
+                  nothing like a size problem.</td>
+              </tr>
+              <tr>
+                <td>Is the microSD card present and readable?</td>
+                <td>Code that assumes a mounted filesystem fails early and silently when it is not
+                  there.</td>
+              </tr>
+              <tr>
+                <td>Is Booster still installed?</td>
+                <td>Flashing certain images over it will replace it. Reinstall from
+                  <a href="/build/atari-st/04-install-booster.html">step 4</a>, and check
+                  <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/faq_v2/" target="_blank" rel="noopener">the FAQ <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> for symptoms
+                  that are not about your code.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Where emulators fit</h2>
+        <p>
+          <strong>Hatari</strong> and <strong>STEEM</strong> emulate the Atari ST. They do not
+          emulate the SidecarTridge board, so they cannot run your microfirmware. What they are good
+          for is Atari-side logic you can exercise independently: screen layout, keyboard handling,
+          anything that does not depend on the board answering.
+        </p>
+        <p>
+          Treat them as a fast side-loop for a narrow class of problem, not as a development
+          environment. Everything that matters still has to be tested on hardware.
+        </p>
+
+        <div class="guide-callout guide-callout-llm">
+          <i class="fas fa-robot" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Debugging is where an assistant needs the most context, not the least.</strong>
+            <p>
+              "It does not work" gets you guesses. Give it the shape of the system and the evidence:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Prompt</span>
+              </div>
+              <pre><code>My SidecarTridge microfirmware &lt;what it does wrong&gt; on real hardware.
+
+What I changed since it last worked:
+&lt;the diff, or a description&gt;
+
+DPRINTF output over the debug probe:
+&lt;paste it, including where it stops&gt;
+
+Already ruled out:
+- the unmodified template still runs correctly
+- &lt;anything else you have checked&gt;
+
+Remember the main loop must never block, the Atari side has 6 KB and
+cannot use Atari RAM, and commands are polled rather than interrupt
+driven. Which of my changes is most likely responsible, and what should
+I instrument next?</code></pre>
+            </div>
+            <p>
+              The "already ruled out" section is what stops it re-suggesting things you have done.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/08-build-with-claude-code.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 8: Build your idea with Claude Code</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/10-publish-to-the-store.html">
+          <span>Step 10: Publish to the store</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 4: Install Booster (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="Flash the Booster bootloader onto your Raspberry Pi Pico W. Nothing else in this guide works until this is done." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/04-install-booster.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 4 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html" aria-current="step"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10: Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 4 · Atari ST</span>
+        <h2>Install Booster.</h2>
+        <p>
+          Booster is the bootloader that owns the board and runs microfirmwares. Until it is
+          flashed, nothing on the device knows how to load your app, so this has to happen before
+          your first build rather than after it. The upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers this same setup for ordinary users, in
+          more detail than here.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>What Booster actually does for you</h2>
+        <p>
+          It is easy to read "bootloader" and assume it is a formality. It is not. Booster provides
+          most of the infrastructure your microfirmware would otherwise have to implement itself:
+        </p>
+        <ul>
+          <li><strong>Wi-Fi and networking</strong>, so your app does not have to bring up a network
+            stack.</li>
+          <li><strong>A web interface</strong> for managing the device from a browser on your phone
+            or laptop.</li>
+          <li><strong>microSD access</strong>, with installed apps living in an <code>/apps</code>
+            folder.</li>
+          <li><strong>App management</strong>: downloading, installing, updating and launching
+            microfirmwares, including yours.</li>
+          <li><strong>Over-the-air updates</strong> of itself.</li>
+        </ul>
+        <p>
+          It also means your app does not own the whole device. It is one of several that can be
+          installed, and the user chooses which is active.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Flash it onto the Pico W</h2>
+        <p>
+          Get the current release from the
+          <a href="https://github.com/sidecartridge/rp2-booster-bootloader" target="_blank"
+            rel="noopener">rp2-booster-bootloader repository <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a>
+          or from the <a href="https://sidecartridge.com/downloads/" target="_blank" rel="noopener">SidecarTridge downloads page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+          There are three ways to install it, all documented upstream. Use whichever you find
+          easiest, they do the same thing.
+        </p>
+
+        <div class="guide-tabs">
+          <div class="guide-tabpanel" data-tab-label="Browser installer">
+            <p class="guide-tabpanel-title">Browser installer</p>
+            <p>
+              The route the upstream documentation recommends, and the one to try first. A
+              browser-based installer flashes the board over USB with no tools installed at all.
+              Follow
+              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-1-using-the-browser-based-installer-recommended" target="_blank" rel="noopener">option 1 in the getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+            <p>
+              It needs a browser with WebUSB support. If yours refuses, fall back to one of the
+              other two routes.
+            </p>
+          </div>
+
+          <div class="guide-tabpanel" data-tab-label="Drag and drop">
+            <p class="guide-tabpanel-title">Drag and drop</p>
+            <p>
+              Hold the <strong>BOOTSEL</strong> button on the Pico W while you connect it over USB.
+              It appears as a mass-storage device called <code>RPI-RP2</code>. Drag the
+              <em>full</em> image onto it:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">file to copy</span>
+              </div>
+              <pre><code>rp-booster-&lt;version&gt;-full.uf2</code></pre>
+            </div>
+            <p>
+              The Pico W reboots by itself once the copy finishes. No tools required beyond a file
+              manager. This is
+              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-2-using-the-drag-and-drop-method" target="_blank" rel="noopener">option 2 upstream <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+              and <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Raspberry Pi's Pico-series documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> explains what
+              BOOTSEL mode is doing.
+            </p>
+          </div>
+
+          <div class="guide-tabpanel" data-tab-label="picotool">
+            <p class="guide-tabpanel-title">picotool</p>
+            <p>
+              If you already installed <code>picotool</code> in step 3, use it. It is faster and it
+              verifies what it wrote:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Terminal</span>
+              </div>
+              <pre><code>picotool load -xv /path/to/rp-booster-&lt;version&gt;.uf2</code></pre>
+            </div>
+            <p>
+              This is <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#option-3-using-picotool" target="_blank" rel="noopener">option 3 upstream <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and the
+              same command shape you will use for your own builds in step 6, so getting comfortable
+              with it now pays off.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Two different files.</strong>
+            <p>
+              The drag-and-drop route uses the <code>-full</code> image. Match the route to the
+              file. Grabbing the wrong one is the most common stumble here.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Bring it up</h2>
+        <p>
+          Put the Pico W on the board, the board in the Atari's cartridge port, and power on. Booster
+          starts, and you configure Wi-Fi and reach its web interface from a browser. The
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/#initial-factory-configuration" target="_blank" rel="noopener">initial factory configuration <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          section walks through it, including a headless option that reads Wi-Fi credentials from a
+          file on the card. Day-to-day use of the web interface is covered in the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/userguide_v2/" target="_blank" rel="noopener">user guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>, and every setting is listed in <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/parameters_v2/" target="_blank" rel="noopener">parameters <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+        </p>
+        <p>
+          On the Atari side you will see a terminal-driven selector. Two keys are worth remembering
+          straight away:
+        </p>
+        <ul>
+          <li>Press <strong><kbd>ESC</kbd></strong> to enter the app selector.</li>
+          <li>Hold either <strong><kbd>SHIFT</kbd></strong> key while booting to skip it and boot
+            straight from GEMDOS.</li>
+        </ul>
+        <p>
+          That second one is your escape hatch. If you later flash a microfirmware that hangs the
+          machine, holding <kbd>SHIFT</kbd> gets you back to a usable computer. If the board does
+          not come up at all, work through
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/troubleshooting_v2/" target="_blank" rel="noopener">troubleshooting <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> before assuming it is broken.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Install something from the catalogue before you write anything.</strong>
+            <p>
+              Pick any app from Booster's list and install it. It proves the board, the microSD
+              card, Wi-Fi and the catalogue connection all work. When your own app misbehaves in
+              step 6, you will already know the platform underneath it is fine.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Where your app will live</h2>
+        <p>
+          Worth knowing now, because it explains some limits you will meet later. The Pico W's flash
+          is 2 MB, and Booster divides it up:
+        </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Size</th>
+                <th>What it holds</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Active app</td>
+                <td>1152 KB</td>
+                <td>The microfirmware currently running, which will be yours once you flash it.</td>
+              </tr>
+              <tr>
+                <td>Per-app settings</td>
+                <td>4 KB each</td>
+                <td>Each installed app gets its own isolated configuration sector.</td>
+              </tr>
+              <tr>
+                <td>Global settings</td>
+                <td>4 KB</td>
+                <td>Booster's own configuration.</td>
+              </tr>
+              <tr>
+                <td>Lookup table</td>
+                <td>4 KB</td>
+                <td>Maps app UUIDs to their settings sectors. Lives at
+                  <code>0x101FE000</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Up to thirty apps can be installed at once. The 1152 KB figure is the one to remember. It
+          is a lot of room for C code, and it is why the C half is where your logic belongs.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Choose a catalogue channel</h2>
+        <p>
+          Booster downloads its list of installable apps from a catalogue on the network. As of
+          <strong>v2.3.0</strong> that catalogue is served by this site, and the
+          <strong>Config</strong> page is the single place that chooses which one:
+        </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Config page option</th>
+                <th>What it fetches</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Stable - Tested release (default)</code></td>
+                <td><code>md-store.sidecartridge.com/atari-st/apps.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Testing - unstable releases</code></td>
+                <td><code>.../apps-test.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Development - Local development only</code></td>
+                <td><code>.../apps-dev.json</code></td>
+              </tr>
+              <tr>
+                <td><code>Custom apps catalog URL</code></td>
+                <td>Anything you type. Never rewritten by an upgrade.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          The Stable and Beta chips on the Apps page are a <em>filter</em> over whatever the Config
+          page selected. They used to switch catalogue and quietly rewrite the saved setting, and as
+          of v2.3.0 they no longer do.
+        </p>
+        <p>
+          For this guide you want <strong>Development</strong>, and the next section explains why it
+          is a requirement rather than a preference.
+        </p>
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Upgrading from an older Booster.</strong>
+            <p>
+              Devices already on one of the standard channels are moved to the new store
+              automatically. If you had set a custom catalogue URL, it is left exactly as it was.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Turn on developer mode</h2>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Development is not optional for this track.</strong>
+            <p>
+              Everything you build from step 6 onward uses the development UUID,
+              <code>44444444-4444-4444-8444-444444444444</code>. That UUID is the DEV APP slot, and
+              <strong>it only exists on the Development channel</strong>. On Stable or Testing there
+              is nothing for your build to land in.
+            </p>
+            <p>
+              So set the channel now and leave it there for the whole of the rest of this guide. You
+              switch away at the end, in
+              <a href="/build/atari-st/10-publish-to-the-store.html">step 10</a>, once your app has
+              a real UUID of its own.
+            </p>
+          </div>
+        </div>
+
+        <ol>
+          <li>Open <strong>Config</strong> and set the catalogue to
+            <code>Development - Local development only</code>.</li>
+          <li>Go to <strong>Apps</strong> and install the <strong>DEV APP</strong> from that
+            catalogue. This is the slot your builds get pushed into.</li>
+          <li>Stay on the Development channel. Changing catalogue or deleting the DEV APP closes the
+            gate immediately.</li>
+        </ol>
+        <p>
+          A red <strong>DEVELOPMENT MODE</strong> banner appears when it is active. That banner is
+          how you know the deploy API in
+          <a href="/build/atari-st/06-first-build.html">step 6</a> will answer.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>The deploy API has no authentication.</strong>
+            <p>
+              Anyone who can reach your device on the network can push code to it and run that code
+              on the attached Atari. That is why it is off by default, why it needs two deliberate
+              actions to enable, and why it shuts off the moment you change catalogue or delete the
+              DEV APP.
+            </p>
+            <p>
+              Use it on a network you trust. Turn it off when you are done developing. The full
+              contract is in <a href="https://github.com/sidecartridge/rp2-booster-bootloader/blob/main/docs/DEPLOY-API.md" target="_blank" rel="noopener">DEPLOY-API.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/03-toolchain.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 3: Set up the toolchain</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/05-pick-a-template.html">
+          <span>Step 5: Pick a template</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

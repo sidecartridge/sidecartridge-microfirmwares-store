@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 2: What you need (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="The hardware and software checklist for building an Atari ST microfirmware. It must be a Raspberry Pi Pico W, not a plain Pico and not a Pico 2 W." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/02-what-you-need.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 2 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html" aria-current="step"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10: Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 2 · Atari ST</span>
+        <h2>What you need.</h2>
+        <p>
+          Work through this before installing anything. Everything on the hardware list except the
+          debug probe is required to finish the track, and finding that out at step 6 is a bad way
+          to spend an evening.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>There is no software-only path through this track.</strong>
+            <p>
+              The microcontroller half of a microfirmware emulates the Atari's cartridge bus in real
+              time, in hardware. That cannot be simulated on a PC. Emulators help you test
+              Atari-side code, but you cannot develop or debug a microfirmware without the physical
+              board.
+            </p>
+          </div>
+        </div>
+
+        <h2>Hardware</h2>
+        <ul class="guide-checklist">
+          <li class="guide-check">
+            <input type="checkbox" id="hw-board">
+            <label class="guide-check-body" for="hw-board">
+              <strong>A SidecarTridge Multi-device board</strong>
+              <span>The cartridge that plugs into the Atari. This is the thing your code runs on.
+                See the <a href="https://sidecartridge.com/products/sidecartridge-multidevice-atari-st/" target="_blank" rel="noopener">product page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                or buy one from the <a href="https://store.sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge store <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="hw-pico">
+            <label class="guide-check-body" for="hw-pico">
+              <strong>A Raspberry Pi Pico W</strong>
+              <span>The microcontroller module that sits on the board. It has to be the
+                <strong>Pico W</strong> exactly. Not the plain Pico, and not the Pico 2 W. See the
+                warning below before you buy anything. Raspberry Pi document the family on the
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico series page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="hw-sd">
+            <label class="guide-check-body" for="hw-sd">
+              <strong>A microSD card</strong>
+              <span>Booster keeps installed apps and their files here. Format it as FAT32 or
+                exFAT, as described in the
+                <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="hw-atari">
+            <label class="guide-check-body" for="hw-atari">
+              <strong>An Atari ST, STE, MegaST or MegaSTE</strong>
+              <span>With a working cartridge port. This is what you test on. Check the
+                <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/compatibility_v2/" target="_blank" rel="noopener">compatibility notes <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                if you have an unusual machine.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="hw-probe">
+            <label class="guide-check-body" for="hw-probe">
+              <strong>A Raspberry Pi Debug Probe, optional but get one</strong>
+              <span>Not needed to build or run anything, so you can start without it. Since
+                Booster v2.3.0 you can also deploy over Wi-Fi, so the probe is no longer the way to
+                get code onto the board. What it still gives you is the log: it turns "the screen is
+                black" into an actual error message, and step 9 is a much shorter step if you have
+                one. See the
+                <a href="https://www.raspberrypi.com/products/debug-probe/" target="_blank" rel="noopener">product page <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> and its
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">documentation <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>It must be a Pico W. No other Pico works.</strong>
+            <p>
+              This is the easiest way to waste money on this list, because the boards look almost
+              identical and the names are one character apart.
+            </p>
+            <ul>
+              <li><strong>Raspberry Pi Pico W</strong> is the supported module. Buy this one.</li>
+              <li><strong>Raspberry Pi Pico</strong>, without the W, has no Wi-Fi. Booster needs it
+                for the web interface and for fetching the app catalogue.</li>
+              <li><strong>Raspberry Pi Pico 2 W</strong> is a different chip, the RP2350, and it is
+                <strong>not supported</strong>. Newer is not better here.</li>
+            </ul>
+            <p>
+              Check the silkscreen on the board itself rather than trusting the listing you bought
+              it from.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>What about Hatari and STEEM?</strong>
+            <p>
+              The Atari emulators are useful for working on Atari-side code in isolation, and the
+              upstream documentation mentions them as a testing aid. They do not emulate the
+              SidecarTridge board, so they cannot run your microfirmware. Treat them as a
+              convenience, not a substitute for the hardware above.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Software</h2>
+        <p>
+          Step 3 walks through installing and configuring all of this. Here it is as a list so you
+          know what is coming and can start any slow downloads now.
+        </p>
+
+        <ul class="guide-checklist">
+          <li class="guide-check">
+            <input type="checkbox" id="sw-git">
+            <label class="guide-check-body" for="sw-git">
+              <strong>git</strong>
+              <span>You will clone a template repository and initialise its submodules.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="sw-docker">
+            <label class="guide-check-body" for="sw-docker">
+              <strong>Docker</strong>
+              <span>The 68000 cross-compiler runs inside a container, so you do not have to build a
+                1980s toolchain yourself.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="sw-cmake">
+            <label class="guide-check-body" for="sw-cmake">
+              <strong>CMake and GNU Make</strong>
+              <span>Standard C build tooling, used by the microcontroller half. The
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+                covers the setup.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="sw-arm">
+            <label class="guide-check-body" for="sw-arm">
+              <strong>An ARM toolchain, plus OpenOCD if you have the debug probe</strong>
+              <span>Produces the binaries that run on the Pico W, and lets the debugger talk to it.
+                Both come from the
+                <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">C/C++ SDK setup <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="sw-picotool">
+            <label class="guide-check-body" for="sw-picotool">
+              <strong>picotool</strong>
+              <span>Copies your built firmware onto the board. You will use this constantly. It
+                lives at <a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">raspberrypi/picotool <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="sw-vscode">
+            <label class="guide-check-body" for="sw-vscode">
+              <strong>Visual Studio Code</strong>
+              <span>With the C/C++ Extension Pack, CMake, CMake Tools and Cortex-Debug. The
+                templates ship VS Code configuration that expects these.</span>
+            </label>
+          </li>
+        </ul>
+
+        <p>
+          You do <strong>not</strong> need to install a 68000 assembler, and you do not need to
+          download the Pico SDKs separately. The templates carry them as git submodules. Step 3
+          explains both. The upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank" rel="noopener">programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          covers the same ground in reference form, and its "Prerequisites for Developers and
+          Makers" section in the
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/getting_started_v2/" target="_blank" rel="noopener">getting started guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+          is worth a look before you begin.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>What you should already be comfortable with</h2>
+        <p>
+          This guide assumes you can write C, use git, and read a compiler error. It does
+          <em>not</em> assume you have written assembly, used the Pico SDK, or worked with embedded
+          hardware before. Where those come up, they are explained.
+        </p>
+        <p>
+          It also assumes you will lean on an AI assistant for the parts you have not done before.
+          That is a reasonable way to work here. Step 8 is about doing it well rather than badly,
+          because the failure mode is an assistant that writes plausible code which cannot possibly
+          fit in six kilobytes.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Order the debug probe now if you are going to.</strong>
+            <p>
+              It arrives while you work through steps 3 to 6, which do not need it, and it is
+              waiting for you at step 9, which does.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/01-what-a-microfirmware-is.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 1: What a microfirmware is</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/03-toolchain.html">
+          <span>Step 3: Set up the toolchain</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

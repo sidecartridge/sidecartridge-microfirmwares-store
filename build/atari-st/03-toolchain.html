@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 3: Set up the toolchain (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="Install the Raspberry Pi Pico SDKs, the Atari ST cross-compiler in Docker and VS Code, and set the five environment variables that tie them together." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/03-toolchain.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 3 of 10</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html" aria-current="step"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10: Publish to the store">10</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 3 · Atari ST</span>
+        <h2>Set up the toolchain.</h2>
+        <p>
+          Your microfirmware is compiled twice, by two completely different compilers: one for the
+          Raspberry Pi Pico W, one for the Atari's 68000. This step installs both, plus the editor
+          that drives them. It condenses the environment setup from the upstream
+          <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank" rel="noopener">programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>This is the longest step. Do it properly once.</strong>
+            <p>
+              Almost every confusing failure later in this track traces back to a half-finished
+              toolchain: a missing environment variable, a Docker image that never pulled. The
+              upstream guide says the same thing. Take your time here.
+            </p>
+          </div>
+        </div>
+
+        <h2>What you are installing, and why</h2>
+        <p>
+          Four separate things, doing four separate jobs. Knowing which is which before you start
+          helps, because when something breaks you need to know who to blame.
+        </p>
+
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>What</th>
+                <th>Job</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="https://github.com/raspberrypi/pico-sdk" target="_blank" rel="noopener"><strong>Pico SDK</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+                  <a href="https://github.com/raspberrypi/pico-extras" target="_blank" rel="noopener"><strong>Pico Extras</strong> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>,
+                  <strong>FatFS SDK</strong></td>
+                <td>Compile the C half of your app, the part that runs on the microcontroller and
+                  does the real work.</td>
+              </tr>
+              <tr>
+                <td><strong>ARM toolchain</strong> plus <strong>OpenOCD</strong></td>
+                <td>Produce ARM binaries, and let the debugger talk to the chip over a
+                  <a href="https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html" target="_blank" rel="noopener">Debug Probe <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.</td>
+              </tr>
+              <tr>
+                <td><strong>atarist-toolkit-docker</strong></td>
+                <td>Compile the 68000 half. It is a Docker image, so you do not install a 1980s
+                  assembler on your machine by hand.</td>
+              </tr>
+              <tr>
+                <td><strong>VS Code</strong> and its extensions</td>
+                <td>Edit, build and step through code. The templates ship VS Code configuration
+                  that expects these extensions.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You also need the ordinary things a C project needs, <code>git</code>, <code>cmake</code>
+          and <code>make</code>, plus <code>picotool</code>, which copies your built firmware onto
+          the board. Install those the way you normally would on your system. Raspberry Pi's own
+          documentation is the authority for the rest:
+        </p>
+        <ul>
+          <li><a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">The C/C++ SDK <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> covers the ARM toolchain, OpenOCD and the
+            CMake setup, per platform.</li>
+          <li><a href="https://github.com/raspberrypi/picotool" target="_blank" rel="noopener">raspberrypi/picotool <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> is
+            where <code>picotool</code> comes from, with build and install instructions.</li>
+          <li><a href="https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html" target="_blank" rel="noopener">Pico-series boards <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> documents the hardware itself. The
+            Pico W is the one this board uses.</li>
+        </ul>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Where the Pico SDKs come from</h2>
+        <p>
+          There are two ways to have the SDKs on your machine. Understand which one you are doing,
+          because it decides what your environment variables point at.
+        </p>
+
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>The templates already vendor them.</strong>
+            <p>
+              Both microfirmware templates carry <code>pico-sdk</code>, <code>pico-extras</code> and
+              <code>fatfs-sdk</code> as git submodules, pinned to known-good commits. When you clone
+              a template in <a href="/build/atari-st/05-pick-a-template.html">step 5</a> and run
+              <code>git submodule update --init --recursive</code>, you get all three inside the
+              project. You do not have to clone them separately.
+            </p>
+            <p>
+              The upstream programming guide also describes a standalone, system-wide Pico SDK
+              environment. Either works. Just make sure the paths below point at whichever copies
+              you actually intend to build against.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Set the environment variables</h2>
+        <p>
+          The build scripts find everything through five environment variables. Set them in your
+          shell profile so they survive a new terminal. If you only export them once, the next build
+          fails with a message about a missing SDK and you will not connect the two events.
+        </p>
+
+        <div class="guide-tabs">
+          <div class="guide-tabpanel" data-tab-label="macOS / Linux">
+            <p class="guide-tabpanel-title">macOS / Linux</p>
+            <p>
+              Add these to <code>~/.zshrc</code>, <code>~/.bashrc</code> or whichever profile your
+              shell reads, then open a new terminal.
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">~/.zshrc</span>
+              </div>
+              <pre><code>export PICO_SDK_PATH=/path/to/pico-sdk
+export PICO_EXTRAS_PATH=/path/to/pico-extras
+export FATFS_SDK_PATH=/path/to/fatfs-sdk
+export ARM_GDB_PATH=/path/to/your/arm-toolchain
+export PICO_OPENOCD_PATH=/path/to/openocd/tcl</code></pre>
+            </div>
+          </div>
+
+          <div class="guide-tabpanel" data-tab-label="Windows (PowerShell)">
+            <p class="guide-tabpanel-title">Windows (PowerShell)</p>
+            <p>
+              The upstream guide gives the two debugger paths explicitly in PowerShell form:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">PowerShell</span>
+              </div>
+              <pre><code>$env:ARM_GDB_PATH="C:\Path\to\your\arm-toolchain"
+$env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
+            </div>
+            <p>
+              The three SDK paths are set exactly the same way, for example
+              <code>$env:PICO_SDK_PATH="C:\Path\to\pico-sdk"</code>. Watch out for one thing:
+              <code>$env:</code> assignments only last for the current PowerShell session. Use
+              <em>System Properties &gt; Environment Variables</em>, or add them to your PowerShell
+              profile, to make them permanent.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Use absolute paths.</strong>
+            <p>
+              <code>~/pico-sdk</code> and <code>./pico-sdk</code> will both bite you, because the
+              build runs from directories you are not thinking about. Write the path out in full.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>The Atari cross-compiler</h2>
+        <p>
+          The 68000 half of your microfirmware is built with <code>vasm</code> and
+          <code>vlink</code>, wrapped in a Docker image so you do not have to build them yourself.
+          Install Docker, then set up
+          <a href="https://github.com/sidecartridge/atarist-toolkit-docker" target="_blank"
+            rel="noopener">atarist-toolkit-docker <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a>
+          following its README. It gives you a command called <code>stcmd</code> that runs the
+          Atari tools inside the container.
+        </p>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Known gotcha: "Docker image not found".</strong>
+            <p>
+              If a build fails because the image cannot be found, edit
+              <code>/usr/local/bin/stcmd</code> and pin the image explicitly:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">/usr/local/bin/stcmd</span>
+              </div>
+              <pre><code>THEDOCKER="logronoide/atarist-toolkit-docker-x86_64:latest"</code></pre>
+            </div>
+            <p>
+              This is documented upstream. It usually means the generic image tag did not resolve
+              for your architecture.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          Confirm Docker itself is running before you go further. A stopped Docker daemon produces
+          build errors that look nothing like "Docker is not running".
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>docker run --rm hello-world</code></pre>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>VS Code and its extensions</h2>
+        <p>
+          The templates include a <code>.vscode/</code> directory with build and debug
+          configuration that expects these four extensions. Install all of them:
+        </p>
+        <ul>
+          <li><strong>C/C++ Extension Pack</strong>, language support for the C half.</li>
+          <li><strong>CMake</strong> and <strong>CMake Tools</strong>, which drive the build.</li>
+          <li><strong>Cortex-Debug</strong>, to step through code on the microcontroller over the
+            Debug Probe.</li>
+        </ul>
+        <p>
+          You can write a microfirmware in any editor, but the debugging setup in
+          <a href="/build/atari-st/09-test-and-debug.html">step 9</a> assumes VS Code and
+          Cortex-Debug, and it is much less pleasant to reconstruct by hand. Raspberry Pi also
+          publish an official Pico extension for VS Code, described in
+          <a href="https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html" target="_blank" rel="noopener">the C/C++ SDK guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Check it worked</h2>
+        <p>
+          Work down this list before moving on. Every item is something a later step silently
+          depends on.
+        </p>
+        <ul class="guide-checklist">
+          <li class="guide-check">
+            <input type="checkbox" id="chk-env">
+            <label class="guide-check-body" for="chk-env">
+              <strong>All five environment variables survive a new terminal</strong>
+              <span>Open a fresh terminal and run <code>echo $PICO_SDK_PATH</code>, or
+                <code>echo $env:PICO_SDK_PATH</code> in PowerShell. An empty line means it is not
+                set.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="chk-cmake">
+            <label class="guide-check-body" for="chk-cmake">
+              <strong><code>cmake --version</code> and <code>make --version</code> both answer</strong>
+              <span>Any recent version is fine.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="chk-docker">
+            <label class="guide-check-body" for="chk-docker">
+              <strong>Docker is running and <code>stcmd</code> is on your PATH</strong>
+              <span>The 68000 half cannot build without it.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="chk-picotool">
+            <label class="guide-check-body" for="chk-picotool">
+              <strong><code>picotool</code> is installed</strong>
+              <span>This is how you get the built firmware onto the board in step 6.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="chk-vscode">
+            <label class="guide-check-body" for="chk-vscode">
+              <strong>VS Code has all four extensions</strong>
+              <span>C/C++ Extension Pack, CMake, CMake Tools, Cortex-Debug.</span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="guide-callout guide-callout-llm">
+          <i class="fas fa-robot" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Stuck? This is a good thing to hand to an assistant.</strong>
+            <p>
+              Toolchain setup is the one part of this track where an AI assistant is immediately
+              useful, because the errors are generic and your machine is the variable. Paste the
+              actual error and be specific about your setup:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Prompt</span>
+              </div>
+              <pre><code>I'm setting up a Raspberry Pi Pico W build environment on &lt;your OS and version&gt;.
+I need PICO_SDK_PATH, PICO_EXTRAS_PATH, FATFS_SDK_PATH, ARM_GDB_PATH and
+PICO_OPENOCD_PATH set permanently, plus cmake, make and picotool installed.
+Here is what I ran and the error I got:
+
+&lt;paste the command and the full error&gt;
+
+What is missing, and what exactly should I run to fix it?</code></pre>
+            </div>
+            <p>
+              Step 8 goes much further into working with an assistant on the microfirmware itself,
+              where the advice it needs is far more specific.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/02-what-you-need.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 2: What you need</span>
+        </a>
+        <a class="guide-pager-link" href="/build/atari-st/04-install-booster.html">
+          <span>Step 4: Install Booster</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
