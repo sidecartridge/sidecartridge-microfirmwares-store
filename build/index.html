@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Build a microfirmware — SidecarTridge Microfirmware Store</title>
+  <meta name="description"
+    content="Start here: pick your platform, then follow a step-by-step guide to building your own microfirmware for the SidecarTridge Multi-device — written for developers new to the hardware." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Build a microfirmware</span>
+        <h2>Make something that runs on real hardware.</h2>
+        <p>
+          This store lists microfirmwares — the apps that run on a
+          <a href="https://sidecartridge.com/" target="_blank" rel="noopener">SidecarTridge</a>
+          Multi-device board plugged into a vintage computer. This guide is about writing one
+          yourself, starting from a template rather than a blank page.
+        </p>
+        <div class="guide-hero-meta">
+          <span><i class="fas fa-list-check" aria-hidden="true"></i> Ten steps, in order</span>
+          <span><i class="fas fa-microchip" aria-hidden="true"></i> No 68000 experience assumed</span>
+          <span><i class="fas fa-robot" aria-hidden="true"></i> Written to be followed with an AI assistant</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>Step 0 — pick your platform</h2>
+        <p>
+          Every SidecarTridge board does the same fundamental thing, but the computer on the other
+          end of the cartridge port changes almost everything practical about the work: which
+          toolchain you install, which assembler the target half is written in, which template you
+          start from, and how you test it. So the guide splits into one <strong>track</strong> per
+          platform, and you choose yours before you install anything.
+        </p>
+      </section>
+
+      <div class="browser-card-grid platform-grid">
+        <a class="platform-card guide-platform-card" href="/build/atari-st/">
+          <span class="platform-logo">
+            <img class="platform-logo-img" src="/assets/platforms/atari-st.png" alt="Atari ST logo" loading="lazy"
+              onerror="this.remove()">
+          </span>
+          <div class="platform-card-body">
+            <h3>Atari ST</h3>
+            <p>
+              The original SidecarTridge target. Your microfirmware is C running on a Raspberry Pi
+              Pico, paired with a small 68000 cartridge program on the Atari side.
+            </p>
+            <div class="platform-card-devices">
+              <span class="browser-entry-tag">ST</span>
+              <span class="browser-entry-tag">STE</span>
+              <span class="browser-entry-tag">MegaST</span>
+              <span class="browser-entry-tag">MegaSTE</span>
+            </div>
+          </div>
+          <span class="platform-card-go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+        </a>
+      </div>
+
+      <section class="browser-section guide-prose">
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Atari ST is the only track today.</strong>
+            <p>
+              It is the only platform with a published catalogue in this store, so it is the only
+              one with a guide. When another platform ships, it gets its own track here — the
+              shared ideas below will carry over, the commands will not.
+            </p>
+          </div>
+        </div>
+
+        <h2>What is the same on every platform</h2>
+        <p>
+          The per-platform tracks differ in their commands, but they are all built on the same four
+          ideas. Reading these first will make your track make sense.
+        </p>
+
+        <h3>1. Your microfirmware has two halves</h3>
+        <p>
+          One half is C, compiled for the Raspberry Pi Pico microcontroller on the board. The other
+          half is a small program in the host computer's native code, living in the address space
+          the board pretends to be. The two talk to each other; most of your logic belongs in the C
+          half, where you have room to work.
+        </p>
+
+        <h3>2. The board pretends to be a ROM cartridge</h3>
+        <p>
+          The host computer thinks it is reading a memory chip. The microcontroller answers those
+          reads fast enough that the illusion holds. You never write that emulation yourself — it
+          is already done, and it is the part you must be careful not to disturb.
+        </p>
+
+        <h3>3. Booster runs your app</h3>
+        <p>
+          You do not ship a whole firmware image. A bootloader called <strong>Booster</strong> owns
+          the device — Wi-Fi, the web interface, the microSD card, and installing and launching
+          apps. Your microfirmware is one app it can load, which is why it is a <em>micro</em>firmware.
+        </p>
+
+        <h3>4. It reaches users through this store</h3>
+        <p>
+          Booster fetches a catalogue of available apps over the network. That catalogue is what
+          this site publishes. Getting listed is the last step of every track, and it is the same
+          process for everyone — documented in
+          <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
+            target="_blank" rel="noopener">CREATORS.md <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a>.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>You will want the reference docs too</h2>
+        <p>
+          This guide is the walked path: it tells you what to type and why, in order. It does not
+          replace the reference documentation, which goes far deeper into how the hardware actually
+          works. Keep it open in another tab.
+        </p>
+        <ul>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/programming/" target="_blank"
+              rel="noopener">Programming guide <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+            — the full development environment and project structure.
+          </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank"
+              rel="noopener">Microfirmwares <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+            — what they are and how users install them.
+          </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/architecture_and_design/" target="_blank"
+              rel="noopener">Architecture and design <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+            — memory, flash, bus contention, the design constraints behind the rules you will follow.
+          </li>
+          <li>
+            <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/hardware_interface/" target="_blank"
+              rel="noopener">Hardware interface <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+            — pinouts, timing and the PIO state machine, if you want to know how the illusion works.
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
