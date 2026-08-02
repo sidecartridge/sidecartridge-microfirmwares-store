@@ -98,7 +98,7 @@
             <h3>Atari ST</h3>
             <p>
               The original SidecarTridge target. Your microfirmware is C running on a Raspberry Pi
-              Pico, paired with a small 68000 cartridge program on the Atari side.
+              Pico W, paired with a small 68000 cartridge program on the Atari side.
             </p>
             <div class="platform-card-devices">
               <span class="browser-entry-tag">ST</span>
@@ -132,7 +132,7 @@
 
         <h3>1. Your microfirmware has two halves</h3>
         <p>
-          One half is C, compiled for the Raspberry Pi Pico microcontroller on the board. The other
+          One half is C, compiled for the Raspberry Pi Pico W microcontroller on the board. The other
           half is a small program in the host computer's native code, living in the address space
           the board pretends to be. The two talk to each other, and most of your logic belongs in
           the C half, where you have room to work.
