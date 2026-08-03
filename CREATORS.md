@@ -7,6 +7,12 @@ Microfirmware Store (<https://md-store.sidecartridge.com/>).
 You do not need to have worked with SidecarTridge, this repository, or the target hardware before.
 Every term is explained where it first appears.
 
+> **Want it in context instead?** The store's build guide covers this same process at the end of a
+> walkthrough that starts from an empty machine and ends with a published microfirmware:
+> [step 11 of the Atari ST track](https://md-store.sidecartridge.com/build/atari-st/11-get-listed.html).
+> That page walks the process; this document is the reference for the `apps.json` contract and the
+> field rules. Either route gets you listed.
+
 ## The idea in one minute
 
 A **microfirmware** is a firmware image (a `.uf2` file) that runs on a SidecarTridge Multidevice
@@ -189,7 +195,8 @@ platform per channel.
 ## 6. Add your origin — step by step
 
 The worked example adds a creator called **Retro Homebrew Collective** to Atari ST's stable
-catalogue.
+catalogue. The same walkthrough, written for somebody who has just built their first microfirmware,
+is [step 11 of the build guide](https://md-store.sidecartridge.com/build/atari-st/11-get-listed.html).
 
 ### Step 1 — fork and branch
 
