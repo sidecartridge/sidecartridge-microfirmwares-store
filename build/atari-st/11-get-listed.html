@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Step 11: Get listed in the store (Atari ST) | SidecarTridge</title>
+  <meta name="description"
+    content="Add your origin to the store's registry so your microfirmware appears in the public catalogue every device downloads." />
+  <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/11-get-listed.html" />
+
+  <!-- Pure.css (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="/styles.css?v=14.0" />
+  <link rel="stylesheet" href="/build/guide.css?v=1.0" />
+
+  <!-- Font Awesome for icons (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+  <script defer src="/build/guide.js?v=1.0"></script>
+</head>
+
+<body class="browser-page" x-data="{ navMenuOpen: false }">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-copy">
+        <span class="app-header-kicker"><a href="https://sidecartridge.com/" target="_blank" rel="noopener"
+            style="color:inherit">SidecarTridge</a></span>
+        <h1>Microfirmware Store</h1>
+      </div>
+      <button type="button" class="app-nav-toggle" aria-controls="primaryNav"
+        :aria-expanded="navMenuOpen ? 'true' : 'false'" @click="navMenuOpen = !navMenuOpen">
+        <i class="fas" :class="navMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+        <span x-text="navMenuOpen ? 'Close' : 'Menu'"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="primaryNav" class="app-nav" :class="{'is-open': navMenuOpen}">
+    <div class="app-nav-inner">
+      <a href="/" class="app-nav-link" @click="navMenuOpen = false">Store</a>
+      <a href="/build/" class="app-nav-link is-active" aria-current="page">Build</a>
+      <a href="https://docs.sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">Docs</a>
+      <a href="https://sidecartridge.com/" target="_blank" class="app-nav-link"
+        @click="navMenuOpen = false">SidecarTridge</a>
+    </div>
+  </nav>
+
+  <main class="main-content browser-main">
+
+    <a class="guide-backlink" href="/build/atari-st/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Atari ST
+      track</a>
+
+    <nav class="guide-rail" aria-label="Steps in this track">
+      <span class="guide-rail-label">Step 11 of 11</span>
+      <span class="guide-rail-steps">
+        <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
+          aria-label="Step 1: What a microfirmware is">1</a>
+        <a class="guide-rail-step" href="/build/atari-st/02-what-you-need.html"
+          aria-label="Step 2: What you need">2</a>
+        <a class="guide-rail-step" href="/build/atari-st/03-toolchain.html"
+          aria-label="Step 3: Set up the toolchain">3</a>
+        <a class="guide-rail-step" href="/build/atari-st/04-install-booster.html"
+          aria-label="Step 4: Install Booster">4</a>
+        <a class="guide-rail-step" href="/build/atari-st/05-pick-a-template.html"
+          aria-label="Step 5: Pick a template">5</a>
+        <a class="guide-rail-step" href="/build/atari-st/06-first-build.html"
+          aria-label="Step 6: Your first build">6</a>
+        <a class="guide-rail-step" href="/build/atari-st/07-code-layout.html"
+          aria-label="Step 7: How the code is laid out">7</a>
+        <a class="guide-rail-step" href="/build/atari-st/08-build-with-claude-code.html"
+          aria-label="Step 8: Build your idea with Claude Code">8</a>
+        <a class="guide-rail-step" href="/build/atari-st/09-test-and-debug.html"
+          aria-label="Step 9: Test and debug">9</a>
+        <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html"
+          aria-label="Step 10: Publish to the store">10</a>
+        <a class="guide-rail-step" href="/build/atari-st/11-get-listed.html" aria-current="step"
+          aria-label="Step 11: Get listed in the store">11</a>
+      </span>
+    </nav>
+
+    <section class="browser-hero guide-hero">
+      <div class="browser-hero-copy">
+        <span class="browser-kicker">Step 11 · Atari ST</span>
+        <h2>Get listed in the store.</h2>
+        <p>
+          Your microfirmware is built and hosted, but only you know it exists. This step adds it to
+          the catalogue every device downloads, which is one small pull request against this
+          repository.
+        </p>
+      </div>
+    </section>
+
+    <div class="browser-shell">
+
+      <section class="browser-section guide-prose">
+        <h2>What you are actually asking for</h2>
+        <p>
+          The store does not host your files and does not want a copy of them. It keeps a
+          <strong>registry</strong> of <strong>origins</strong>, and an origin is two things: who
+          you are, and the URL of the <code>apps.json</code> you already host.
+        </p>
+        <p>
+          A build job fetches every origin in that registry, merges what it finds into one catalogue
+          per channel, and publishes it. So you are not submitting your apps. You are submitting a
+          pointer to them, and you keep control of what is on the other end.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>This is why the pull request happens once.</strong>
+            <p>
+              Adding an app, releasing a new version, fixing a description: none of those need
+              another pull request. You edit your own <code>apps.json</code> in place, at the same
+              URL, and the store picks it up on its next build. The registry entry only names where
+              to look.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Before you start</h2>
+        <ul class="guide-checklist">
+          <li class="guide-check">
+            <input type="checkbox" id="pub-hosted">
+            <label class="guide-check-body" for="pub-hosted">
+              <strong>Your <code>apps.json</code> is reachable at a stable URL</strong>
+              <span>Anywhere on the web works. The build fetches it server-side, so there is no CORS
+                requirement and the URL may be HTTP or HTTPS. Keep the URL stable and update the
+                file in place.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="pub-https">
+            <label class="guide-check-body" for="pub-https">
+              <strong>The <code>image</code> and <code>binary</code> URLs inside it are HTTPS</strong>
+              <span>A visitor's browser loads those directly, so unlike the catalogue URL itself
+                they cannot be plain HTTP.</span>
+            </label>
+          </li>
+          <li class="guide-check">
+            <input type="checkbox" id="pub-uuid">
+            <label class="guide-check-body" for="pub-uuid">
+              <strong>Your app has its own UUID</strong>
+              <span>Not the development one from step 6. If yours collides with a SidecarTridge
+                app's UUID, yours is the one dropped.</span>
+            </label>
+          </li>
+        </ul>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Fork, and open the right file</h2>
+        <p>
+          Fork this repository, clone your fork, and branch:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>git checkout -b add-my-origin</code></pre>
+        </div>
+        <p>
+          Which file you edit depends on the channel you picked in
+          <a href="/build/atari-st/10-publish-to-the-store.html">step 10</a>:
+        </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Channel</th>
+                <th>Registry file</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stable</td>
+                <td><code>origins/atari-st.json</code></td>
+              </tr>
+              <tr>
+                <td>Testing</td>
+                <td><code>origins/atari-st-test.json</code></td>
+              </tr>
+              <tr>
+                <td>Development</td>
+                <td><code>origins/atari-st-dev.json</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="guide-callout guide-callout-warn">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>Do not edit <code>atari-st/apps.json</code>.</strong>
+            <p>
+              That file and its siblings are generated by the build from the registry. Anything you
+              write there is overwritten on the next run, and a pull request that changes it will be
+              sent back.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Append your entry</h2>
+        <p>
+          The file has a <code>platform</code>, a <code>channel</code>, and an <code>origins</code>
+          array whose first entry is SidecarTridge's. Add one object to the end of that array, and
+          mind the comma after the entry before yours:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">origins/atari-st.json</span>
+          </div>
+          <pre><code>{
+  "creator": {
+    "id": "retro-homebrew",
+    "name": "Retro Homebrew Collective",
+    "url": "https://retro-homebrew.example"
+  },
+  "official": false,
+  "enabled": true,
+  "url": "https://retro-homebrew.example/atari-st/apps.json"
+}</code></pre>
+        </div>
+        <p>That is the whole change. Four things to get right:</p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>What to put, and why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>creator.id</code></td>
+                <td>A lowercase-kebab slug, unique on the platform. It becomes your filter key in
+                  the store, so <strong>pick one you can live with</strong>. Changing it later reads
+                  as a different creator.</td>
+              </tr>
+              <tr>
+                <td><code>official</code></td>
+                <td>Always <code>false</code>. <code>true</code> marks the first-party SidecarTridge
+                  origin, exactly one registry entry may carry it, and a creator entry that sets it
+                  is rejected.</td>
+              </tr>
+              <tr>
+                <td><code>enabled</code></td>
+                <td><code>true</code>. Set it <code>false</code> later to keep your entry on file
+                  but leave it out of the build.</td>
+              </tr>
+              <tr>
+                <td><code>url</code></td>
+                <td>Your hosted <code>apps.json</code>. There is also a <code>source</code> field
+                  for files kept inside this repository. It is not for creators, so always use
+                  <code>url</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <code>creator</code> also takes an optional <code>image</code> and <code>contact</code>.
+          The full field reference is in
+          <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
+            target="_blank" rel="noopener">CREATORS.md <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a>.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Run the check before you push</h2>
+        <p>
+          The pull request runs a required check. You can run exactly the same thing locally, which
+          turns a review cycle into a ten-second loop:
+        </p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">Terminal</span>
+          </div>
+          <pre><code>pip install jsonschema                              # enables the strict validator
+python3 tools/build_catalog.py --check --strict     # exactly what the PR check runs</code></pre>
+        </div>
+        <p>A pass ends with one line:</p>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">expected output</span>
+          </div>
+          <pre><code>check: OK</code></pre>
+        </div>
+        <p>
+          Anything else means something is wrong, and the lines above name the file and the rule.
+          Because <code>--strict</code> actually <strong>fetches</strong> your URL, this also catches
+          a host that is unreachable or a path you mistyped, which is the failure most likely to
+          embarrass you in review.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>See your apps in the real site first.</strong>
+            <p>
+              Build the catalogue locally and serve the repository:
+            </p>
+            <div class="guide-code">
+              <div class="guide-code-head">
+                <span class="guide-code-label">Terminal</span>
+              </div>
+              <pre><code>python3 tools/build_catalog.py --platform atari-st
+python3 -m http.server                              # then open http://localhost:8000</code></pre>
+            </div>
+            <p>
+              You will see a line per origin, such as
+              <code>- retro-homebrew (unofficial): +3 app(s)</code>. These local builds are
+              throwaway, so <strong>do not commit the regenerated <code>atari-st/apps.json</code></strong>
+              in your pull request.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Open the pull request</h2>
+        <p>
+          Commit the registry change on its own and open a pull request against <code>main</code>. A
+          reviewer wants three things in the body: the <code>apps.json</code> URL, one line on what
+          your microfirmwares do, and anything unusual they should know.
+        </p>
+        <p>
+          Opening it triggers the <strong>Validate origins</strong> check, which validates your
+          registry entry, fetches your <code>apps.json</code>, and validates that too. It must be
+          green before the pull request can merge. If it fails, the troubleshooting table in
+          <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
+            target="_blank" rel="noopener">CREATORS.md <i class="fas fa-up-right-from-square"
+              aria-hidden="true"></i></a>
+          maps each message to its cause.
+        </p>
+        <p>
+          After a maintainer merges it, the build folds your listing into the published catalogue and
+          the site deploys. Your apps appear under your creator name, with a filter for browsing just
+          yours.
+        </p>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>What the build does to your data</h2>
+        <p>
+          Your <code>apps.json</code> is not copied verbatim. Four things happen to it, so that every
+          creator's data behaves the same way. None of them is a surprise once you know.
+        </p>
+        <ul>
+          <li>
+            <strong>Your apps are tagged with your creator id</strong> and shown under your name.
+          </li>
+          <li>
+            <strong>Duplicate UUIDs resolve in SidecarTridge's favour.</strong> If one of your apps
+            shares a <code>uuid</code> with theirs, yours is dropped. Use your own.
+          </li>
+          <li>
+            <strong>Device names are rewritten to canonical spellings.</strong> For Atari ST those
+            are <code>ST</code>, <code>STE</code>, <code>MegaST</code>, <code>MegaSTE</code>,
+            <code>TT</code> and <code>Falcon</code>. Case, punctuation and a leading platform name
+            are ignored, so <code>Atari MegaST</code> and <code>atari-megast</code> both resolve. A
+            name matching nothing is kept as written and reported in the log, never discarded, but it
+            will appear in the store as its own filter entry.
+          </li>
+          <li>
+            <strong><code>description</code> is sanitised</strong> to a whitelist of tags when it is
+            rendered.
+          </li>
+        </ul>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>Afterwards</h2>
+        <p>
+          You are done with this repository. To ship a new version, bump
+          <code>version.txt</code>, rebuild, upload the new <code>.uf2</code>, and update your own
+          <code>apps.json</code> in place at the same URL. The store rebuilds daily and picks it up.
+          Ask a maintainer if you need it sooner.
+        </p>
+
+        <div class="guide-callout guide-callout-tip">
+          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+          <div class="guide-callout-body">
+            <strong>That is the whole track.</strong>
+            <p>
+              You installed a toolchain, flashed a bootloader, built from a template, learned the
+              memory map, wrote something of your own, debugged it on real 1980s hardware and got it
+              into the catalogue that every SidecarTridge device downloads.
+            </p>
+            <p>
+              If any page here was wrong, unclear or out of date, please
+              <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/issues"
+                target="_blank" rel="noopener">say so <i class="fas fa-up-right-from-square"
+                  aria-hidden="true"></i></a>.
+              The next person following this will thank you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <nav class="browse-pager guide-pager" aria-label="Step navigation">
+        <a class="guide-pager-link" href="/build/atari-st/10-publish-to-the-store.html">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span>Step 10: Publish to the store</span>
+        </a>
+        <a class="guide-pager-link" href="/">
+          <span>Browse the store</span>
+          <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </a>
+      </nav>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025-26 GOODDATA LABS SLU. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
