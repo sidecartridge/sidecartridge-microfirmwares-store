@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Step 10: Publish to the store (Atari ST) | SidecarTridge</title>
   <meta name="description"
-    content="Generate a real UUID, make a release build, host your apps.json, and open the pull request that lists your microfirmware here." />
+    content="Generate a real UUID, make a release build, fill in desc/app.json and host your own apps.json." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/10-publish-to-the-store.html" />
 
   <!-- Pure.css (CDN) -->
@@ -59,7 +59,7 @@
       track</a>
 
     <nav class="guide-rail" aria-label="Steps in this track">
-      <span class="guide-rail-label">Step 10 of 10</span>
+      <span class="guide-rail-label">Step 10 of 11</span>
       <span class="guide-rail-steps">
         <a class="guide-rail-step" href="/build/atari-st/01-what-a-microfirmware-is.html"
           aria-label="Step 1: What a microfirmware is">1</a>
@@ -81,6 +81,8 @@
           aria-label="Step 9: Test and debug">9</a>
         <a class="guide-rail-step" href="/build/atari-st/10-publish-to-the-store.html" aria-current="step"
           aria-label="Step 10: Publish to the store">10</a>
+        <a class="guide-rail-step" href="/build/atari-st/11-get-listed.html"
+          aria-label="Step 11: Get listed in the store">11</a>
       </span>
     </nav>
 
@@ -302,55 +304,31 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
       </section>
 
       <section class="browser-section guide-prose">
-        <h2>Host it, then get listed</h2>
+        <h2>Host it</h2>
         <p>
           Publishing is two separate things, and keeping them apart in your head helps:
         </p>
         <ol>
           <li>
             <strong>You host your own files.</strong> The <code>.uf2</code> and an
-            <code>apps.json</code> describing it live somewhere you control: a GitHub release, a web
-            host, anywhere reachable. You keep ownership of your own listing.
+            <code>apps.json</code> listing it live somewhere you control: a GitHub release, a web
+            host, anywhere reachable. You keep ownership of your own listing, and you update it
+            without asking anyone.
           </li>
           <li>
-            <strong>This store points at them.</strong> You open a pull request adding your origin
-            to the registry. A build job then folds your listing into the catalogue every device
-            downloads.
+            <strong>This store points at them.</strong> One pull request adds your origin to the
+            registry, and from then on a build job folds whatever is at your URL into the catalogue
+            every device downloads. That is <a href="/build/atari-st/11-get-listed.html">step
+              11</a>.
           </li>
         </ol>
-
         <p>
-          The full contract for <code>apps.json</code>, every field, the rules, a worked example and
-          the exact pull request to open, is documented separately and kept up to date with the
-          build that validates it:
+          Two rules on the hosting itself. Keep the URL <strong>stable</strong> and update the file
+          in place, because the registry stores that URL and nothing else. And while the
+          <code>apps.json</code> URL may be HTTP or HTTPS, the <code>image</code> and
+          <code>binary</code> URLs <em>inside</em> it must be HTTPS, since a visitor's browser loads
+          those directly.
         </p>
-        <p>
-          <a class="btn-primary"
-            href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/blob/main/CREATORS.md"
-            target="_blank" rel="noopener">
-            <i class="fas fa-paper-plane" aria-hidden="true"></i>
-            Read the creator guide
-          </a>
-        </p>
-
-        <div class="guide-callout guide-callout-note">
-          <i class="fas fa-circle-info" aria-hidden="true"></i>
-          <div class="guide-callout-body">
-            <strong>What to expect from the pull request.</strong>
-            <p>
-              An automated check validates your JSON strictly and reports on the PR. A maintainer
-              reviews it. Once merged, a scheduled job fetches your <code>apps.json</code>, folds it
-              into the consolidated catalogue and deploys, so your app appears without anyone
-              editing the catalogue by hand, alongside the apps already listed in the
-              <a href="https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/" target="_blank" rel="noopener">upstream catalogue <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>.
-            </p>
-            <p>
-              A couple of things the build does to your data are worth knowing before they surprise
-              you. Device names are normalised to a standard spelling, and descriptions are
-              sanitised. The creator guide explains both.
-            </p>
-          </div>
-        </div>
       </section>
 
       <section class="browser-section guide-prose">
@@ -437,21 +415,14 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
           it.
         </p>
 
-        <div class="guide-callout guide-callout-tip">
-          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+        <div class="guide-callout guide-callout-note">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
           <div class="guide-callout-body">
-            <strong>You have finished the track.</strong>
+            <strong>One step left.</strong>
             <p>
-              You installed a toolchain, flashed a bootloader, built from a template, learned the
-              memory map, wrote something of your own, debugged it on real 1980s hardware and
-              published it.
-            </p>
-            <p>
-              If any page here was wrong, unclear or out of date, please
-              <a href="https://github.com/sidecartridge/sidecartridge-microfirmwares-store/issues"
-                target="_blank" rel="noopener">say so <i class="fas fa-up-right-from-square"
-                  aria-hidden="true"></i></a>.
-              The next person following this will thank you.
+              Right now that catalogue does not know about you. Step 11 is the pull request that
+              adds your origin to the registry it is built from, and it is the last thing you have
+              to do.
             </p>
           </div>
         </div>
@@ -462,8 +433,8 @@ python3 -c "import uuid; print(uuid.uuid4())"</code></pre>
           <i class="fas fa-arrow-left" aria-hidden="true"></i>
           <span>Step 9: Test and debug</span>
         </a>
-        <a class="guide-pager-link" href="/">
-          <span>Browse the store</span>
+        <a class="guide-pager-link" href="/build/atari-st/11-get-listed.html">
+          <span>Step 11: Get listed in the store</span>
           <i class="fas fa-arrow-right" aria-hidden="true"></i>
         </a>
       </nav>
