@@ -28,6 +28,20 @@ repo root is uploaded as-is). The site is served over HTTPS on the custom domain
 (`md-store.sidecartridge.com`). In the repository settings, Pages → Build and deployment →
 Source is **GitHub Actions**.
 
+## Build guide
+
+The `/build/` section is a step-by-step guide to writing a microfirmware. Its eleven Atari ST step
+pages are **generated** from `tools/guide-src/` by `tools/build_guide.py`, which stamps identical
+chrome, the step rail and the pager onto each one. Edit the source and re-run it:
+
+```bash
+python3 tools/build_guide.py
+```
+
+This is not a build step. It runs by hand and its output is committed, so the site is still served
+as-is. See [`tools/guide-src/README.md`](tools/guide-src/README.md) for which files are generated
+and which are hand-written.
+
 ## Backlog
 
 Development is tracked in `docs/epics/` (a local-only, git-ignored backlog; run
