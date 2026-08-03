@@ -204,12 +204,21 @@ Do not guess a size, an address or a timing figure.</code></pre>
         <div class="guide-callout guide-callout-tip">
           <i class="fas fa-lightbulb" aria-hidden="true"></i>
           <div class="guide-callout-body">
-            <strong>Make it permanent.</strong>
+            <strong>The template already has one. Read it before you add to it.</strong>
             <p>
-              If your assistant supports a project instructions file, and Claude Code reads
-              <code>CLAUDE.md</code> from the repository root, put that block in it and commit it.
-              Then it applies to every session, including sessions six months from now when you have
-              forgotten why the rules exist.
+              Both templates ship a <a href="https://github.com/sidecartridge/md-microfirmware-template/blob/main/CLAUDE.md" target="_blank" rel="noopener"><code>CLAUDE.md</code> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a>
+              and an <a href="https://github.com/sidecartridge/md-microfirmware-template/blob/main/AGENTS.md" target="_blank" rel="noopener"><code>AGENTS.md</code> <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> at the
+              repository root, which Claude Code and most other assistants read automatically. They
+              are detailed and current, and they know things this page does not: the exact error a
+              build prints when the cartridge overruns 8 KB, why a stale
+              <code>target_firmware.h</code> shows garbage on the Atari while commands still work,
+              and which submodule directories must never be edited.
+            </p>
+            <p>
+              So do not paste the block above over them. <strong>Append</strong> what they do not
+              cover, which is mostly the architecture model and the shared memory map, and commit
+              that. If the two ever disagree, the files in the template win: they sit next to the
+              code and change with it.
             </p>
           </div>
         </div>

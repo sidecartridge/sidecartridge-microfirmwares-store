@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Step 3: Set up the toolchain (Atari ST) | SidecarTridge</title>
   <meta name="description"
-    content="Install the Raspberry Pi Pico SDKs, the Atari ST cross-compiler in Docker and VS Code, and set the five environment variables that tie them together." />
+    content="Install the ARM toolchain, the Atari ST cross-compiler in Docker and VS Code, and set PICO_TOOLCHAIN_PATH. The template supplies the Pico SDKs itself." />
   <link rel="canonical" href="https://md-store.sidecartridge.com/build/atari-st/03-toolchain.html" />
 
   <!-- Pure.css (CDN) -->
@@ -190,9 +190,12 @@
               project. You do not have to clone them separately.
             </p>
             <p>
+              Better still, the template sets <code>PICO_SDK_PATH</code>,
+              <code>PICO_EXTRAS_PATH</code> and <code>FATFS_SDK_PATH</code> from its own submodules
+              when you have not set them yourself, so the common case needs no configuration at all.
               The upstream programming guide also describes a standalone, system-wide Pico SDK
-              environment. Either works. Just make sure the paths below point at whichever copies
-              you actually intend to build against.
+              environment. That works too, and then the paths do matter. The template's own
+              <a href="https://github.com/sidecartridge/md-microfirmware-template/blob/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md <i class="fas fa-up-right-from-square" aria-hidden="true"></i></a> is the current reference for both.
             </p>
           </div>
         </div>
@@ -201,9 +204,43 @@
       <section class="browser-section guide-prose">
         <h2>Set the environment variables</h2>
         <p>
-          The build scripts find everything through five environment variables. Set them in your
-          shell profile so they survive a new terminal. If you only export them once, the next build
-          fails with a message about a missing SDK and you will not connect the two events.
+          Fewer of these are mandatory than you might expect, because the template fills in most of
+          them itself. Only one is always required:
+        </p>
+        <div class="guide-tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>When you need it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>PICO_TOOLCHAIN_PATH</code></td>
+                <td><strong>Always.</strong> Point it at your ARM GNU Toolchain's
+                  <code>arm-none-eabi/bin</code> directory. Without it the build cannot find
+                  <code>arm-none-eabi-gcc</code>.</td>
+              </tr>
+              <tr>
+                <td><code>PICO_SDK_PATH</code>, <code>PICO_EXTRAS_PATH</code>,
+                  <code>FATFS_SDK_PATH</code></td>
+                <td>Only if you are <em>not</em> building against the template's own submodules. The
+                  template sets all three from the repository when they are unset, so most people
+                  never touch them.</td>
+              </tr>
+              <tr>
+                <td><code>ARM_GDB_PATH</code>, <code>PICO_OPENOCD_PATH</code></td>
+                <td>Only for the debugger in
+                  <a href="/build/atari-st/09-test-and-debug.html">step 9</a>. Skip them until you
+                  have a Debug Probe in your hand.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Set whichever apply in your shell profile so they survive a new terminal. Exporting them
+          once in a single session is the classic way to get a confusing failure two days later.
         </p>
 
         <div class="guide-tabs">
@@ -217,10 +254,16 @@
               <div class="guide-code-head">
                 <span class="guide-code-label">~/.zshrc</span>
               </div>
-              <pre><code>export PICO_SDK_PATH=/path/to/pico-sdk
+              <pre><code># required
+export PICO_TOOLCHAIN_PATH=/path/to/arm-none-eabi/bin
+
+# only if you are not using the template's submodules
+export PICO_SDK_PATH=/path/to/pico-sdk
 export PICO_EXTRAS_PATH=/path/to/pico-extras
 export FATFS_SDK_PATH=/path/to/fatfs-sdk
-export ARM_GDB_PATH=/path/to/your/arm-toolchain
+
+# only for the debugger, step 9
+export ARM_GDB_PATH=/path/to/arm-none-eabi/bin
 export PICO_OPENOCD_PATH=/path/to/openocd/tcl</code></pre>
             </div>
           </div>
@@ -228,21 +271,23 @@ export PICO_OPENOCD_PATH=/path/to/openocd/tcl</code></pre>
           <div class="guide-tabpanel" data-tab-label="Windows (PowerShell)">
             <p class="guide-tabpanel-title">Windows (PowerShell)</p>
             <p>
-              The upstream guide gives the two debugger paths explicitly in PowerShell form:
+              Same variables, PowerShell syntax:
             </p>
             <div class="guide-code">
               <div class="guide-code-head">
                 <span class="guide-code-label">PowerShell</span>
               </div>
-              <pre><code>$env:ARM_GDB_PATH="C:\Path\to\your\arm-toolchain"
+              <pre><code># required
+$env:PICO_TOOLCHAIN_PATH="C:\Path\to\arm-none-eabi\bin"
+
+# only for the debugger, step 9
+$env:ARM_GDB_PATH="C:\Path\to\arm-none-eabi\bin"
 $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
             </div>
             <p>
-              The three SDK paths are set exactly the same way, for example
-              <code>$env:PICO_SDK_PATH="C:\Path\to\pico-sdk"</code>. Watch out for one thing:
-              <code>$env:</code> assignments only last for the current PowerShell session. Use
-              <em>System Properties &gt; Environment Variables</em>, or add them to your PowerShell
-              profile, to make them permanent.
+              Watch out for one thing: <code>$env:</code> assignments only last for the current
+              PowerShell session. Use <em>System Properties &gt; Environment Variables</em>, or add
+              them to your PowerShell profile, to make them permanent.
             </p>
           </div>
         </div>
@@ -336,10 +381,11 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
           <li class="guide-check">
             <input type="checkbox" id="chk-env">
             <label class="guide-check-body" for="chk-env">
-              <strong>All five environment variables survive a new terminal</strong>
-              <span>Open a fresh terminal and run <code>echo $PICO_SDK_PATH</code>, or
-                <code>echo $env:PICO_SDK_PATH</code> in PowerShell. An empty line means it is not
-                set.</span>
+              <strong><code>PICO_TOOLCHAIN_PATH</code> survives a new terminal</strong>
+              <span>Open a fresh terminal and run <code>echo $PICO_TOOLCHAIN_PATH</code>, or
+                <code>echo $env:PICO_TOOLCHAIN_PATH</code> in PowerShell. An empty line means it is
+                not set, and the build will fail looking for
+                <code>arm-none-eabi-gcc</code>.</span>
             </label>
           </li>
           <li class="guide-check">
@@ -386,8 +432,8 @@ $env:PICO_OPENOCD_PATH="C:\Path\to\openocd\tcl"</code></pre>
                 <span class="guide-code-label">Prompt</span>
               </div>
               <pre><code>I'm setting up a Raspberry Pi Pico W build environment on &lt;your OS and version&gt;.
-I need PICO_SDK_PATH, PICO_EXTRAS_PATH, FATFS_SDK_PATH, ARM_GDB_PATH and
-PICO_OPENOCD_PATH set permanently, plus cmake, make and picotool installed.
+I need PICO_TOOLCHAIN_PATH set permanently to my ARM GNU Toolchain's
+arm-none-eabi/bin directory, plus cmake, make and picotool installed.
 Here is what I ran and the error I got:
 
 &lt;paste the command and the full error&gt;
