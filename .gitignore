@@ -3,7 +3,11 @@ docs/
 
 # Editor / OS cruft
 .DS_Store
-.claude/
+
+# Local Claude Code config stays out; the shared skill ships with the repo.
+# `.claude/*` rather than `.claude/` so git still descends into skills/.
+.claude/*
+!.claude/skills/
 
 # Python
 __pycache__/

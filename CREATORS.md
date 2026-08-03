@@ -198,6 +198,10 @@ The worked example adds a creator called **Retro Homebrew Collective** to Atari 
 catalogue. The same walkthrough, written for somebody who has just built their first microfirmware,
 is [step 11 of the build guide](https://md-store.sidecartridge.com/build/atari-st/11-get-listed.html).
 
+If you work with Claude Code in a clone of this repository, the `publish-to-the-store` skill under
+[`.claude/skills/`](.claude/skills/publish-to-the-store/SKILL.md) drives this same process and runs
+the validator for you.
+
 ### Step 1 — fork and branch
 
 Fork this repository, clone it, and create a branch:
