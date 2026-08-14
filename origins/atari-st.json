@@ -13,6 +13,16 @@
       "official": true,
       "enabled": true,
       "url": "http://atarist.sidecartridge.com/apps.json"
+    },
+    {
+      "creator": {
+        "id": "neilrackett",
+        "name": "Neil Rackett",
+        "url": "https://neilrackett.com"
+      },
+      "official": false,
+      "enabled": true,
+      "url": "https://neilrackett.com/md-store-stable.json"
     }
   ],
   "_example_unofficial_origin": {
