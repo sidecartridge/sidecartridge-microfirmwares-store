@@ -460,28 +460,6 @@
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
-    },
-    {
-      "uuid": "39f63068-f2b2-4b99-aaf5-5210ae3ff96b",
-      "name": "Hello, SidecarT!",
-      "description": "Hello World microfirmware for the SidecarTridge Multi-device. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-helloworld/image.webp",
-      "tags": [
-        "Hello World",
-        "Development"
-      ],
-      "devices": [
-        "ST",
-        "STE",
-        "MegaST",
-        "MegaSTE"
-      ],
-      "binary": "https://downloads.neilrackett.com/md-helloworld/39f63068-f2b2-4b99-aaf5-5210ae3ff96b.uf2",
-      "md5": "95860cf3761d10b38173203032c84502",
-      "version": "v0.0.5",
-      "previous_versions": [],
-      "official": false,
-      "creator": "neilrackett"
     }
   ]
 }
