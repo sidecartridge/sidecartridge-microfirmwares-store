@@ -5,7 +5,8 @@ For each `origins/<platform>.json` registry (EPIC-09, D-14) this reads the offic
 origin (local `source`), fetches each unofficial origin (remote `url`, HTTP or HTTPS, D-16),
 validates the registry (schema/origins.schema.json, D-14) and each origin against the
 apps.json contract (schema/apps.schema.json, D-06), tags
-every app with `official` + `creator`, dedupes by `uuid` (official wins, D-17), and
+every app with `official` + `creator`, drops any `uuid` listed in `blacklist/<platform>.json`
+(schema/blacklist.schema.json, D-25), dedupes by `uuid` (official wins, D-17), and
 writes the consolidated `<platform>/apps.json` (schema/catalog.schema.json, D-15):
 `{ "creators": {<id>: {...}}, "apps": [ {...app, official, creator} ] }`.
 
@@ -118,6 +119,31 @@ def load_origin_apps(origin):
     return data.get("apps", [])
 
 
+def load_blacklist(platform):
+    """{uuid: reason} withheld from every channel of `platform` (D-25).
+
+    `blacklist/<platform>.json`, absent when nothing is blocked. Deliberately one file per
+    platform rather than per channel: an app pulled for a defect has to leave stable, test
+    and dev at once, and an emergency edit should touch one file. A malformed file is fatal,
+    because a blacklist that fails quietly is worse than none."""
+    rel = os.path.join("blacklist", f"{platform}.json")
+    if not os.path.exists(os.path.join(ROOT, rel)):
+        return {}
+    data = load_local(rel)
+    if JSONSCHEMA is not None:
+        JSONSCHEMA.validate(data, load_local("schema/blacklist.schema.json"))
+    if data.get("platform") != platform:
+        raise RuntimeError(f"{rel}: declares platform '{data.get('platform')}', expected '{platform}'")
+    blocked = {}
+    for i, e in enumerate(data.get("blocked", [])):
+        # Checked here too, not just by the schema: the schema is skipped when jsonschema
+        # is absent, and an entry that parses but blocks nothing is the failure to avoid.
+        if not isinstance(e, dict) or not e.get("uuid"):
+            raise RuntimeError(f"{rel}: blocked[{i}] needs a non-empty 'uuid'")
+        blocked[e["uuid"]] = e.get("reason")
+    return blocked
+
+
 def _device_key(name):
     """Comparison key for a device name: case- and punctuation-insensitive."""
     return re.sub(r"[^a-z0-9]", "", name.lower())
@@ -197,6 +223,8 @@ def build_platform(registry_rel, check=False, strict=False):
     errors = []
     canon = DEVICE_CANON.get(platform)     # None => platform not in platforms.json, no allow-list
     renamed_devices, unknown_devices = 0, {}
+    blacklist = load_blacklist(platform)   # D-25; {} when the platform has no blacklist file
+    blocked_hits = {}
     log(f"platform {label}:")
     for o in ordered:
         cid = o["creator"]["id"]
@@ -220,9 +248,13 @@ def build_platform(registry_rel, check=False, strict=False):
             creators[cid]["image"] = c["image"]
         creators[cid]["official"] = is_official
 
-        added = dropped = 0
+        added = dropped = blocked = 0
         for app in origin_apps:
             uuid = app.get("uuid")
+            if uuid in blacklist:            # withheld from every origin, official included (D-25)
+                blocked += 1
+                blocked_hits[uuid] = blocked_hits.get(uuid, 0) + 1
+                continue
             if uuid and uuid in seen:        # official processed first → official wins (D-17)
                 dropped += 1
                 continue
@@ -239,7 +271,15 @@ def build_platform(registry_rel, check=False, strict=False):
             apps.append({**app, "official": is_official, "creator": cid})
             added += 1
         note = f", {dropped} dedup drop(s)" if dropped else ""
+        note += f", {blocked} blacklisted" if blocked else ""
         log(f"  - {cid} ({tag}): +{added} app(s){note}")
+
+    if blacklist:
+        # Print the count even when it is zero: a mistyped uuid blocks nothing, and this
+        # line is the only place that shows it.
+        log(f"  blacklist: {len(blacklist)} uuid(s) listed, {sum(blocked_hits.values())} app(s) removed")
+        for uuid, n in sorted(blocked_hits.items()):
+            log(f"    - {uuid} x{n}: {blacklist[uuid] or 'no reason recorded'}")
 
     if renamed_devices:
         log(f"  devices: normalized on {renamed_devices} app(s)")

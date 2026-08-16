@@ -42,6 +42,19 @@ This is not a build step. It runs by hand and its output is committed, so the si
 as-is. See [`tools/guide-src/README.md`](tools/guide-src/README.md) for which files are generated
 and which are hand-written.
 
+## Pulling an app from the catalog
+
+`blacklist/<platform>.json` withholds app `uuid`s from that platform's catalogs. Add an entry:
+
+```json
+{ "uuid": "…", "reason": "why it was pulled", "date": "YYYY-MM-DD" }
+```
+
+to the `blocked` array, commit, and the next build drops the app from every channel of that
+platform (stable, test and dev), whoever published it. The daily rebuild picks it up; run
+`.github/workflows/rebuild-catalog.yml` by hand to make it immediate. Removing the entry puts the
+app back. This affects the catalog only, so a device that already downloaded the app keeps it.
+
 ## Backlog
 
 Development is tracked in `docs/epics/` (a local-only, git-ignored backlog; run

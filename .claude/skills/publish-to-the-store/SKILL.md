@@ -120,6 +120,9 @@ revalidates the entry and refetches the URL. It must be green before the PR can 
   punctuation and a leading platform name are ignored, so `Atari MegaST` resolves. A name matching
   nothing is kept as written and reported, never discarded, but it appears as its own filter entry.
 - **`description` is sanitised** to a whitelist of tags when rendered.
+- **A `uuid` listed in `blacklist/<platform>.json` is withheld** from every channel of that
+  platform, whoever published it. That file is the maintainers' emergency brake, not something a
+  creator edits. Never add or remove an entry there as part of a publishing change.
 
 ## Afterwards
 

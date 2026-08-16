@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://md-store.sidecartridge.com/schema/blacklist.schema.json",
+  "title": "blacklist/<platform>.json — app uuids withheld from a platform's catalogs (D-25)",
+  "description": "Build-time INPUT consumed by tools/build_catalog.py. One file per platform, named after the platform id, covering EVERY release channel of that platform: an app pulled for a defect has to leave stable, test and dev at once. A missing file means nothing is blocked. Not loaded by the UI, and it removes nothing that is already on a device: it only keeps the uuid out of the next build.",
+  "type": "object",
+  "required": ["platform", "blocked"],
+  "additionalProperties": true,
+  "properties": {
+    "platform": {
+      "type": "string",
+      "description": "Platform id. Must match platforms.json and the filename; the build rejects a mismatch."
+    },
+    "blocked": {
+      "type": "array",
+      "description": "Blocked apps. Empty means the platform has nothing withheld.",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": ["uuid"],
+      "additionalProperties": true,
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The app uuid to withhold, copied exactly from the origin's apps.json. Matched exactly and case-sensitively, so a typo blocks nothing. Check the removal count the build logs."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Why it was pulled. Free text, written for whoever reads this file months later deciding whether it can come back."
+        },
+        "date": {
+          "type": "string",
+          "description": "When it was pulled, YYYY-MM-DD."
+        }
+      }
+    }
+  }
+}

@@ -302,7 +302,7 @@ rebuild picks it up), the site deploys, and your apps appear attributed to you.
 
 ## 7. What the build does to your data
 
-Your `apps.json` is not copied verbatim into the store. Four things happen to it, so that every
+Your `apps.json` is not copied verbatim into the store. Five things happen to it, so that every
 creator's data behaves consistently:
 
 - **Your apps are tagged with your creator id** and displayed under your name, with a filter for
@@ -316,6 +316,12 @@ creator's data behaves consistently:
   as-is** and reported in the build log — nothing is discarded — but it will appear in the store
   exactly as you wrote it, as its own filter entry. Prefer the canonical spellings.
 - **`description` is sanitized** to the whitelisted tags when rendered.
+- **A `uuid` on the platform's blacklist is withheld.** `blacklist/<platform>.json` is the
+  maintainers' emergency brake for an app found to be harmful or broken. A listed `uuid` is dropped
+  from every channel of that platform on the next build, whoever published it, and the build log
+  records the reason. Your `apps.json` is untouched: nothing is edited on your side, the app simply
+  stops appearing in the store. If one of yours is pulled and you fix it, open an issue and ask for
+  the entry to be removed.
 
 ### Check your work locally
 
@@ -370,6 +376,7 @@ Common causes, and what they mean:
 | `HTTP 404` / connection error | The `url` is wrong or the host is unreachable. | Confirm the file is public at that exact URL. |
 | `exactly one official origin required` | You set `official: true`. | Creator origins are `official: false`. |
 | Your apps don't appear after merge | A `uuid` clashed with SidecarTridge's. | Use your own ids. |
+| One app vanished after being live | Its `uuid` is in `blacklist/<platform>.json`. | Read the entry's `reason`, fix the app, then ask for the entry to be removed. |
 
 ---
 
