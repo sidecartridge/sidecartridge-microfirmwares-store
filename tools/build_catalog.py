@@ -120,7 +120,7 @@ def load_origin_apps(origin):
 
 
 def load_blacklist(platform):
-    """{uuid: reason} withheld from every channel of `platform` (D-25).
+    """{uuid: entry} withheld from every channel of `platform` (D-25).
 
     `blacklist/<platform>.json`, absent when nothing is blocked. Deliberately one file per
     platform rather than per channel: an app pulled for a defect has to leave stable, test
@@ -140,7 +140,7 @@ def load_blacklist(platform):
         # is absent, and an entry that parses but blocks nothing is the failure to avoid.
         if not isinstance(e, dict) or not e.get("uuid"):
             raise RuntimeError(f"{rel}: blocked[{i}] needs a non-empty 'uuid'")
-        blocked[e["uuid"]] = e.get("reason")
+        blocked[e["uuid"]] = e
     return blocked
 
 
@@ -279,7 +279,9 @@ def build_platform(registry_rel, check=False, strict=False):
         # line is the only place that shows it.
         log(f"  blacklist: {len(blacklist)} uuid(s) listed, {sum(blocked_hits.values())} app(s) removed")
         for uuid, n in sorted(blocked_hits.items()):
-            log(f"    - {uuid} x{n}: {blacklist[uuid] or 'no reason recorded'}")
+            e = blacklist[uuid]
+            name = f" {e['name']!r}" if e.get("name") else ""
+            log(f"    - {uuid}{name} x{n}: {e.get('reason') or 'no reason recorded'}")
 
     if renamed_devices:
         log(f"  devices: normalized on {renamed_devices} app(s)")

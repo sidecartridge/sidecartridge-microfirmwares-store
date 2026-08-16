@@ -28,6 +28,10 @@
           "minLength": 1,
           "description": "The app uuid to withhold, copied exactly from the origin's apps.json. Matched exactly and case-sensitively, so a typo blocks nothing. Check the removal count the build logs."
         },
+        "name": {
+          "type": "string",
+          "description": "The app's name, as a human-readable label for the uuid. Optional, purely for reference: the build matches on uuid alone, never on this, and it is not checked against the app's real name. Worth filling in, because an app pulled today may be gone from its origin entirely by the time someone reads this entry, leaving the uuid meaning nothing."
+        },
         "reason": {
           "type": "string",
           "description": "Why it was pulled. Free text, written for whoever reads this file months later deciding whether it can come back."

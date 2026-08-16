@@ -47,7 +47,7 @@ and which are hand-written.
 `blacklist/<platform>.json` withholds app `uuid`s from that platform's catalogs. Add an entry:
 
 ```json
-{ "uuid": "…", "reason": "why it was pulled", "date": "YYYY-MM-DD" }
+{ "uuid": "…", "name": "the app's name", "reason": "why it was pulled", "date": "YYYY-MM-DD" }
 ```
 
 to the `blocked` array, commit, and the next build drops the app from every channel of that
