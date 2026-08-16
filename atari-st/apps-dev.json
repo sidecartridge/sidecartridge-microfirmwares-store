@@ -6,6 +6,12 @@
       "url": "https://sidecartridge.com",
       "image": "assets/platforms/atari-st.png",
       "official": true
+    },
+    "neilrackett": {
+      "id": "neilrackett",
+      "name": "Neil Rackett",
+      "url": "https://neilrackett.com",
+      "official": false
     }
   },
   "apps": [
@@ -29,6 +35,30 @@
       "previous_versions": [],
       "official": true,
       "creator": "sidecartridge"
+    },
+    {
+      "uuid": "991d4c35-3d0d-4e90-8bff-f7f1f1f93483",
+      "name": "MD/Pico3D: Open World 3D Game",
+      "description": "Pico3D is an open world 3D game demo for the Atari ST with the SidecarTridge Multi-device. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-pico3d/image.webp",
+      "tags": [
+        "Demo",
+        "GPU",
+        "3D",
+        "Game"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-pico3d/991d4c35-3d0d-4e90-8bff-f7f1f1f93483.uf2",
+      "md5": "f6c7897cc5f7840b8d64620ac45449a1",
+      "version": "v0.5.1",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
     }
   ]
 }

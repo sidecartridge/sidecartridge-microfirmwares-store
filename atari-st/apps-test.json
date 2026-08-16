@@ -6,6 +6,12 @@
       "url": "https://sidecartridge.com",
       "image": "assets/platforms/atari-st.png",
       "official": true
+    },
+    "neilrackett": {
+      "id": "neilrackett",
+      "name": "Neil Rackett",
+      "url": "https://neilrackett.com",
+      "official": false
     }
   },
   "apps": [

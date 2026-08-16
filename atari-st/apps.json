@@ -6,6 +6,12 @@
       "url": "https://sidecartridge.com",
       "image": "assets/platforms/atari-st.png",
       "official": true
+    },
+    "neilrackett": {
+      "id": "neilrackett",
+      "name": "Neil Rackett",
+      "url": "https://neilrackett.com",
+      "official": false
     }
   },
   "apps": [
@@ -339,6 +345,143 @@
       ],
       "official": true,
       "creator": "sidecartridge"
+    },
+    {
+      "uuid": "6952d09f-2fbf-41f0-90d6-bfc89d293c7e",
+      "name": "MD/Net: WiFi that just works!",
+      "description": "Wireless internet on your Atari ST that configures itself. Just install STinG from <a href=\"https://github.com/neilrackett/md-net/releases/latest\">here</a>, run INSTALL.TOS from the cartridge, restart your ST and you're ready to get online. For more, or to download the LowWire web browser, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-net/image.webp",
+      "tags": [
+        "Network",
+        "WiFi",
+        "Internet",
+        "STinG",
+        "Utility"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-net/6952d09f-2fbf-41f0-90d6-bfc89d293c7e.uf2",
+      "md5": "05c297b1a13bf73c0df63d1bb3494b98",
+      "version": "v0.5.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "7795c766-c5a8-4607-bc7d-01c55e03d300",
+      "name": "MD/Sidepad",
+      "description": "MD/Sidepad enables you to connect almost any Bluetooth gamepad to your Atari ST and use it as a joystick and mouse. For more information and games, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-sidepad/image.webp",
+      "tags": [
+        "Bluetooth",
+        "Controller",
+        "Gamepad",
+        "Joystick"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-sidepad/7795c766-c5a8-4607-bc7d-01c55e03d300.uf2",
+      "md5": "a5ad457b256dd42fd3960e6e29b3760f",
+      "version": "v1.0.3",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "82172749-35b4-4878-b8f6-929d68f1a624",
+      "name": "MD/Speccy: ZX Spectrum 48K",
+      "description": "MD/Speccy turns your SidecarT into a ZX Spectrum 48K running on your Atari ST! It comes with two great demos and you can add more simply by adding your favourite .z80 and .sna files into the /speccy folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-speccy/image.webp",
+      "tags": [
+        "Emulation",
+        "ZX Spectrum",
+        "Game"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-speccy/82172749-35b4-4878-b8f6-929d68f1a624.uf2",
+      "md5": "86f43f0ee4bcaa13fb8df2a48d3514e7",
+      "version": "v1.1.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "5453cff2-e763-4bbb-b6df-d533493bcb85",
+      "name": "MD/MJPEG",
+      "description": "Why watch videos at 4K resolution in 16.7 million colours when you can watch them at 0.3K in 16! Stream MJPEG video with sound from your SidecarT's SD card to your Atari ST. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-mjpeg/image.webp",
+      "tags": [
+        "Video",
+        "Audio"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-mjpeg/5453cff2-e763-4bbb-b6df-d533493bcb85.uf2",
+      "md5": "2b708c4598cc0e34b53959ded4d3573b",
+      "version": "v1.0.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "c586d331-a715-4f3b-882e-138385c9900d",
+      "name": "MD/Snap",
+      "description": "Capture Atari ST screenshots to your SidecarT's SD card by pressing the SELECT button. The current screen is saved as a 640×400 PNG, it works in every ST resolution, and the aspect ratio is corrected for you. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-snap/image.webp",
+      "tags": [
+        "Screenshot"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-snap/c586d331-a715-4f3b-882e-138385c9900d.uf2",
+      "md5": "6da3e117ca2e16c5b613edf6d14e0c42",
+      "version": "v1.0.1",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "39f63068-f2b2-4b99-aaf5-5210ae3ff96b",
+      "name": "Hello, SidecarT!",
+      "description": "Hello World microfirmware for the SidecarTridge Multi-device. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-helloworld/image.webp",
+      "tags": [
+        "Hello World",
+        "Development"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-helloworld/39f63068-f2b2-4b99-aaf5-5210ae3ff96b.uf2",
+      "md5": "95860cf3761d10b38173203032c84502",
+      "version": "v0.0.5",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
     }
   ]
 }
