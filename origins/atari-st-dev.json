@@ -1,5 +1,5 @@
 {
-  "_comment": "Build-time origins registry (D-14) for the DEV channel (D-19). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps-dev.json, shown by the UI at ?channel=dev. Note the upstream key is apps-dev.json (apps-devs.json does not exist). Sibling channels: origins/atari-st.json (stable), origins/atari-st-test.json (test).",
+  "_comment": "Build-time origins registry (D-14) for the DEV channel (D-19). Consumed by tools/build_catalog.py (EPIC-10) to produce the consolidated atari-st/apps-dev.json, shown by the UI at ?channel=dev. Note the upstream key is apps-dev.json (apps-devs.json does not exist). Sibling channels: origins/atari-st.json (stable), origins/atari-st-test.json (test). THIS CHANNEL IS OFFICIAL-ONLY: the SidecarTridge origin is the only origin that belongs here, and creator origins must not be added. The dev channel exists for the DEV APP slot tied to the shared development UUID 44444444-4444-4444-8444-444444444444, which a developer overwrites with their own build; it is a workbench, not a distribution channel. Creators publish to stable (origins/atari-st.json) and, for pre-release, test (origins/atari-st-test.json).",
   "platform": "atari-st",
   "channel": "dev",
   "origins": [
@@ -13,16 +13,6 @@
       "official": true,
       "enabled": true,
       "url": "http://atarist.sidecartridge.com/apps-dev.json"
-    },
-    {
-      "creator": {
-        "id": "neilrackett",
-        "name": "Neil Rackett",
-        "url": "https://neilrackett.com"
-      },
-      "official": false,
-      "enabled": true,
-      "url": "https://neilrackett.com/md-store-dev.json"
     }
   ]
 }
