@@ -1,10 +1,18 @@
 {
   "_comment": "Emergency removal list (D-25) for the atari-st platform. Consumed by tools/build_catalog.py, validated against schema/blacklist.schema.json. Add an object to \"blocked\" with the app's uuid and the build drops it from atari-st/apps.json, apps-test.json and apps-dev.json alike. One file per platform, all channels, because an app pulled for a defect has to go everywhere at once. Works on the official origin too. It changes the next build only: devices that already downloaded the app keep it. Removing the entry puts the app back, provided its origin still lists it.",
   "platform": "atari-st",
-  "blocked": [],
+  "blocked": [
+    {
+      "uuid": "39f63068-f2b2-4b99-aaf5-5210ae3ff96b",
+      "name": "Hello, SidecarT!",
+      "reason": "It hangs on start.",
+      "date": "2026-08-16"
+    }
+  ],
   "_example_blocked_entry": {
     "_comment": "INERT TEMPLATE, kept as documentation rather than as a live entry. build_catalog.py only reads the \"blocked\" array, so nothing under this key is applied. To pull an app, copy the object below into \"blocked\" (dropping this \"_comment\") and put its real uuid in.",
     "uuid": "b1e6c0a2-7f3d-4a9c-9b21-0a1b2c3d4e5f",
+    "name": "Example App",
     "reason": "Corrupts the microSD card on STE hardware.",
     "date": "2026-08-16"
   }
