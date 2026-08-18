@@ -168,34 +168,6 @@
       "creator": "sidecartridge"
     },
     {
-      "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
-      "name": "MD/JS: JavaScript Worker",
-      "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the Sidecartridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://github.com/neilrackett/md-js\">https://github.com/neilrackett/md-js</a>.",
-      "image": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca.png",
-      "tags": [
-        "Scripting",
-        "Development"
-      ],
-      "devices": [
-        "ST",
-        "STE",
-        "MegaST",
-        "MegaSTE"
-      ],
-      "binary": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca-v1.1.0.uf2",
-      "md5": "2eabf1c6615fdcf9a669bb39f1f75bc4",
-      "version": "v1.1.0",
-      "previous_versions": [
-        {
-          "version": "v1.0.1beta",
-          "binary": "https://atarist.sidecartridge.com/6f3f635c-4a05-4201-8450-39e4b1c32eca-v1.0.1beta.uf2",
-          "md5": "9e544d1baa30cf700b648364420dbf98"
-        }
-      ],
-      "official": true,
-      "creator": "sidecartridge"
-    },
-    {
       "uuid": "b04ccd04-9b5d-4f6b-abd1-43af82c3b43a",
       "name": "MV16 Emulator",
       "description": "Emulates the MV16 audio device for Atari ST computers and outputs audio through Bluetooth audio streams. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/mv16-emulator/'>Learn more</a>",
@@ -457,6 +429,30 @@
       "binary": "https://downloads.neilrackett.com/md-snap/c586d331-a715-4f3b-882e-138385c9900d.uf2",
       "md5": "6da3e117ca2e16c5b613edf6d14e0c42",
       "version": "v1.0.1",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
+      "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
+      "name": "MD/JS: JavaScript Worker",
+      "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the SidecarTridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-js/image.webp",
+      "tags": [
+        "JavaScript",
+        "Worker",
+        "Scripting",
+        "Development"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-js/6f3f635c-4a05-4201-8450-39e4b1c32eca.uf2",
+      "md5": "bfe517449f3218ebcc668bdf202452c5",
+      "version": "v1.1.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
