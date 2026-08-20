@@ -322,7 +322,7 @@
       "uuid": "6952d09f-2fbf-41f0-90d6-bfc89d293c7e",
       "name": "MD/Net: WiFi that just works!",
       "description": "Wireless internet on your Atari ST that configures itself. Just install STinG from <a href=\"https://github.com/neilrackett/md-net/releases/latest\">here</a>, run INSTALL.TOS from the cartridge, restart your ST and you're ready to get online. For more, or to download the LowWire web browser, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-net/image.webp",
+      "image": "https://downloads.neilrackett.com/md-net.webp",
       "tags": [
         "Network",
         "WiFi",
@@ -347,7 +347,7 @@
       "uuid": "7795c766-c5a8-4607-bc7d-01c55e03d300",
       "name": "MD/Sidepad",
       "description": "MD/Sidepad enables you to connect almost any Bluetooth gamepad to your Atari ST and use it as a joystick and mouse. For more information and games, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-sidepad/image.webp",
+      "image": "https://downloads.neilrackett.com/md-sidepad.webp",
       "tags": [
         "Bluetooth",
         "Controller",
@@ -371,7 +371,7 @@
       "uuid": "82172749-35b4-4878-b8f6-929d68f1a624",
       "name": "MD/Speccy: ZX Spectrum 48K",
       "description": "MD/Speccy turns your SidecarT into a ZX Spectrum 48K running on your Atari ST! It comes with two great demos and you can add more simply by adding your favourite .z80 and .sna files into the /speccy folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-speccy/image.webp",
+      "image": "https://downloads.neilrackett.com/md-speccy.webp",
       "tags": [
         "Emulation",
         "ZX Spectrum",
@@ -394,7 +394,7 @@
       "uuid": "5453cff2-e763-4bbb-b6df-d533493bcb85",
       "name": "MD/MJPEG",
       "description": "Why watch videos at 4K resolution in 16.7 million colours when you can watch them at 0.3K in 16! Stream MJPEG video with sound from your SidecarT's SD card to your Atari ST. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-mjpeg/image.webp",
+      "image": "https://downloads.neilrackett.com/md-mjpeg.webp",
       "tags": [
         "Video",
         "Audio"
@@ -416,7 +416,7 @@
       "uuid": "c586d331-a715-4f3b-882e-138385c9900d",
       "name": "MD/Snap",
       "description": "Capture Atari ST screenshots to your SidecarT's SD card by pressing the SELECT button. The current screen is saved as a 640×400 PNG, it works in every ST resolution, and the aspect ratio is corrected for you. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-snap/image.webp",
+      "image": "https://downloads.neilrackett.com/md-snap.webp",
       "tags": [
         "Screenshot"
       ],
@@ -437,7 +437,7 @@
       "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
       "name": "MD/JS: JavaScript Worker",
       "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the SidecarTridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
-      "image": "https://downloads.neilrackett.com/md-js/image.webp",
+      "image": "https://downloads.neilrackett.com/md-js.webp",
       "tags": [
         "JavaScript",
         "Worker",
