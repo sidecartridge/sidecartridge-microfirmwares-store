@@ -46,6 +46,30 @@
       "creator": "sidecartridge"
     },
     {
+      "uuid": "1f730536-e6a4-415b-8814-bf261d73c484",
+      "name": "Cubase Dongle Emulator",
+      "description": "Emulates Steinberg's Cubase 2 (black) and Cubase 3 (red) copy-protection dongles on the SidecarTridge MultiDevice, so you can run Cubase on a real Atari ST without the original hardware key. Pick the dongle from the boot menu and it launches straight into GEM. <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/cubase-dongles/'>Learn how</a>",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-cubase-dongles/main/icon.png",
+      "tags": [
+        "Cubase",
+        "Dongle"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE",
+        "TT",
+        "Falcon"
+      ],
+      "binary": "https://atarist.sidecartridge.com/1f730536-e6a4-415b-8814-bf261d73c484-v1.0.0.uf2",
+      "md5": "79b32cfb69341f8e6f5282c561fbcb54",
+      "version": "v1.0.0",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
       "uuid": "360a8520-9f50-4556-8a05-65f924d4f5d8",
       "name": "Real Time Clock",
       "description": "Real Time Clock reading the values from a remote NTP server. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/rtc_emulator/'>Learn more</a>",
