@@ -139,7 +139,7 @@
       "uuid": "60a83f2a-6dca-440a-87a5-92fec145708f",
       "name": "Debug Cart",
       "description": "Repurposes the SidecarTridge Multi-device as a debug-output device for Atari ST software through the cartridge port forwarding to the USB serial port  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/debug-cart/'>Learn more</a>",
-      "image": "https://placehold.co/256x256/png",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-debug-cart/main/icon.png",
       "tags": [
         "Development"
       ],
@@ -162,7 +162,7 @@
       "uuid": "6bc6b136-c177-4cbd-a827-4a310d3cc303",
       "name": "GPU Demo",
       "description": "A demo application showcasing graphics co-processing rendering on the RP2040 and Atari ST  <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/gpu-demo/'>Learn how</a>",
-      "image": "https://placehold.co/256x256/png",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-gpu-demo/main/icon.png",
       "tags": [
         "Demo",
         "GPU"
