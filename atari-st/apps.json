@@ -73,7 +73,7 @@
       "uuid": "360a8520-9f50-4556-8a05-65f924d4f5d8",
       "name": "Real Time Clock",
       "description": "Real Time Clock reading the values from a remote NTP server. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/rtc_emulator/'>Learn more</a>",
-      "image": "https://placehold.co/256x256/png",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-rtc-emulator/main/icon.png",
       "tags": [
         "RTC"
       ],
@@ -276,7 +276,7 @@
       "uuid": "ed70ef7b-3538-43c8-8957-4d9fa4e7736c",
       "name": "ROM Emulator",
       "description": "Pure raw emulation of ROMs with a maximum of 128KBs. It can load any ROM file from the SD card or download it from the public repository in the net.  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/rom_emulator/'>Learn more</a>",
-      "image": "https://placehold.co/256x256/png",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-rom-emulator/main/icon.png",
       "tags": [
         "Emulation",
         "ROM"
