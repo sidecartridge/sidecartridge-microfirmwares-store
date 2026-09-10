@@ -343,6 +343,30 @@
       "creator": "sidecartridge"
     },
     {
+      "uuid": "5f623c75-5a4e-4d1b-a805-1ec089349f0e",
+      "name": "MD/DOOM",
+      "description": "Yes, the SidecarTridge Multi-device is brilliant, but can it run DOOM? MD/DOOM is full speed, fully playable Doom on your Atari ST. To download level packs, head over to <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a> and select MD/DOOM.",
+      "image": "https://downloads.neilrackett.com/md-doom.webp",
+      "tags": [
+        "Game",
+        "FPS",
+        "Joystick",
+        "Gamepad"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-doom/5f623c75-5a4e-4d1b-a805-1ec089349f0e.uf2",
+      "md5": "0c7feb472116a920a1bc14c1978564d3",
+      "version": "v0.4.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
       "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
       "name": "MD/JS: JavaScript Worker",
       "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the SidecarTridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
@@ -475,8 +499,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-speccy/82172749-35b4-4878-b8f6-929d68f1a624.uf2",
-      "md5": "86f43f0ee4bcaa13fb8df2a48d3514e7",
-      "version": "v1.1.0",
+      "md5": "536ffe8c0b06d45eb3fd3045b261eaa9",
+      "version": "v1.2.2",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
