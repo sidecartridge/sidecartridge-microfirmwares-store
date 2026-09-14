@@ -5,7 +5,8 @@
  *   </div>
  *   <script src="https://md-store.sidecartridge.com/widget/carousel.js" defer></script>
  *
- * Add data-theme="dark" when the container sits on a dark background.
+ * Add data-theme="dark" when the container sits on a dark background, and data-creator="<name>"
+ * to show one creator's apps instead of all of them.
  *
  * Reads <platform>/apps.json from the store that serves this script, so it shows what the store
  * shows. Everything renders inside a shadow root: the host page's CSS cannot restyle the cards and
@@ -115,7 +116,7 @@
     return li;
   }
 
-  function build(root, data, platform) {
+  function build(root, data, platform, byName) {
     const apps = data.apps;
     const creators = data.creators || {};
 
@@ -124,7 +125,8 @@
     section.setAttribute('aria-label', 'Microfirmware catalog');
 
     const bar = el('div', 'bar');
-    bar.append(el('p', 'count', `${apps.length} microfirmware${apps.length === 1 ? '' : 's'}`));
+    const count = `${apps.length} microfirmware${apps.length === 1 ? '' : 's'}`;
+    bar.append(el('p', 'count', byName ? `${count} by ${byName}` : count));
     const nav = el('div', 'nav');
     const prev = el('button', 'prev');
     const next = el('button', 'next');
@@ -205,6 +207,7 @@
   function mount(host) {
     if (host.shadowRoot) return;             // the script was included twice
     const platform = (host.dataset.platform || 'atari-st').trim();
+    const creator = (host.dataset.creator || '').trim();
     if (!/^[a-z0-9-]+$/.test(platform)) return;
 
     // Until the carousel is ready the shadow root only holds a slot, which keeps showing the
@@ -224,8 +227,20 @@
 
     Promise.all([catalog, styled])
       .then(([data]) => {
-        if (!data || !Array.isArray(data.apps) || !data.apps.length) return;
-        build(root, data, platform);
+        if (!data || !Array.isArray(data.apps)) return;
+        const creators = data.creators || {};
+        // data-creator narrows the carousel to one creator. It matches the creator's id or display
+        // name, ignoring case, so "neilrackett" and "Neil Rackett" both work. Empty shows every app.
+        const wanted = creator.toLowerCase();
+        const byCreator = (app) => [app.creator, creators[app.creator] && creators[app.creator].name]
+          .some((v) => typeof v === 'string' && v.trim().toLowerCase() === wanted);
+        const apps = wanted ? data.apps.filter(byCreator) : data.apps;
+        if (!apps.length) {
+          if (wanted) console.warn(`[md-store carousel] no apps by creator "${creator}" on ${platform}`);
+          return;
+        }
+        const byName = wanted ? (creators[apps[0].creator] && creators[apps[0].creator].name) || apps[0].creator : '';
+        build(root, { ...data, apps }, platform, byName);
       })
       .catch((err) => console.warn('[md-store carousel]', err));
   }
