@@ -45,7 +45,7 @@
   // Catalog descriptions often close on a link such as "Learn more". The whole card is already a
   // link, so that text would point nowhere: a final link whose text is a generic call to action
   // is dropped. Any other link keeps its text, because it is part of a sentence ("visit
-  // neilrackett.com.").
+  // example.com.").
   const CALL_TO_ACTION = /^\s*(learn|read|find out|see|more|details)\b/i;
   const plainText = (html) => {
     const body = new DOMParser().parseFromString(String(html || ''), 'text/html').body;
@@ -230,7 +230,8 @@
         if (!data || !Array.isArray(data.apps)) return;
         const creators = data.creators || {};
         // data-creator narrows the carousel to one creator. It matches the creator's id or display
-        // name, ignoring case, so "neilrackett" and "Neil Rackett" both work. Empty shows every app.
+        // name, ignoring case, so "retro-homebrew" and "Retro Homebrew Collective" both work.
+        // Empty shows every app.
         const wanted = creator.toLowerCase();
         const byCreator = (app) => [app.creator, creators[app.creator] && creators[app.creator].name]
           .some((v) => typeof v === 'string' && v.trim().toLowerCase() === wanted);
