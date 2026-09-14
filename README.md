@@ -53,6 +53,8 @@ and which are hand-written.
 <script src="https://md-store.sidecartridge.com/widget/carousel.js" defer></script>
 ```
 
+Add `data-creator="Neil Rackett"` (a creator's name or id) to show only that creator's apps.
+
 It fetches `<platform>/apps.json` from this site at page load and renders inside a shadow root. Each
 card opens its app through the store's `#<platform>/<uuid>` deep link. The snippet and live previews
 are at [`/widget/`](https://md-store.sidecartridge.com/widget/).

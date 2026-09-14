@@ -103,6 +103,12 @@
         <ul>
           <li><code>data-platform</code> picks the catalog. Today that is <code>atari-st</code>.</li>
           <li><code>data-theme="dark"</code> switches the cards for a dark background.</li>
+          <li>
+            <code>data-creator</code> shows one creator's apps. Use the name shown on the cards or
+            the creator's id, in any case: <code>Neil Rackett</code> and <code>neilrackett</code>
+            both work. Leave it out, or empty, for every app. A name that matches nobody leaves the
+            fallback in place.
+          </li>
         </ul>
         <p>
           Each card opens that app in the store in a new tab. The widget renders inside a shadow
@@ -124,6 +130,19 @@
           <div data-md-store-carousel data-platform="atari-st" data-theme="dark">
             <a href="https://md-store.sidecartridge.com/#atari-st">Browse all apps in the Store</a>
           </div>
+        </div>
+      </section>
+
+      <section class="browser-section guide-prose">
+        <h2>One creator</h2>
+        <div class="guide-code">
+          <div class="guide-code-head">
+            <span class="guide-code-label">HTML</span>
+          </div>
+          <pre><code>&lt;div data-md-store-carousel data-platform="atari-st" data-creator="Neil Rackett"&gt;</code></pre>
+        </div>
+        <div data-md-store-carousel data-platform="atari-st" data-creator="Neil Rackett">
+          <a href="https://md-store.sidecartridge.com/#atari-st">Browse all apps in the Store</a>
         </div>
       </section>
 
