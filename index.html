@@ -134,9 +134,9 @@
           this.loading = false;
         },
 
-        // ----- routing: #<platform-id> -----
+        // ----- routing: #<platform-id>, or #<platform-id>/<app-uuid> to open one app -----
         async applyHash() {
-          const pid = decodeURIComponent((location.hash || '').replace(/^#/, ''));
+          const [pid, uuid] = decodeURIComponent((location.hash || '').replace(/^#/, '')).split('/');
           const p = pid && this.platforms.find(x => x.id === pid);
           if (!p) { this.view = 'platforms'; this.activePlatform = null; this.detailApp = null; return; }
           this.view = 'catalog';
@@ -146,7 +146,8 @@
             this.loading = false;
           }
           this.clearFilters();
-          this.detailApp = null;
+          // A uuid this catalog does not carry just shows the grid.
+          this.detailApp = (uuid && this.apps.find(a => a.uuid === uuid)) || null;
         },
         selectPlatform(p) { location.hash = p.id; },
         backToPlatforms() { location.hash = ''; },
@@ -173,7 +174,12 @@
         hasFilters() { return !!(this.search || this.activeTag || this.activeDevice || this.activeCreator); },
         clearFilters() { this.search = ''; this.activeTag = ''; this.activeDevice = ''; this.activeCreator = ''; },
         openDetail(a) { this.detailApp = a; },
-        closeDetail() { this.detailApp = null; },
+        closeDetail() {
+          this.detailApp = null;
+          // Drop a deep-linked uuid so a reload does not reopen the app. replaceState fires no
+          // hashchange, so the filters survive.
+          if (this.activePlatform && location.hash.includes('/')) history.replaceState(null, '', '#' + this.activePlatform.id);
+        },
 
         // ----- no-logo art (EPIC-05 STORY-02): placehold.co / missing / broken -> brand monogram
         noLogo(app) { const src = (app && app.image) || ''; return !src || /placehold\.co/i.test(src); },
