@@ -42,6 +42,21 @@ This is not a build step. It runs by hand and its output is committed, so the si
 as-is. See [`tools/guide-src/README.md`](tools/guide-src/README.md) for which files are generated
 and which are hand-written.
 
+## Catalog widget
+
+`widget/carousel.js` shows the live catalog as a carousel on any page, such as the docs site:
+
+```html
+<div data-md-store-carousel data-platform="atari-st">
+  <a href="https://md-store.sidecartridge.com/#atari-st">Browse all apps in the Store</a>
+</div>
+<script src="https://md-store.sidecartridge.com/widget/carousel.js" defer></script>
+```
+
+It fetches `<platform>/apps.json` from this site at page load and renders inside a shadow root. Each
+card opens its app through the store's `#<platform>/<uuid>` deep link. The snippet and live previews
+are at [`/widget/`](https://md-store.sidecartridge.com/widget/).
+
 ## Pulling an app from the catalog
 
 `blacklist/<platform>.json` withholds app `uuid`s from that platform's catalogs. Add an entry:

@@ -1,0 +1,213 @@
+/* Styles for widget/carousel.js. Loaded inside the widget's shadow root, so these selectors
+   only ever match the widget's own markup, and nothing on the host page matches it. */
+
+:host {
+  --ink: #0d042b;
+  --ink-2: #3b364c;
+  --surface: #f7f6ed;
+  --accent: #faebd7;
+  --accent-ink: #0d042b;
+  --border: rgba(13, 4, 43, 0.12);
+  --border-hover: #0d042b;
+  --focus: #0d042b;
+  --mono: ui-monospace, "Fira Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  display: block;
+  /* The row of cards is far wider than any page. Without this the host page can size its
+     container to fit the row and scroll sideways; with it the widget always takes the width
+     it is given. */
+  contain: inline-size;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: left;
+}
+
+/* For a dark container, such as the Apps Catalog hero on docs.sidecartridge.com. */
+:host([data-theme="dark"]) {
+  --ink: #fdfcf9;
+  --ink-2: rgba(253, 252, 249, 0.74);
+  --surface: rgba(253, 252, 249, 0.05);
+  --border: rgba(250, 235, 215, 0.18);
+  --border-hover: rgba(250, 235, 215, 0.45);
+  --focus: #faebd7;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.75rem;
+}
+.count {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.nav { display: flex; gap: 0.4rem; }
+.nav button {
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.nav button:hover:not(:disabled) { border-color: var(--border-hover); background: var(--surface); }
+.nav button:disabled { opacity: 0.35; cursor: default; }
+.nav button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.nav svg { inline-size: 1rem; block-size: 1rem; }
+.next svg { transform: scaleX(-1); }
+
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(13.5rem, 78%, 16.5rem);
+  gap: 0.875rem;
+  margin: 0;
+  /* Room for the hover lift and the focus ring, which overflow clipping would cut off. */
+  padding: 4px 3px 6px;
+  scroll-padding-inline: 3px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.track::-webkit-scrollbar { display: none; }
+.track:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 14px; }
+.track.dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+
+.slide { display: flex; scroll-snap-align: start; }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  -webkit-user-drag: none;
+  transition: border-color 0.16s ease, transform 0.16s ease, background-color 0.16s ease;
+}
+.card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.card:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.dragging .card { transform: none; }
+
+.media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background: var(--logo-bg, var(--accent));
+  overflow: hidden;
+}
+.icon { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.monogram {
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.8rem 0.9rem 0.9rem;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+.version {
+  flex: none;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+.creator { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.name {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.desc {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: auto 0 0;
+  padding: 0.25rem 0 0;
+  list-style: none;
+}
+.tags li {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--ink-2);
+}
+
+.progress {
+  position: relative;
+  block-size: 2px;
+  margin-top: 0.75rem;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.progress span {
+  position: absolute;
+  inset-block: 0;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+/* Everything fits: nothing to scroll, so no controls. */
+.static .nav,
+.static .progress { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .nav button { transition: none; }
+  .card:hover { transform: none; }
+}
