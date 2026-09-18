@@ -122,7 +122,7 @@
       "uuid": "5a7827c7-6b1a-4d4a-bc96-99d08e81aaac",
       "name": "DevOps toolkit",
       "description": "Remote development surface for Atari ST/STE/MegaST/MegaSTE: GEMDRIVE folder-as-drive, HTTP-driven program launcher, Pexec load/exec/unload split, system memory snapshots, and high-bandwidth debug-byte streaming over Wi-Fi or USB CDC.  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/devops/'>Learn more</a>",
-      "image": "https://raw.githubusercontent.com/sidecartridge/md-devops/refs/heads/main/icon.png",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-devops/main/icon.png",
       "tags": [
         "Development",
         "GEMDRIVE",
@@ -134,10 +134,16 @@
         "MegaST",
         "MegaSTE"
       ],
-      "binary": "https://atarist.sidecartridge.com/5a7827c7-6b1a-4d4a-bc96-99d08e81aaac-v1.0.1beta.uf2",
-      "md5": "f49dff91b2c6fc3ed36d94a48655b305",
-      "version": "v1.0.1beta",
-      "previous_versions": [],
+      "binary": "https://atarist.sidecartridge.com/5a7827c7-6b1a-4d4a-bc96-99d08e81aaac-v1.1.0.uf2",
+      "md5": "b7a1758462452f88d05ecd592c50eeda",
+      "version": "v1.1.0",
+      "previous_versions": [
+        {
+          "version": "v1.0.1beta",
+          "binary": "https://atarist.sidecartridge.com/5a7827c7-6b1a-4d4a-bc96-99d08e81aaac-v1.0.1beta.uf2",
+          "md5": "f49dff91b2c6fc3ed36d94a48655b305"
+        }
+      ],
       "official": true,
       "creator": "sidecartridge"
     },
