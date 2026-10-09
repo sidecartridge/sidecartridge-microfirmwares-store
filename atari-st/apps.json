@@ -388,6 +388,28 @@
       "creator": "sidecartridge"
     },
     {
+      "uuid": "39f63068-f2b2-4b99-aaf5-5210ae3ff96b",
+      "name": "Hello, SidecarT!",
+      "description": "Hello World microfirmware to help new developers understand how the SidecarTridge Multi-device works. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "image": "https://downloads.neilrackett.com/md-helloworld.webp",
+      "tags": [
+        "Hello World",
+        "Development"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/md-helloworld/39f63068-f2b2-4b99-aaf5-5210ae3ff96b.uf2",
+      "md5": "50901f962d3f06ad2fa5f0a1edf172b6",
+      "version": "v0.0.8",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
+    },
+    {
       "uuid": "5f623c75-5a4e-4d1b-a805-1ec089349f0e",
       "name": "MD/DOOM",
       "description": "Yes, the SidecarTridge Multi-device is brilliant, but can it run DOOM? MD/DOOM is full speed, fully playable Doom on your Atari ST. To download level packs, head over to <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a> and select MD/DOOM.",
