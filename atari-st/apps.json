@@ -549,6 +549,33 @@
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
+    },
+    {
+      "uuid": "801e2a14-a081-490f-8238-dda4b6205b47",
+      "name": "ROTT Accelerator",
+      "description": "The ROTT Accelerator enables you to play Rise of the Triad at 15fps on your Atari ST. ROTT for Atari ST is available at <a href=\"https://neilrackett.com/atarist\">neilrackett.com/atarist</a>.",
+      "image": "https://downloads.neilrackett.com/atarist-rott.webp",
+      "tags": [
+        "Game",
+        "FPS",
+        "3D",
+        "GPU",
+        "Accelerator",
+        "Gamepad",
+        "Mouse"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://downloads.neilrackett.com/atarist-rott/801e2a14-a081-490f-8238-dda4b6205b47.uf2",
+      "md5": "c3970b3d920c8d61a04a58a740566b61",
+      "version": "v1.4.0-beta.1",
+      "previous_versions": [],
+      "official": false,
+      "creator": "neilrackett"
     }
   ]
 }
