@@ -23,6 +23,16 @@
       "official": false,
       "enabled": true,
       "url": "https://neilrackett.com/md-store-stable.json"
+    },
+    {
+      "creator": {
+        "id": "galvanoid",
+        "name": "Galvanoid",
+        "url": "https://github.com/galvanoid/zynaps-wide"
+      },
+      "official": false,
+      "enabled": true,
+      "url": "https://raw.githubusercontent.com/galvanoid/zynaps-wide/main/apps.json"
     }
   ],
   "_example_unofficial_origin": {
