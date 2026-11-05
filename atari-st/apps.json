@@ -376,6 +376,28 @@
       "creator": "sidecartridge"
     },
     {
+      "uuid": "f30fafe6-7ab3-4176-8209-3eeb332d25fe",
+      "name": "Cho Ren Sha 68k",
+      "description": "1995: Famibe no Yosshin's legendary X68000 shoot 'em up, hundreds of sprites and bullets on screen. Now it plays at 50 fps on your Atari ST, STE, Mega ST or Mega STE, music and effects included. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/chorensha-50fps/'>Learn more</a>",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-chorensha/main/icon.png",
+      "tags": [
+        "Game",
+        "Shoot 'em up"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/f30fafe6-7ab3-4176-8209-3eeb332d25fe-v1.0.0.uf2",
+      "md5": "a48cfd54ddda902a4dc5d2e20c74632e",
+      "version": "v1.0.0",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
       "uuid": "f6b96229-873c-415d-992f-2555c7f7918d",
       "name": "File and Download manager",
       "description": "Browse and download floppy image collections right from the repository or custom locations <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/browser/'>Learn how</a>",
