@@ -238,6 +238,30 @@
       "creator": "sidecartridge"
     },
     {
+      "uuid": "81852356-9c9f-44bf-954b-5d56c4e68edf",
+      "name": "Jackintosh Multidrive Emulation",
+      "description": "Floppy and hard disk images, the clock and the PRAM for the Jackintosh ROMs, which turn an Atari ST/STE/MegaST/MegaSTE into a Macintosh Plus. Works only with the Jackintosh ROMs in the TOS sockets (a SidecarTridge TOS Emulator, or EPROMs): put your Mac disk images in /jackintosh on the microSD card and choose them in the Jackintosh menu. Under TOS it only offers to return to Booster or the GEM desktop. <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/jackintosh/'>Learn more</a>",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-jackintosh/main/icon.png",
+      "tags": [
+        "Jackintosh",
+        "Macintosh",
+        "Emulation",
+        "Disks"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://atarist.sidecartridge.com/81852356-9c9f-44bf-954b-5d56c4e68edf-v1.0.0.uf2",
+      "md5": "b8cbed527c7349b990019b75c7271923",
+      "version": "v1.0.0",
+      "previous_versions": [],
+      "official": true,
+      "creator": "sidecartridge"
+    },
+    {
       "uuid": "b04ccd04-9b5d-4f6b-abd1-43af82c3b43a",
       "name": "MV16 Emulator",
       "description": "Emulates the MV16 audio device for Atari ST computers and outputs audio through Bluetooth audio streams. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/mv16-emulator/'>Learn more</a>",
