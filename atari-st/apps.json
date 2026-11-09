@@ -501,8 +501,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-doom/5f623c75-5a4e-4d1b-a805-1ec089349f0e.uf2",
-      "md5": "3cf77a7cd7e6d7b7428d259fbd50b40e",
-      "version": "v0.8.0",
+      "md5": "fa79c6fa9da8aaaa5c3e041f95d6b491",
+      "version": "v1.0.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -650,8 +650,8 @@
     },
     {
       "uuid": "82172749-35b4-4878-b8f6-929d68f1a624",
-      "name": "MD/Speccy: ZX Spectrum 48K",
-      "description": "MD/Speccy turns your SidecarT into a ZX Spectrum 48K running on your Atari ST! It comes with two great demos and you can add more simply by adding your favourite .z80 and .sna files into the /speccy folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "name": "MD/Speccy: ZX Spectrum 128K",
+      "description": "MD/Speccy turns your SidecarT into a ZX Spectrum 128K running on your Atari ST! It comes with two great demos and you can add more simply by adding your favourite .z80 and .sna files into the /speccy folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-speccy.webp",
       "tags": [
         "Emulation",
@@ -665,8 +665,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-speccy/82172749-35b4-4878-b8f6-929d68f1a624.uf2",
-      "md5": "536ffe8c0b06d45eb3fd3045b261eaa9",
-      "version": "v1.2.2",
+      "md5": "abb1b984cdc87a2384890816bd8e211f",
+      "version": "v2.0.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
