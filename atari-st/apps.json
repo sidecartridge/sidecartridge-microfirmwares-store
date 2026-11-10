@@ -27,6 +27,7 @@
       "description": "All in one Hard disk, Floppy disk and Real Time emulator for Atari ST/STE/MegaST/MegaSTE/Falcon.  <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/drives_emulator/'>Learn more</a>",
       "image": "https://raw.githubusercontent.com/sidecartridge/md-drives-emulator/main/icon.png",
       "tags": [
+        "Emulation",
         "HD",
         "GEMDRIVE",
         "Floppy",
@@ -63,6 +64,7 @@
       "description": "Emulates Steinberg's Cubase 2 (black) and Cubase 3 (red) copy-protection dongles on the SidecarTridge MultiDevice, so you can run Cubase on a real Atari ST without the original hardware key. Pick the dongle from the boot menu and it launches straight into GEM. <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/cubase-dongles/'>Learn how</a>",
       "image": "https://raw.githubusercontent.com/sidecartridge/md-cubase-dongles/main/icon.png",
       "tags": [
+        "Emulation",
         "Cubase",
         "Dongle"
       ],
@@ -87,6 +89,7 @@
       "description": "Real Time Clock reading the values from a remote NTP server. <a target='_blank' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/rtc_emulator/'>Learn more</a>",
       "image": "https://raw.githubusercontent.com/sidecartridge/md-rtc-emulator/refs/heads/main/icon.png",
       "tags": [
+        "Emulation",
         "RTC"
       ],
       "devices": [
