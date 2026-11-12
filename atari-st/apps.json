@@ -480,8 +480,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-helloworld/39f63068-f2b2-4b99-aaf5-5210ae3ff96b.uf2",
-      "md5": "50901f962d3f06ad2fa5f0a1edf172b6",
-      "version": "v0.0.8",
+      "md5": "74c781f8e0ed5077e6ed6abe7efd98f1",
+      "version": "v0.0.9",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -504,8 +504,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-doom/5f623c75-5a4e-4d1b-a805-1ec089349f0e.uf2",
-      "md5": "fa79c6fa9da8aaaa5c3e041f95d6b491",
-      "version": "v1.0.0",
+      "md5": "02c3be7d420b1a9ba74b0c447342577c",
+      "version": "v1.0.1",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -553,8 +553,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-lynx/cc1533a1-da61-41c8-968a-2132ff1b769c.uf2",
-      "md5": "c7f00c6ec12682ff88d3e360930139fc",
-      "version": "v1.0.0",
+      "md5": "8aef8c0e2c841f55996ea891f6d16f87",
+      "version": "v1.1.2",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -575,8 +575,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-mjpeg/5453cff2-e763-4bbb-b6df-d533493bcb85.uf2",
-      "md5": "582b78a6d3920a6a86f77a07922e3086",
-      "version": "v1.1.0",
+      "md5": "9d185edf3a816baa43868d586a722310",
+      "version": "v1.1.1",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -645,8 +645,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-snap/c586d331-a715-4f3b-882e-138385c9900d.uf2",
-      "md5": "6da3e117ca2e16c5b613edf6d14e0c42",
-      "version": "v1.0.1",
+      "md5": "6cec87d4802411a5a5c4fa98ca6b7047",
+      "version": "v1.0.2",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -668,8 +668,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-speccy/82172749-35b4-4878-b8f6-929d68f1a624.uf2",
-      "md5": "abb1b984cdc87a2384890816bd8e211f",
-      "version": "v2.0.0",
+      "md5": "63d85a04500a4aa10556d17fac1fdca3",
+      "version": "v2.0.1",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
