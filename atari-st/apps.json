@@ -506,8 +506,8 @@
         "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-doom/5f623c75-5a4e-4d1b-a805-1ec089349f0e.uf2",
-      "md5": "461ffe2591656338cf52fc481706bd7f",
-      "version": "v1.1.0",
+      "md5": "859a9a1d924ae7c74ebbc4ca776d70be",
+      "version": "v1.1.3",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -576,11 +576,13 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-mjpeg/5453cff2-e763-4bbb-b6df-d533493bcb85.uf2",
-      "md5": "365aeaf189e5687a7ff2e7659f325dd9",
-      "version": "v1.1.3",
+      "md5": "d673ba935d5449fd9ffbeae89673324f",
+      "version": "v1.2.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
