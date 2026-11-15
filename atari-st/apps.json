@@ -467,7 +467,7 @@
     {
       "uuid": "39f63068-f2b2-4b99-aaf5-5210ae3ff96b",
       "name": "Hello, SidecarT!",
-      "description": "Hello World microfirmware to help new developers understand how the SidecarTridge Multi-device works. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "Every new coding adventure begins with 'Hello, World!' — a minimal example microfirmware for the SidecarTridge Multi-device, and the perfect starting point for writing your own SidecarT apps for the Atari ST. Find out more at <a href=\"https://neilrackett.com/atarist/md-helloworld\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-helloworld.webp",
       "tags": [
         "Hello World",
@@ -489,7 +489,7 @@
     {
       "uuid": "5f623c75-5a4e-4d1b-a805-1ec089349f0e",
       "name": "MD/DOOM",
-      "description": "Yes, the SidecarTridge Multi-device is brilliant, but can it run DOOM? MD/DOOM is full speed, fully playable Doom on your Atari ST, TT or Falcon. To download level packs, head over to <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a> and select MD/DOOM.",
+      "description": "Yes, the SidecarTridge Multi-device is brilliant, but can it run DOOM? MD/DOOM is full speed, fully playable Doom on your Atari ST, TT or Falcon, with sound effects and OPL2 music on all of them. Download the level packs and get shooting. Find out more at <a href=\"https://neilrackett.com/atarist/md-doom\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-doom.webp",
       "tags": [
         "Game",
@@ -506,8 +506,8 @@
         "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-doom/5f623c75-5a4e-4d1b-a805-1ec089349f0e.uf2",
-      "md5": "859a9a1d924ae7c74ebbc4ca776d70be",
-      "version": "v1.1.3",
+      "md5": "d41f3d1c4071c18b861ea0d35f223b20",
+      "version": "v1.1.6",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -515,7 +515,7 @@
     {
       "uuid": "6f3f635c-4a05-4201-8450-39e4b1c32eca",
       "name": "MD/JS: JavaScript Worker",
-      "description": "MD/JS: JavaScript Worker for Atari ST enables you to upload and execute JavaScript on the SidecarTridge Multi-device, call named functions and receive results in your ST applications. For more information and examples, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "MD/JS turns your SidecarTridge Multi-device into a persistent JavaScript Worker for the Atari ST. Upload JavaScript source from your ST, call named functions with JSON arguments, fetch text or JSON files, and use modern ES2020 features — all running on the SidecarT. Find out more at <a href=\"https://neilrackett.com/atarist/md-js\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-js.webp",
       "tags": [
         "JavaScript",
@@ -539,7 +539,7 @@
     {
       "uuid": "cc1533a1-da61-41c8-968a-2132ff1b769c",
       "name": "MD/Lynx: Atari Lynx Emulator",
-      "description": "MD/Lynx turns your Atari ST into an Atari Lynx, powered by your SidecarTridge Multi-device! It comes with a Pong Wars demo cartridge and you can add your own simply by copying them to the /lynx folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "MD/Lynx turns your Atari ST into an Atari Lynx, powered by your SidecarTridge Multi-device! It comes with a Pong Wars demo cartridge, and you can add your own games by copying them to the /lynx folder on your SD card, then play them with the ST keyboard or joystick. Find out more at <a href=\"https://neilrackett.com/atarist/md-lynx\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-lynx.webp",
       "tags": [
         "Emulation",
@@ -566,7 +566,7 @@
     {
       "uuid": "5453cff2-e763-4bbb-b6df-d533493bcb85",
       "name": "MD/MJPEG",
-      "description": "Why watch videos at 4K resolution in 16.7 million colours when you can watch them at 0.3K in 16! Stream MJPEG video with sound from your SidecarT's SD card to your Atari ST. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "Why watch videos at 4K resolution in 16.7 million colours when you can watch them at 0.3K in 16! Stream MJPEG video with sound from your SidecarT's SD card to your Atari ST. Find out more at <a href=\"https://neilrackett.com/atarist/md-mjpeg\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-mjpeg.webp",
       "tags": [
         "Video",
@@ -590,7 +590,7 @@
     {
       "uuid": "6952d09f-2fbf-41f0-90d6-bfc89d293c7e",
       "name": "MD/Net: WiFi that just works!",
-      "description": "Wireless internet on your Atari ST that configures itself. Just install STinG from <a href=\"https://github.com/neilrackett/md-net/releases/latest\">here</a>, run INSTALL.TOS from the cartridge, restart your ST and you're ready to get online. For more, or to download the LowWire web browser, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "MD/Net is Atari ST WiFi that just works. Install the firmware, copy the STinG files from the latest MD/Net release to your ST's hard disk, run INSTALL.TOS from the cartridge, and reset. That's it, your ST is online and ready for the HighWire web browser. Find out more at <a href=\"https://neilrackett.com/atarist/md-net\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-net.webp",
       "tags": [
         "Network",
@@ -615,7 +615,7 @@
     {
       "uuid": "7795c766-c5a8-4607-bc7d-01c55e03d300",
       "name": "MD/Sidepad",
-      "description": "MD/Sidepad enables you to connect up to four Bluetooth gamepads to your Atari ST. The first works as a joystick and mouse, and games that support Xpad can use all four, with every button, both analogue sticks, the triggers and rumble. For more information and games, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "MD/Sidepad enables your SidecarTridge Multi-device to connect almost any Bluetooth gamepad to your Atari ST and use it as a joystick and/or mouse, and as a controller for any game that supports Xpad. We've recreated some classic games so you can give it a try, and it works perfectly with FreeNukum ST! Find out more at <a href=\"https://neilrackett.com/atarist/md-sidepad\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-sidepad.webp",
       "tags": [
         "Bluetooth",
@@ -639,7 +639,7 @@
     {
       "uuid": "c586d331-a715-4f3b-882e-138385c9900d",
       "name": "MD/Snap",
-      "description": "Capture Atari ST screenshots to your SidecarT's SD card by pressing the SELECT button. The current screen is saved as a 640×400 PNG, it works in every ST resolution, and the aspect ratio is corrected for you. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "MD/Snap turns your SidecarTridge Multi-device into a screenshot button for your Atari ST: press SELECT and the current screen is saved as a 640×400 PNG on the SD card. It works in every ST resolution and corrects the aspect ratio for you. Find out more at <a href=\"https://neilrackett.com/atarist/md-snap\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-snap.webp",
       "tags": [
         "Screenshot"
@@ -660,7 +660,7 @@
     {
       "uuid": "82172749-35b4-4878-b8f6-929d68f1a624",
       "name": "MD/Speccy: ZX Spectrum 128K",
-      "description": "MD/Speccy turns your SidecarT into a ZX Spectrum 128K running on your Atari ST! It comes with two great demos and you can add more simply by adding your favourite .z80 and .sna files into the /speccy folder on your SD card. For more information, visit <a href=\"https://neilrackett.com/atarist\">neilrackett.com</a>.",
+      "description": "A fully functional ZX Spectrum 128K emulator for your Atari ST with SidecarTridge Multi-device, ready and waiting to run all your classic games in .z80 and .sna format straight from your SD card! Find out more at <a href=\"https://neilrackett.com/atarist/md-speccy\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-speccy.webp",
       "tags": [
         "Emulation",
@@ -685,7 +685,7 @@
     {
       "uuid": "801e2a14-a081-490f-8238-dda4b6205b47",
       "name": "ROTT Accelerator",
-      "description": "The ROTT Accelerator enables you to play Rise of the Triad at up to 30fps on your Atari ST. ROTT for Atari ST is available at <a href=\"https://neilrackett.com/atarist\">neilrackett.com/atarist</a>. To use it, run ROTT_ST.TOS from the GEM Desktop.",
+      "description": "The ROTT Accelerator turns your SidecarTridge Multi-device into a graphics card for Rise of the Triad, enabling you to play it at up to 30fps on your Atari ST. Your ST runs the game while the Multi-device takes care of the 3D rendering to give you a fast, playable game. Still experimental. Find out more at <a href=\"https://neilrackett.com/atarist/atarist-rott-accelerator\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/atarist-rott.webp",
       "tags": [
         "Game",
