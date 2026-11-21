@@ -629,8 +629,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-net/6952d09f-2fbf-41f0-90d6-bfc89d293c7e.uf2",
-      "md5": "845a0503ec9a9f1faa236ba44e58e333",
-      "version": "v0.7.1",
+      "md5": "19145c98faad8eb8593aeca0d67f8a96",
+      "version": "v1.0.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -653,8 +653,8 @@
         "MegaSTE"
       ],
       "binary": "https://downloads.neilrackett.com/md-sidepad/7795c766-c5a8-4607-bc7d-01c55e03d300.uf2",
-      "md5": "4c4197626468bf67a1e430be9d0fbee0",
-      "version": "v1.5.0",
+      "md5": "4b576517db5116a15146ab80a2d7ae5f",
+      "version": "v1.5.1",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
