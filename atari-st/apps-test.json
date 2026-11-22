@@ -18,6 +18,12 @@
       "name": "Galvanoid",
       "url": "https://github.com/galvanoid",
       "official": false
+    },
+    "starious": {
+      "id": "starious",
+      "name": "STarious",
+      "url": "https://github.com/volkerm25",
+      "official": false
     }
   },
   "apps": [
@@ -222,6 +228,28 @@
       "previous_versions": [],
       "official": false,
       "creator": "galvanoid"
+    },
+    {
+      "uuid": "a801bcb1-6755-44f4-8d6d-922b7699976f",
+      "name": "C64 Emulator",
+      "description": "Commodore 64 emulator: the RP2040 runs the C64, the Atari ST shows the picture, plays the sound on its YM2149 and supplies keyboard and joysticks. D64/D81 disks and CRT cartridges from the SD card.",
+      "image": "https://raw.githubusercontent.com/volkerm25/sidecart_c64_emu/main/icon.png",
+      "tags": [
+        "Emulator",
+        "C64"
+      ],
+      "devices": [
+        "ST",
+        "STE",
+        "MegaST",
+        "MegaSTE"
+      ],
+      "binary": "https://github.com/volkerm25/sidecart_c64_emu/releases/download/v0.4.0/a801bcb1-6755-44f4-8d6d-922b7699976f-v0.4.0.uf2",
+      "md5": "dd3160841f2c6b23a174f53bb09b78de",
+      "version": "v0.4.0",
+      "previous_versions": [],
+      "official": false,
+      "creator": "starious"
     }
   ]
 }
