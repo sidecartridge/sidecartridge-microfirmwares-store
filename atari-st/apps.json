@@ -500,7 +500,9 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-helloworld/39f63068-f2b2-4b99-aaf5-5210ae3ff96b.uf2",
       "md5": "74c781f8e0ed5077e6ed6abe7efd98f1",
@@ -550,7 +552,9 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-js/6f3f635c-4a05-4201-8450-39e4b1c32eca.uf2",
       "md5": "07fab63a95a7b1a37120b71f3a73396f",
@@ -626,7 +630,9 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-net/6952d09f-2fbf-41f0-90d6-bfc89d293c7e.uf2",
       "md5": "19145c98faad8eb8593aeca0d67f8a96",
@@ -638,7 +644,7 @@
     {
       "uuid": "7795c766-c5a8-4607-bc7d-01c55e03d300",
       "name": "MD/Sidepad",
-      "description": "MD/Sidepad enables your SidecarTridge Multi-device to connect almost any Bluetooth gamepad to your Atari ST and use it as a joystick and/or mouse, and as a controller for any game that supports Xpad. We've recreated some classic games so you can give it a try, and it works perfectly with FreeNukum ST! Find out more at <a href=\"https://neilrackett.com/atarist/md-sidepad\">neilrackett.com</a>.",
+      "description": "MD/Sidepad enables your SidecarTridge Multi-device to connect almost any Bluetooth gamepad to your Atari ST, TT or Falcon and use it as a joystick and/or mouse, and as a controller for any game that supports Xpad, including almost all of my Atari ST games! Find out more at <a href=\"https://neilrackett.com/atarist/md-sidepad\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-sidepad.webp",
       "tags": [
         "Bluetooth",
@@ -650,7 +656,9 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/md-sidepad/7795c766-c5a8-4607-bc7d-01c55e03d300.uf2",
       "md5": "4b576517db5116a15146ab80a2d7ae5f",
