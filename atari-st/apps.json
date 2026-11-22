@@ -291,8 +291,8 @@
     {
       "uuid": "c1c59922-942b-465f-9859-a75831486e73",
       "name": "Multidevice Test",
-      "description": "This ROM combined with a test tool running in the computer will test the quality of the connection between the computer and the cartridge. <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/multidevice-test/'>Learn how</a>",
-      "image": "https://placehold.co/256x256/png",
+      "description": "Tests the Multi-device and its connection to your Atari ST, STE, Mega ST, Mega STE, TT or Falcon: every line of the cartridge port, the microSD card, Wi-Fi, Bluetooth, SELECT and the LED, with MDTEST.TOS on the Atari. It says what works, and what to do about what does not. <a target='_blank' rel='noopener noreferrer' href='https://docs.sidecartridge.com/sidecartridge-multidevice/microfirmwares/multidevice-test/'>Learn how</a>",
+      "image": "https://raw.githubusercontent.com/sidecartridge/md-testrom/main/icon.png",
       "tags": [
         "Troubleshooting"
       ],
@@ -304,10 +304,15 @@
         "TT",
         "Falcon"
       ],
-      "binary": "https://atarist.sidecartridge.com/c1c59922-942b-465f-9859-a75831486e73-v0.0.3.uf2",
-      "md5": "6a56777a92e08a8d9d44514624c03b51",
-      "version": "v0.0.3",
+      "binary": "https://atarist.sidecartridge.com/c1c59922-942b-465f-9859-a75831486e73-v2.0.0.uf2",
+      "md5": "481971cd5d74a59ee522dda90eeeba1e",
+      "version": "v2.0.0",
       "previous_versions": [
+        {
+          "version": "v0.0.3",
+          "binary": "https://atarist.sidecartridge.com/c1c59922-942b-465f-9859-a75831486e73-v0.0.3.uf2",
+          "md5": "6a56777a92e08a8d9d44514624c03b51"
+        },
         {
           "version": "v0.0.1dev",
           "binary": "https://atarist.sidecartridge.com/c1c59922-942b-465f-9859-a75831486e73-v0.0.1dev.uf2",
