@@ -33,6 +33,16 @@
       "official": false,
       "enabled": true,
       "url": "https://raw.githubusercontent.com/galvanoid/sidecartridge/main/apps.json"
+    },
+    {
+      "creator": {
+        "id": "starious",
+        "name": "STarious",
+        "url": "https://github.com/volkerm25"
+      },
+      "official": false,
+      "enabled": true,
+      "url": "https://github.com/volkerm25/sidecart_c64_emu/releases/latest/download/apps.json"
     }
   ]
 }
