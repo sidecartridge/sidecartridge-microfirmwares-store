@@ -675,7 +675,7 @@
     {
       "uuid": "c586d331-a715-4f3b-882e-138385c9900d",
       "name": "MD/Snap",
-      "description": "MD/Snap turns your SidecarTridge Multi-device into a screenshot button for your Atari ST: press SELECT and the current screen is saved as a 640×400 PNG on the SD card. It works in every ST resolution and corrects the aspect ratio for you. Find out more at <a href=\"https://neilrackett.com/atarist/md-snap\">neilrackett.com</a>.",
+      "description": "MD/Snap turns your SidecarTridge Multi-device into a screenshot button for your Atari ST or TT: press SELECT and the current screen is saved as a PNG on the SD card. It works in every standard ST and TT resolution and corrects the aspect ratio for you. Find out more at <a href=\"https://neilrackett.com/atarist/md-snap\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/md-snap.webp",
       "tags": [
         "Screenshot"
@@ -684,11 +684,12 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT"
       ],
       "binary": "https://downloads.neilrackett.com/md-snap/c586d331-a715-4f3b-882e-138385c9900d.uf2",
-      "md5": "6cec87d4802411a5a5c4fa98ca6b7047",
-      "version": "v1.0.2",
+      "md5": "032edd826dc96a9bc6611d576a436f15",
+      "version": "v1.1.0",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
@@ -721,7 +722,7 @@
     {
       "uuid": "801e2a14-a081-490f-8238-dda4b6205b47",
       "name": "ROTT Accelerator",
-      "description": "The ROTT Accelerator turns your SidecarTridge Multi-device into a graphics card for Rise of the Triad, enabling you to play it at up to 30fps on your Atari ST. Your ST runs the game while the Multi-device takes care of the 3D rendering to give you a fast, playable game. Still experimental. Find out more at <a href=\"https://neilrackett.com/atarist/atarist-rott-accelerator\">neilrackett.com</a>.",
+      "description": "The ROTT Accelerator turns your SidecarTridge Multi-device into a graphics card for Rise of the Triad, enabling you to play it at up to 30fps on your Atari ST, TT or Falcon, with your Multi-device taking care of the 3D rendering to give you a fast, playable game. Find out more at <a href=\"https://neilrackett.com/atarist/atarist-rott-accelerator\">neilrackett.com</a>.",
       "image": "https://downloads.neilrackett.com/atarist-rott.webp",
       "tags": [
         "Game",
@@ -736,11 +737,13 @@
         "ST",
         "STE",
         "MegaST",
-        "MegaSTE"
+        "MegaSTE",
+        "TT",
+        "Falcon"
       ],
       "binary": "https://downloads.neilrackett.com/atarist-rott/801e2a14-a081-490f-8238-dda4b6205b47.uf2",
-      "md5": "fc024330e43a20dc7554573733fa08d4",
-      "version": "v1.4.0-beta.7",
+      "md5": "9ea620198b9a3ecbd1c8b3901bf947c9",
+      "version": "v1.4.0-beta.8",
       "previous_versions": [],
       "official": false,
       "creator": "neilrackett"
